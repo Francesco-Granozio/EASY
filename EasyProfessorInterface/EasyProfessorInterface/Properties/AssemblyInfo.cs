@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Le informazioni generali relative a un assembly sono controllate dal seguente 
 // set di attributi. Modificare i valori di questi attributi per modificare le informazioni
 // associate a un assembly.
-[assembly: AssemblyTitle("EasyProfessorInterface")]
+[assembly: AssemblyTitle("EASYProfessorInterface")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("EasyProfessorInterface")]
+[assembly: AssemblyProduct("EASYProfessorInterface")]
 [assembly: AssemblyCopyright("Copyright ©  2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Se il progetto viene esposto a COM, il GUID seguente verrà utilizzato come ID della libreria dei tipi
-[assembly: Guid("5827f554-bf8b-41a3-b049-58d33e7ca40e")]
+[assembly: Guid("ed94a094-58e2-48c3-a249-bf2affc3c374")]
 
 // Le informazioni sulla versione di un assembly sono costituite dai seguenti quattro valori:
 //

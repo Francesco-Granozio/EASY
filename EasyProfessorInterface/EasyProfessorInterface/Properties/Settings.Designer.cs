@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace EasyProfessorInterface.Properties
+namespace EASYProfessorInterface.Properties
 {
 
 

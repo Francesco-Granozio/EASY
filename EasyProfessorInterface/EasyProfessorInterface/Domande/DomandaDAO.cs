@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EasyProfessorInterface.DAO;
+using EasyProfessorInterface;
 using EasyProfessorInterface.Storage;
 using Microsoft.Data.Sqlite;
 
@@ -83,7 +84,7 @@ namespace EasyProfessorInterface.Domande
             command.Parameters.AddWithValue("@difficolta", domanda.Difficolta);
             command.Parameters.AddWithValue("@tempoRisposta", domanda.TempoRisposta);
             command.Parameters.AddWithValue("@meme", domanda.Meme);
-            
+
             return command.ExecuteNonQuery() == 1;
         }
 

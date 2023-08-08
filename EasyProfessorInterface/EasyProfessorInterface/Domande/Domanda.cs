@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasyProfessorInterface.DAO
+namespace EasyProfessorInterface
 {
     internal class Domanda
     {
-        private int numeroDomanda;
+        private int numeroDomanda = 0;
         private string testo;
         private string argomento;
         private string rispostaA;
@@ -23,6 +23,20 @@ namespace EasyProfessorInterface.DAO
         public Domanda(int numeroDomanda, string testo, string argomento, string rispostaA, string rispostaB, string rispostaC, string rispostaD, int rispostaCorretta, int difficolta, int tempoRisposta, string meme)
         {
             this.numeroDomanda = numeroDomanda;
+            this.testo = testo;
+            this.argomento = argomento;
+            this.rispostaA = rispostaA;
+            this.rispostaB = rispostaB;
+            this.rispostaC = rispostaC;
+            this.rispostaD = rispostaD;
+            this.rispostaCorretta = rispostaCorretta;
+            this.difficolta = difficolta;
+            this.tempoRisposta = tempoRisposta;
+            this.meme = meme;
+        }
+
+        public Domanda(string testo, string argomento, string rispostaA, string rispostaB, string rispostaC, string rispostaD, int rispostaCorretta, int difficolta, int tempoRisposta, string meme)
+        {
             this.testo = testo;
             this.argomento = argomento;
             this.rispostaA = rispostaA;
