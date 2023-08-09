@@ -20,6 +20,11 @@ namespace EasyInterfacciaDomande.Domande
         private int tempoRisposta;
         private string meme;
 
+        public Domanda(int numeroDomanda)
+        {
+            this.numeroDomanda = numeroDomanda;
+        }
+
         public Domanda(int numeroDomanda, string testo, string argomento, string rispostaA, string rispostaB, string rispostaC, string rispostaD, int rispostaCorretta, int difficolta, int tempoRisposta, string meme)
         {
             this.numeroDomanda = numeroDomanda;

@@ -10,7 +10,7 @@ using Microsoft.Data.Sqlite;
 
 namespace EasyInterfacciaDomande.Domande
 {
-    internal class DomandaDAO : SQLDAO
+    public class DomandaDAO : SQLDAO
     {
         public DomandaDAO(SqliteConnection connection) : base(connection)
         {
@@ -55,6 +55,21 @@ namespace EasyInterfacciaDomande.Domande
             }
             return domande;
         }
+
+        public List<Domanda> DoRetrieveByTesto(string testo)
+        {
+            Debug.WriteLine("DoRetrieveByTesto");
+            List<Domanda> domande = new List<Domanda>();
+            SqliteCommand command = new SqliteCommand("SELECT * FROM Domande WHERE Testo = @testo", connection);
+            command.Parameters.AddWithValue("@testo", testo);
+            SqliteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                domande.Add(new Domanda(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetInt32(7), reader.GetInt32(8), reader.GetInt32(9), reader.IsDBNull(10) ? null : reader.GetString(10)));
+            }
+            return domande;
+        }
+    
 
         public List<Domanda> DoRetrieveByDifficolta(int difficolta)
         {

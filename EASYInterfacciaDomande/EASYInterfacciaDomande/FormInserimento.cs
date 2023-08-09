@@ -1,6 +1,7 @@
 ﻿using EasyInterfacciaDomande;
 using EasyInterfacciaDomande.Domande;
 using EasyInterfacciaDomande.Utils;
+using EASYInterfacciaDomande.Utils;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace EasyInterfacciaDomande
         private FormVisualizzazione formVisualizzazione;
         private bool mode = true; //false aggiornamento, true inserimento
         private int id;
-        
+
         public FormInserimento()
         {
             this.MaximizeBox = false;
@@ -45,7 +46,7 @@ namespace EasyInterfacciaDomande
             this.MinimizeBox = false;
             this.formVisualizzazione = formVisualizzazione;
             this.mode = mode;
-            
+
             InitializeComponent();
 
             this.id = domanda.NumeroDomanda;
@@ -107,7 +108,7 @@ namespace EasyInterfacciaDomande
 
         private void button_conferma_Click(object sender, EventArgs e)
         {
-            
+
             if (string.IsNullOrEmpty(richTextBox_testo.Text) || comboBox_argomento.SelectedItem == null
                 || string.IsNullOrEmpty(richTextBox_rispostaA.Text) || string.IsNullOrEmpty(richTextBox_rispostaB.Text)
                 || string.IsNullOrEmpty(richTextBox_rispostaC.Text) || string.IsNullOrEmpty(richTextBox_rispostaD.Text)
@@ -119,60 +120,50 @@ namespace EasyInterfacciaDomande
 
             try
             {
-                
+
                 domanda = new Domanda(id, richTextBox_testo.Text, comboBox_argomento.SelectedItem.ToString(),
                 richTextBox_rispostaA.Text, richTextBox_rispostaB.Text, richTextBox_rispostaC.Text,
                 richTextBox_rispostaD.Text,
                 comboBox_risposta_corretta.SelectedIndex + 1, domainUpDown_difficolta.SelectedIndex + 1,
                 Convert.ToInt32(trackBar_tempo_risposta.Value), label_meme_path.Text);
-                
-                
+
+
             }
             catch
             {
                 MessageBox.Show("Inserire tutti i campi", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            
-            using (SqliteConnection connection = new SqliteConnection(@"Data Source=C:\Shared\Unisa\Tesi\EASY\database.db"))
+
+            DatabaseManager.Instance.Execute(connection =>
             {
-                try
+                DomandaDAO dao = new DomandaDAO(connection);
+
+                if (dao.DoSaveOrUpdate(domanda))
                 {
-                    connection.Open();
-
-                    DomandaDAO dao = new DomandaDAO(connection);
-
-                    if (dao.DoSaveOrUpdate(domanda))
-                    {
-                        this.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Errore durante l'inserimento della domanda", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    
-                    if (mode)
-                    {
-                        MessageBox.Show("Domanda inserita con successo", "Successo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        //formVisualizzazione.AddRow(domanda, formVisualizzazione.GetDataGridView());
-                        formVisualizzazione.Refresh_Database();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Domanda aggiornata con successo", "Successo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        //formVisualizzazione.UpdateRow(domanda, formVisualizzazione.GetDataGridView());
-                        formVisualizzazione.Refresh_Database();
-
-                    }
+                    this.Close();
                 }
-                finally
+                else
                 {
-                    connection.Close();
+                    MessageBox.Show("Errore durante l'inserimento della domanda", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
-                
-            }
-            
+                if (mode)
+                {
+                    MessageBox.Show("Domanda inserita con successo", "Successo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //formVisualizzazione.AddRow(domanda, formVisualizzazione.GetDataGridView());
+                    formVisualizzazione.Refresh_Database();
+                }
+                else
+                {
+                    MessageBox.Show("Domanda aggiornata con successo", "Successo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //formVisualizzazione.UpdateRow(domanda, formVisualizzazione.GetDataGridView());
+                    formVisualizzazione.Refresh_Database();
+
+                }
+            });
         }
+
+  
 
         private void richTextBox_rispostaA_TextChanged(object sender, EventArgs e)
         {

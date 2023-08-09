@@ -2,7 +2,7 @@
 
 namespace EasyInterfacciaDomande.Storage
 {
-    internal abstract class SQLDAO
+    public abstract class SQLDAO
     {
         protected readonly SqliteConnection connection;
 

@@ -1,6 +1,7 @@
 ﻿using EasyInterfacciaDomande;
 using EasyInterfacciaDomande.Domande;
-using EasyInterfacciaDomande;
+using EasyInterfacciaDomande.Utils;
+using EASYInterfacciaDomande.Utils;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
@@ -26,46 +27,72 @@ namespace EasyInterfacciaDomande
         public void Refresh_Database()
         {
             dataGridView1.Rows.Clear();
-            List<Domanda> domande;
+            List<Domanda> domande = null;
 
-            using (SqliteConnection connection = new SqliteConnection(@"Data Source=C:\Shared\Unisa\Tesi\EASY\database.db"))
+            DatabaseManager.Instance.Execute(connection =>
             {
-                connection.Open();
-
                 DomandaDAO dao = new DomandaDAO(connection);
                 domande = dao.DoRetrieveAll();
-                connection.Close();
-            }
+            });
 
-            foreach (Domanda domanda in domande)
+
+            if (domande != null)
             {
-                AddRow(domanda, dataGridView1);
+                foreach (Domanda domanda in domande)
+                {
+                    AddRow(domanda, dataGridView1);
+
+                }
             }
         }
-        
+
+        public void Refresh_Database(Func<DomandaDAO, List<Domanda>> retrieveMethod)
+        {
+            dataGridView1.Rows.Clear();
+            List<Domanda> domande = null;
+
+            DatabaseManager.Instance.Execute(connection =>
+            {
+                DomandaDAO dao = new DomandaDAO(connection);
+                domande = retrieveMethod(dao);
+            });
+
+            if (domande != null)
+            {
+                Debug.WriteLine(domande[0]);
+                foreach (Domanda domanda in domande)
+                {
+                    AddRow(domanda, dataGridView1);
+
+                }
+            }
+        }
+
         public void Carica_Database()
         {
-            List<Domanda> domande;
+            List<Domanda> domande = null;
 
-            using (SqliteConnection connection = new SqliteConnection(@"Data Source=C:\Shared\Unisa\Tesi\EASY\database.db"))
+            DatabaseManager.Instance.Execute(connection =>
             {
-                connection.Open();
-
                 DomandaDAO dao = new DomandaDAO(connection);
                 domande = dao.DoRetrieveAll();
-                connection.Close();
-            }
+            });
 
-            foreach (Domanda domanda in domande)
+            if (domande != null)
             {
-                AddRow(domanda, dataGridView1);
-                
+                foreach (Domanda domanda in domande)
+                {
+                    AddRow(domanda, dataGridView1);
+
+                }
             }
+                
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             Carica_Database();
+            comboBox_ricerca.SelectedItem = "Numero domanda";
         }
 
         public DataGridView GetDataGridView()
@@ -137,7 +164,6 @@ namespace EasyInterfacciaDomande
 
         private void dataGridView1_AllowUserToAddRowsChanged(object sender, EventArgs e)
         {
-            Debug.WriteLine("Chiamato");
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -203,40 +229,6 @@ namespace EasyInterfacciaDomande
 
                 form.Show();
             }
-            /*if (e.RowIndex >= 0)
-            {
-                DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
-
-                // Chiedi all'utente se vuole eliminare o modificare
-                DialogResult result = MessageBox.Show("Vuoi eliminare la domanda?", "Azione", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                if (result == DialogResult.Yes)
-                {
-                    Domanda domanda = new Domanda(
-                        Convert.ToInt32(row.Cells["numeroDomanda"].Value),
-                        row.Cells["testo"].Value.ToString(),
-                        row.Cells["argomento"].Value.ToString(),
-                        row.Cells["rispostaA"].Value.ToString(),
-                        row.Cells["rispostaB"].Value.ToString(),
-                        row.Cells["rispostaC"].Value.ToString(),
-                        row.Cells["rispostaD"].Value.ToString(),
-                        Convert.ToInt32(row.Cells["rispostaCorretta"].Value),
-                        Convert.ToInt32(row.Cells["difficolta"].Value),
-                        Convert.ToInt32(row.Cells["tempoRisposta"].Value),
-                        row.Cells["meme"].Value.ToString());
-
-                    dataGridView1.Rows.Remove(row);
-
-                    using (SqliteConnection connection = new SqliteConnection(@"Data Source=C:\Shared\Unisa\Tesi\EASY\database.db"))
-                    {
-                        connection.Open();
-
-                        DomandaDAO dao = new DomandaDAO(connection);
-                        dao.DoDelete(domanda);
-                        connection.Close();
-                    }
-                }
-            }*/
         }
 
         private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -260,10 +252,9 @@ namespace EasyInterfacciaDomande
                     // Rimuovi la riga dalla DataGridView
                     dataGridView1.Rows.Remove(row);
 
-                    using (SqliteConnection connection = new SqliteConnection(@"Data Source=C:\Shared\Unisa\Tesi\EASY\database.db"))
-                    {
-                        connection.Open();
 
+                    DatabaseManager.Instance.Execute(connection =>
+                    {
                         DomandaDAO dao = new DomandaDAO(connection);
                         if (dao.DoDelete(new Domanda(numeroDomanda, null, null, null,
                             null, null, null, 0, 0, 0, null)))
@@ -273,9 +264,11 @@ namespace EasyInterfacciaDomande
                         else
                         {
                             success = false;
-                            break;
                         }
-                        connection.Close();
+                    });
+                    if (!success)
+                    {
+                        break;
                     }
                 }
             }
@@ -287,6 +280,40 @@ namespace EasyInterfacciaDomande
             else
             {
                 MessageBox.Show("Errore durante l'eliminazione delle domande", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            if (comboBox_ricerca.SelectedItem.Equals("Numero domanda"))
+            {
+                if (int.TryParse(comboBox_input.Text, out int numeroDomanda))
+                {
+                    
+                    //Refresh_Database(dao => dao.DoRetrieveAll());
+                    Refresh_Database(dao =>
+                    {
+                        Domanda domanda = dao.DoRetrieveById(numeroDomanda);
+                        return new List<Domanda> { domanda };
+                    });
+                }
+                else
+                {
+                    MessageBox.Show("Inserisci un numero valido.", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void comboBox_ricerca_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBox_input.Items.Clear();
+            comboBox_input.SelectedItem = "";
+            comboBox_input.Text = "";
+            if (comboBox_ricerca.SelectedItem.Equals("Argomento"))
+            {
+                
+                comboBox_input.Items.AddRange(Argomenti.argomenti);
+                comboBox_input.SelectedItem = Argomenti.CONCETTI_BASE;
             }
         }
     }     

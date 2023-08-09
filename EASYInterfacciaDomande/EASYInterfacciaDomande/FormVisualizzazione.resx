@@ -156,4 +156,14 @@
   <metadata name="elimina.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="pictureBox2.InitialImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
+        DAAACwwBP0AiyAAAALNJREFUOE/NkUsOAUEQhjsSjwuwteEAYkViQcLGgiOQcAhCPMIKiXM4m0P4qqsT
+        E6pnktnwJV/qr0yqH9Pu7yjgEs94xH3ITcxEhi/Y8t2bIm6w67sUFvg5nOSGFY02p1BjtHGq0WYXaowS
+        rjTaHEKNUcO5Rhu5guwSQ4YbGm3k41bjF3W8a0yng1eUHybPV8UZygs8cYSZlHGCa0weu4+yyNB3Oemh
+        LDL2XU4G+ND4e5x7Ab+aEvBjcMGhAAAAAElFTkSuQmCC
+</value>
+  </data>
 </root>
