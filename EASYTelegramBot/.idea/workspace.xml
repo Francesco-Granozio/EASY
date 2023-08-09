@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="01f806c3-7cbd-4b91-863a-f7e44c87fa9e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface.sln" beforeDir="false" afterPath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/App.config" beforeDir="false" afterPath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/App.config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/Domande/Domanda.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/Domande/Domanda.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/Domande/DomandaDAO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/Domande/DomandaDAO.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/EasyProfessorInterface.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/EasyProfessorInterface.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/FodyWeavers.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/Form1.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/Form1.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/Form1.resx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/Properties/AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/Properties/AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/Properties/Resources.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/Properties/Resources.Designer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/Properties/Settings.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/Properties/Settings.Designer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/packages.config" beforeDir="false" afterPath="$PROJECT_DIR$/../EasyProfessorInterface/EasyProfessorInterface/packages.config" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="2TfsctQtbuzfJxYyVOu2Znqu7ko" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Shared/Unisa/Tesi/EASY/EASYTelegramBot/bot.py",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Shared\Unisa\Tesi\EASY\EASYTelegramBot" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="EASY" type="PythonConfigurationType" factoryName="Python">
+      <module name="EASYTelegramBot" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="BOT_TOKEN" value="6292992649:AAHBSrwKpkUOdf7Pm44JK-AAvhNdS4Lolgc" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.11 (EASYTelegramBot)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/bot.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="01f806c3-7cbd-4b91-863a-f7e44c87fa9e" name="Changes" comment="" />
+      <created>1691445553869</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1691445553869</updated>
+      <workItem from="1691445553880" duration="171000" />
+      <workItem from="1691504487962" duration="776000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/EASYTelegramBot$EASY.coverage" NAME="EASY Coverage Results" MODIFIED="1691445707287" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+  </component>
+</project>
