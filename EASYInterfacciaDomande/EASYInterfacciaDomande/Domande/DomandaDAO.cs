@@ -18,6 +18,7 @@ namespace EasyInterfacciaDomande.Domande
 
         public List<Domanda> DoRetrieveAll()
         {
+            Debug.WriteLine("DoRetrieveAll");
             List<Domanda> domande = new List<Domanda>();
             SqliteCommand command = new SqliteCommand("SELECT * FROM Domande", connection);
             SqliteDataReader reader = command.ExecuteReader();
@@ -30,6 +31,7 @@ namespace EasyInterfacciaDomande.Domande
 
         public Domanda DoRetrieveById(int id)
         {
+            Debug.WriteLine("DoRetrieveById");
             SqliteCommand command = new SqliteCommand("SELECT * FROM Domande WHERE NumeroDomanda = @id", connection);
             command.Parameters.AddWithValue("@id", id);
             SqliteDataReader reader = command.ExecuteReader();
@@ -42,6 +44,7 @@ namespace EasyInterfacciaDomande.Domande
 
         public List<Domanda> DoRetrieveByArgomento(string argomento)
         {
+            Debug.WriteLine("DoRetrieveByArgomento");
             List<Domanda> domande = new List<Domanda>();
             SqliteCommand command = new SqliteCommand("SELECT * FROM Domande WHERE Argomento = @argomento", connection);
             command.Parameters.AddWithValue("@argomento", argomento);
@@ -55,6 +58,7 @@ namespace EasyInterfacciaDomande.Domande
 
         public List<Domanda> DoRetrieveByDifficolta(int difficolta)
         {
+            Debug.WriteLine("DoRetrieveByDifficolta");
             List<Domanda> domande = new List<Domanda>();
             SqliteCommand command = new SqliteCommand("SELECT * FROM Domande WHERE Difficolta = @difficolta", connection);
             command.Parameters.AddWithValue("@difficolta", difficolta);
@@ -68,6 +72,7 @@ namespace EasyInterfacciaDomande.Domande
 
         public bool DoSave(Domanda domanda)
         {
+            Debug.WriteLine("DoSave");
             SqliteCommand command = new SqliteCommand(
                 @"INSERT INTO Domande (testo, argomento, RispostaA, RispostaB, RispostaC, RispostaD, 
                 RispostaCorretta, difficolta, tempoRisposta, meme) 
@@ -90,6 +95,7 @@ namespace EasyInterfacciaDomande.Domande
 
         public bool DoUpdate(Domanda domanda)
         {
+            Debug.WriteLine("DoUpdate");
             SqliteCommand command = new SqliteCommand(
                 @"UPDATE Domande SET testo = @testo, argomento = @argomento, RispostaA = @RispostaA, 
                 RispostaB = @RispostaB, RispostaC = @RispostaC, RispostaD = @RispostaD, 
@@ -113,6 +119,7 @@ namespace EasyInterfacciaDomande.Domande
 
         public bool DoSaveOrUpdate(Domanda domanda)
         {
+            Debug.WriteLine("DoSaveOrUpdate");
             if (DoRetrieveById(domanda.NumeroDomanda) == null)
             {
                 return DoSave(domanda);
@@ -125,6 +132,7 @@ namespace EasyInterfacciaDomande.Domande
 
         public bool DoDelete(Domanda domanda)
         {
+            Debug.WriteLine("DoDelete");
             SqliteCommand command = new SqliteCommand("DELETE FROM Domande WHERE NumeroDomanda = @id", connection);
             command.Parameters.AddWithValue("@id", domanda.NumeroDomanda);
             return command.ExecuteNonQuery() == 1;

@@ -19,6 +19,9 @@ namespace EasyInterfacciaDomande
     {
         private Domanda domanda;
         private FormVisualizzazione formVisualizzazione;
+        private bool mode = true; //false aggiornamento, true inserimento
+        private int id;
+        
         public FormInserimento()
         {
             this.MaximizeBox = false;
@@ -26,23 +29,26 @@ namespace EasyInterfacciaDomande
             InitializeComponent();
         }
 
-        public FormInserimento(FormVisualizzazione formVisualizzazione)
+        public FormInserimento(FormVisualizzazione formVisualizzazione, bool mode)
         {
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.formVisualizzazione = formVisualizzazione;
-            
+            this.mode = mode;
+
             InitializeComponent();
         }
 
-        public FormInserimento(FormVisualizzazione formVisualizzazione, Domanda domanda)
+        public FormInserimento(FormVisualizzazione formVisualizzazione, Domanda domanda, bool mode)
         {
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.formVisualizzazione = formVisualizzazione;
+            this.mode = mode;
             
             InitializeComponent();
 
+            this.id = domanda.NumeroDomanda;
             richTextBox_testo.Text = domanda.Testo;
             comboBox_argomento.Text = domanda.Argomento;
             richTextBox_rispostaA.Text = domanda.RispostaA;
@@ -51,7 +57,7 @@ namespace EasyInterfacciaDomande
             richTextBox_rispostaD.Text = domanda.RispostaD;
             comboBox_risposta_corretta.Text = domanda.RispostaCorrettaToSting();
             domainUpDown_difficolta.Text = domanda.Difficolta.ToString();
-            trackBar_tempo_risposta.Value = domanda.TempoRisposta / 5;
+            trackBar_tempo_risposta.Value = domanda.TempoRisposta;
             label_meme_path.Text = domanda.Meme;
         }
 
@@ -113,11 +119,14 @@ namespace EasyInterfacciaDomande
 
             try
             {
-                domanda = new Domanda(richTextBox_testo.Text, comboBox_argomento.SelectedItem.ToString(),
+                
+                domanda = new Domanda(id, richTextBox_testo.Text, comboBox_argomento.SelectedItem.ToString(),
                 richTextBox_rispostaA.Text, richTextBox_rispostaB.Text, richTextBox_rispostaC.Text,
                 richTextBox_rispostaD.Text,
                 comboBox_risposta_corretta.SelectedIndex + 1, domainUpDown_difficolta.SelectedIndex + 1,
-                Convert.ToInt32(trackBar_tempo_risposta.Value * 5 + 10), label_meme_path.Text);
+                Convert.ToInt32(trackBar_tempo_risposta.Value), label_meme_path.Text);
+                
+                
             }
             catch
             {
@@ -134,13 +143,25 @@ namespace EasyInterfacciaDomande
 
                     if (dao.DoSaveOrUpdate(domanda))
                     {
-                        MessageBox.Show("Domanda inserita con successo", "Successo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        formVisualizzazione.AddRow(domanda, formVisualizzazione.GetDataGridView());
                         this.Close();
                     }
                     else
                     {
                         MessageBox.Show("Errore durante l'inserimento della domanda", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    
+                    if (mode)
+                    {
+                        MessageBox.Show("Domanda inserita con successo", "Successo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        //formVisualizzazione.AddRow(domanda, formVisualizzazione.GetDataGridView());
+                        formVisualizzazione.Refresh_Database();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Domanda aggiornata con successo", "Successo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        //formVisualizzazione.UpdateRow(domanda, formVisualizzazione.GetDataGridView());
+                        formVisualizzazione.Refresh_Database();
+
                     }
                 }
                 finally

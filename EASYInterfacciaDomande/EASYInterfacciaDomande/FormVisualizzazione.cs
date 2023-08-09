@@ -23,6 +23,26 @@ namespace EasyInterfacciaDomande
             InitializeComponent();
         }
 
+        public void Refresh_Database()
+        {
+            dataGridView1.Rows.Clear();
+            List<Domanda> domande;
+
+            using (SqliteConnection connection = new SqliteConnection(@"Data Source=C:\Shared\Unisa\Tesi\EASY\database.db"))
+            {
+                connection.Open();
+
+                DomandaDAO dao = new DomandaDAO(connection);
+                domande = dao.DoRetrieveAll();
+                connection.Close();
+            }
+
+            foreach (Domanda domanda in domande)
+            {
+                AddRow(domanda, dataGridView1);
+            }
+        }
+        
         public void Carica_Database()
         {
             List<Domanda> domande;
@@ -51,6 +71,37 @@ namespace EasyInterfacciaDomande
         public DataGridView GetDataGridView()
         {
             return dataGridView1;
+        }
+
+        public void UpdateRow(Domanda domanda, DataGridView dataGridView)
+        {
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                if (Convert.ToInt32(row.Cells[0].Value) == domanda.NumeroDomanda)
+                {
+                    row.Cells[1].Value = domanda.Testo;
+                    row.Cells[2].Value = domanda.Argomento;
+                    row.Cells[3].Value = domanda.RispostaA;
+                    row.Cells[4].Value = domanda.RispostaB;
+                    row.Cells[5].Value = domanda.RispostaC;
+                    row.Cells[6].Value = domanda.RispostaD;
+                    row.Cells[7].Value = domanda.RispostaCorretta;
+                    row.Cells[8].Value = domanda.Difficolta;
+                    row.Cells[9].Value = domanda.TempoRisposta;
+                    row.Cells[10].Value = domanda.Meme;
+
+                    byte[] memeBytes = null;
+
+                    if (!string.IsNullOrEmpty(domanda.Meme))
+                    {
+                        memeBytes = File.ReadAllBytes(domanda.Meme);
+                    }
+
+                    row.Cells[11].Value = memeBytes;
+
+                    break; // Esci dal ciclo dopo aver trovato e aggiornato la riga
+                }
+            }
         }
 
         public void AddRow(Domanda domanda, DataGridView dataGridView)
@@ -91,7 +142,7 @@ namespace EasyInterfacciaDomande
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Form f = new FormInserimento(this);
+            Form f = new FormInserimento(this, true);
             f.Show();
         }
 
@@ -147,7 +198,8 @@ namespace EasyInterfacciaDomande
                         Convert.ToInt32(row.Cells["rispostaCorretta"].Value),
                         Convert.ToInt32(row.Cells["difficolta"].Value),
                         Convert.ToInt32(row.Cells["tempoRisposta"].Value),
-                        row.Cells["meme"].Value.ToString()));
+                        row.Cells["meme"].Value.ToString()),
+                        false);
 
                 form.Show();
             }
