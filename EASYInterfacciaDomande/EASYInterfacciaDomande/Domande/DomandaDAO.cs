@@ -60,16 +60,18 @@ namespace EasyInterfacciaDomande.Domande
         {
             Debug.WriteLine("DoRetrieveByTesto");
             List<Domanda> domande = new List<Domanda>();
-            SqliteCommand command = new SqliteCommand("SELECT * FROM Domande WHERE Testo = @testo", connection);
-            command.Parameters.AddWithValue("@testo", testo);
+            SqliteCommand command = new SqliteCommand("SELECT * FROM Domande WHERE Testo LIKE @testo", connection);
+            command.Parameters.AddWithValue("@testo", "%" + testo + "%"); // Aggiunge % al testo per cercare tutte le sottostringhe
             SqliteDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
                 domande.Add(new Domanda(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetInt32(7), reader.GetInt32(8), reader.GetInt32(9), reader.IsDBNull(10) ? null : reader.GetString(10)));
             }
+            // Restituisci l'elenco delle domande trovate
             return domande;
         }
-    
+
+
 
         public List<Domanda> DoRetrieveByDifficolta(int difficolta)
         {

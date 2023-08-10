@@ -59,11 +59,12 @@ namespace EasyInterfacciaDomande
 
             if (domande != null)
             {
-                Debug.WriteLine(domande[0]);
                 foreach (Domanda domanda in domande)
                 {
-                    AddRow(domanda, dataGridView1);
-
+                    if (domanda != null)
+                    {
+                        AddRow(domanda, dataGridView1);
+                    }
                 }
             }
         }
@@ -82,11 +83,13 @@ namespace EasyInterfacciaDomande
             {
                 foreach (Domanda domanda in domande)
                 {
-                    AddRow(domanda, dataGridView1);
-
+                    if (domanda != null)
+                    {
+                        AddRow(domanda, dataGridView1);
+                    }
                 }
             }
-                
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -256,8 +259,7 @@ namespace EasyInterfacciaDomande
                     DatabaseManager.Instance.Execute(connection =>
                     {
                         DomandaDAO dao = new DomandaDAO(connection);
-                        if (dao.DoDelete(new Domanda(numeroDomanda, null, null, null,
-                            null, null, null, 0, 0, 0, null)))
+                        if (dao.DoDelete(new Domanda(numeroDomanda)))
                         {
                             success = true;
                         }
@@ -302,6 +304,30 @@ namespace EasyInterfacciaDomande
                     MessageBox.Show("Inserisci un numero valido.", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+
+            if (comboBox_ricerca.SelectedItem.Equals("Testo"))
+            {
+                Refresh_Database(dao =>
+                {
+                    return dao.DoRetrieveByTesto(comboBox_input.Text);
+                });
+            }
+
+            if (comboBox_ricerca.SelectedItem.Equals("Argomento"))
+            {
+                Refresh_Database(dao =>
+                {
+                    return dao.DoRetrieveByArgomento(comboBox_input.Text);
+                });
+            }
+
+            if (comboBox_ricerca.SelectedItem.Equals("Difficoltà"))
+            {
+                Refresh_Database(dao =>
+                {
+                    return dao.DoRetrieveByDifficolta(Convert.ToInt32(comboBox_input.Text));
+                });
+            }
         }
 
         private void comboBox_ricerca_SelectedIndexChanged(object sender, EventArgs e)
@@ -311,9 +337,22 @@ namespace EasyInterfacciaDomande
             comboBox_input.Text = "";
             if (comboBox_ricerca.SelectedItem.Equals("Argomento"))
             {
-                
+
                 comboBox_input.Items.AddRange(Argomenti.argomenti);
                 comboBox_input.SelectedItem = Argomenti.CONCETTI_BASE;
+                comboBox_input.DropDownStyle = ComboBoxStyle.DropDownList;
+            }
+
+            if (comboBox_ricerca.SelectedItem.Equals("Difficoltà"))
+            {
+
+                comboBox_input.Items.AddRange(new object[] { 1, 2, 3 });
+                comboBox_input.SelectedItem = 1;
+                comboBox_input.DropDownStyle = ComboBoxStyle.DropDownList;
+            }
+            if (comboBox_ricerca.SelectedItem.Equals("Testo") || comboBox_ricerca.SelectedItem.Equals("Numero domanda"))
+            {
+                comboBox_input.DropDownStyle = ComboBoxStyle.DropDown;
             }
         }
     }     
