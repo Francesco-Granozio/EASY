@@ -20,7 +20,7 @@ POWERUP_SUPERVELOCITA = 'Super Velocità 🏃‍♂️'
 POWERUP_STREAK = "Streak 🔥"
 POWERUP_REGALO = "Regalo 🎁"
 POWERUP_DOPPIO_RISCHIO = "Doppio Rischio 🎲"
-POWERUP_2X = "2x 2️⃣"
+POWERUP_2X = "2x 💰"
 POWERUP_50_50 = "50/50 🔘"
 POWERUP_GOMMA = "Gomma 🧼"
 POWERUP_SECONDA_CHANCE = "Seconda Chance 🔄"
@@ -46,7 +46,7 @@ powerups = {
                              "perdono 2x punti in caso di risposta sbagliata",
     POWERUP_RADDOPPIA_TEMPO: "Il tempo per rispondere alla domanda viene raddoppiato",
     POWERUP_RIDUCI_TEMPO_RISPOSTA: "Gli altri giocatori hanno meno tempo per rispondere alla domanda",
-    POWERUP_AUMENTA_TEMPO_RISPOSTA: "Gli altri giocatori hanno più tempo per rispondere alla domanda",
+    #POWERUP_AUMENTA_TEMPO_RISPOSTA: "Gli altri giocatori hanno più tempo per rispondere alla domanda",
 }
 
 opzioni = {

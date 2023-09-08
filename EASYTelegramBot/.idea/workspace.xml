@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="01f806c3-7cbd-4b91-863a-f7e44c87fa9e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/bot.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/comandi.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/databaseManager.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/domande_concetti_base.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/singleton.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/comandi.py" beforeDir="false" afterPath="$PROJECT_DIR$/comandi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../database.db" beforeDir="false" afterPath="$PROJECT_DIR$/../database.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,6 +17,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2TfsctQtbuzfJxYyVOu2Znqu7ko" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -31,7 +30,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Shared/Unisa/Tesi/EASY/EASYTelegramBot/bot.py&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Shared/Unisa/Tesi/EASY/EASYTelegramBot&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -51,7 +50,7 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
-        <env name="BOT_TOKEN" value="6292992649:AAHBSrwKpkUOdf7Pm44JK-AAvhNdS4Lolgc" />
+        <env name="BOT_TOKEN" value="6370038637:AAG4iq7i5BZtBYgk37OzMpWI-_7TsCYB5lc" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="SDK_NAME" value="Python 3.11 (EASYTelegramBot)" />
@@ -81,6 +80,8 @@
       <workItem from="1691445553880" duration="171000" />
       <workItem from="1691504487962" duration="776000" />
       <workItem from="1691612828206" duration="654000" />
+      <workItem from="1694127038944" duration="593000" />
+      <workItem from="1694170070358" duration="2632000" />
     </task>
     <servers />
   </component>
