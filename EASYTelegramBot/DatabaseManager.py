@@ -1,5 +1,3 @@
-import sqlite3
-from sqlite3 import Connection
 from singleton import singleton
 import aiosqlite
 
