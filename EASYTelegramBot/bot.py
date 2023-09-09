@@ -1,6 +1,7 @@
 import os
-from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, ConversationHandler
 
 from DatabaseManager import DatabaseManager
 from Player import Player
@@ -43,10 +44,38 @@ async def comando_nickname(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         await update.message.reply_text(f'Nickname aggiornato con successo!')
 
 
+async def comando_argomenti(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    opzioni = [
+        [
+            InlineKeyboardButton(text='Concetti base del linguaggio C 📚', url='https://t.me/+kV0M0bH98k5iYjNk'),
+            InlineKeyboardButton(text='Espressioni condizionali e cicli 🔁', url='https://t.me/+Yge7RsgLTsE4Mjg0'),
+        ],
+        [
+            InlineKeyboardButton(text='Funzioni 🧩', url='https://t.me/+VLOanReXCyFhOWNk'),
+            InlineKeyboardButton(text='Array e puntatori 🎯', url='https://t.me/+lOz9oEaCvvs0YzBk'),
+        ],
+        [
+            InlineKeyboardButton(text='Stringhe 📜', url='https://t.me/+Uve6o8bowFg1M2Y0'),
+            InlineKeyboardButton(text='Strutture dati 🗄️', url='https://t.me/+pB1kqZKl9iZiYWY0'),
+        ],
+        [
+            InlineKeyboardButton(text='Gestione della memoria 💾', url='https://t.me/+StdzIqaaMQBkOTQ8'),
+            InlineKeyboardButton(text='Files 🗃️', url='https://t.me/+F33xkrlIjywzOWU0'),
+        ],
+        [
+            InlineKeyboardButton(text='Istruzioni di pre-processore ⚙️', url='https://t.me/+wDQAXpAJpEZiYTlk'),
+        ],
+    ]
+
+    await update.message.reply_text(text="Ecco gli argomenti su cui fare quiz:",
+                                    reply_markup=InlineKeyboardMarkup(opzioni))
+
+
 def main():
     app = ApplicationBuilder().token(os.environ.get('BOT_TOKEN')).build()
     app.add_handler(CommandHandler("start", comando_start))
     app.add_handler(CommandHandler("nickname", comando_nickname))
+    app.add_handler(CommandHandler("argomenti", comando_argomenti))
     app.run_polling()
 
 
