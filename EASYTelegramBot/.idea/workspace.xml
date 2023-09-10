@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="01f806c3-7cbd-4b91-863a-f7e44c87fa9e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Powerup.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PowerupDAO.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PlayerDAO.py" beforeDir="false" afterPath="$PROJECT_DIR$/PlayerDAO.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../database.db" beforeDir="false" afterPath="$PROJECT_DIR$/../database.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,6 +101,8 @@
       <workItem from="1694263260809" duration="5718000" />
       <workItem from="1694272638355" duration="3579000" />
       <workItem from="1694280711926" duration="3780000" />
+      <workItem from="1694342658965" duration="3771000" />
+      <workItem from="1694353644028" duration="2282000" />
     </task>
     <servers />
   </component>
@@ -106,6 +110,6 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/EASYTelegramBot$EASY.coverage" NAME="EASY Coverage Results" MODIFIED="1694285370800" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/EASYTelegramBot$EASY.coverage" NAME="EASY Coverage Results" MODIFIED="1694355859390" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

@@ -34,10 +34,11 @@ class PlayerDAO:
         try:
             async with self.db_manager as conn:
                 cursor = await conn.execute("SELECT * FROM Players WHERE nickname = ?", (nickname,))
-                row = await cursor.fetchone()
-                if row:
-                    return Player(row[0], row[1], row[2])
-                return None
+                rows = await cursor.fetchall()
+                players = []
+                for row in rows:
+                    players.append(Player(row[0], row[1], row[2]))
+                return players
         except sqlite3.Error as e:
             print(f"Errore durante la ricerca del giocatore per nickname: {e}")
 
@@ -45,10 +46,11 @@ class PlayerDAO:
         try:
             async with self.db_manager as conn:
                 cursor = await conn.execute("SELECT * FROM Players WHERE punteggio = ?", (punteggio,))
-                row = await cursor.fetchone()
-                if row:
-                    return Player(row[0], row[1], row[2])
-                return None
+                rows = await cursor.fetchall()
+                players = []
+                for row in rows:
+                    players.append(Player(row[0], row[1], row[2]))
+                return players
         except sqlite3.Error as e:
             print(f"Errore durante la ricerca del giocatore per punteggio: {e}")
 
