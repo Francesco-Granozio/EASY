@@ -1,15 +1,18 @@
 import os
 from typing import Any
 import asyncio
+import random
 
 import telegram
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Poll
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, CallbackQueryHandler, CallbackContext
 
 from Argomenti import Argomenti
 from filtri import filtro_privato, filtro_pubblico
 from DatabaseManager import DatabaseManager
 from Player import Player
+from Powerup import Powerup
+from Domanda import Domanda
 from PlayerDAO import PlayerDAO
 from PowerupDAO import PowerupDAO
 from DomandaDAO import DomandaDAO
@@ -142,6 +145,31 @@ async def bottone_avvia_quiz(update: Update, context: CallbackContext) -> None:
 
     domande = await DomandaDAO(database_manager).do_retrieve_by_argomento(nome_gruppo)
 
+    intervallo_domande = 3
+    for numero_domanda, domanda in enumerate(domande):
+        await invia_domanda(update, context, domanda, numero_domanda + 1, len(domande))
+        await asyncio.sleep(intervallo_domande + domanda.tempoRisposta)
+
+
+async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, domanda: Domanda, numero_domanda: int,
+                        totale_domande: int) -> None:
+    risposte = [domanda.rispostaA, domanda.rispostaB, domanda.rispostaC, domanda.rispostaD]
+
+    powerups = await PowerupDAO(database_manager).do_retrieve_all()
+    righe_tastiera_powerups = []
+
+    for powerup in powerups:
+        if random.randint(0, 3) == random.randint(0, 3):
+            bottone = InlineKeyboardButton(text=powerup.get_nome(), callback_data=f"{powerup.get_nome()}")
+            riga = [bottone]
+            righe_tastiera_powerups.append(riga)
+
+    tastiera_powerups = InlineKeyboardMarkup(righe_tastiera_powerups)
+    messaggio = await bot.send_poll(chat_id=update.effective_chat.id,
+                                    question=f"Domanda {numero_domanda}/{totale_domande}\n{domanda.get_testo()}", options=risposte,
+                                    type=Poll.QUIZ, correct_option_id=int(domanda.get_rispostaCorretta()) - 1,
+                                    is_anonymous=False, open_period=domanda.tempoRisposta,
+                                    reply_markup=tastiera_powerups)
 
 
 @filtro_pubblico
