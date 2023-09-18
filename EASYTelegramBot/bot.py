@@ -1,5 +1,6 @@
 import os
 from typing import Any
+import asyncio
 
 import telegram
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
@@ -11,12 +12,13 @@ from DatabaseManager import DatabaseManager
 from Player import Player
 from PlayerDAO import PlayerDAO
 from PowerupDAO import PowerupDAO
+from DomandaDAO import DomandaDAO
 
 bot = telegram.Bot(token=os.environ.get('BOT_TOKEN'))
 DB_PATH = r"C:\Shared\Unisa\Tesi\EASY\database.db"
 database_manager = DatabaseManager(DB_PATH)
 
-lobbies = {argomento: False for argomento in Argomenti}
+lobbies = {argomento.value: False for argomento in Argomenti}
 
 
 @filtro_privato
@@ -112,7 +114,7 @@ async def comando_info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 async def comando_start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     keyboard = [
         [
-            InlineKeyboardButton(text="Inizia il quiz 🚀", callback_data="start_quiz"),
+            InlineKeyboardButton(text="Inizia il quiz 🚀", callback_data="avvia_quiz"),
         ]
     ]
 
@@ -125,7 +127,32 @@ async def comando_start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 
 async def bottone_avvia_quiz(update: Update, context: CallbackContext) -> None:
-    await bot.send_message(text="Quiz avviato fraaaatm", chat_id=update.callback_query.message.chat_id)
+    nome_gruppo = update.effective_chat.title
+    if not lobbies[nome_gruppo]:
+
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Avvio quiz su {nome_gruppo} in corso 🚀")
+        await asyncio.sleep(1)
+
+        lobbies[nome_gruppo] = True
+    else:
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Quiz su {nome_gruppo} già in corso, attendi ⏳")
+        return
+
+    domande = await DomandaDAO(database_manager).do_retrieve_by_argomento(nome_gruppo)
+
+
+
+@filtro_pubblico
+async def comando_stop_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    nome_gruppo = update.effective_chat.title
+
+    if lobbies[nome_gruppo]:
+        lobbies[nome_gruppo] = False
+        print(f"Quiz su {nome_gruppo} terminato")
+    else:
+        print(f"Non c'è nessun quiz su {nome_gruppo}")
 
 
 def main():
@@ -135,7 +162,8 @@ def main():
     app.add_handler(CommandHandler("quiz", comando_quiz))
     app.add_handler(CommandHandler("profilo", comando_profilo))
     app.add_handler(CommandHandler("info", comando_info))
-    app.add_handler(CommandHandler("start_quiz", comando_start_quiz))
+    app.add_handler(CommandHandler("avvia_quiz", comando_start_quiz))
+    app.add_handler(CommandHandler("stop_quiz", comando_stop_quiz))
 
     app.add_handler(CallbackQueryHandler(bottone_avvia_quiz, pattern="start_quiz"))
 
