@@ -22,8 +22,7 @@ DB_PATH = r"C:\Shared\Unisa\Tesi\EASY\database.db"
 database_manager = DatabaseManager(DB_PATH)
 
 lobbies = {argomento.value: False for argomento in Argomenti}
-
-
+messaggi_per_lobby = {argomento.value: [] for argomento in Argomenti}
 @filtro_privato
 async def comando_start(update: Update, context: Any) -> None:
     player = (await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id))
@@ -148,7 +147,21 @@ async def bottone_avvia_quiz(update: Update, context: CallbackContext) -> None:
     intervallo_domande = 3
     for numero_domanda, domanda in enumerate(domande):
         await invia_domanda(update, context, domanda, numero_domanda + 1, len(domande))
-        await asyncio.sleep(intervallo_domande + domanda.tempoRisposta)
+        await asyncio.sleep(domanda.get_tempoRisposta())
+        await asyncio.sleep(intervallo_domande)
+
+    lobbies[nome_gruppo] = False
+
+    messaggio = await bot.send_message(text="Sto per cancellare la chat 👇🏻", chat_id=update.effective_chat.id)
+    messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
+    await cancella_messaggi(update, context)
+
+async def cancella_messaggi(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+    for messaggio_per_lobby in messaggi_per_lobby[update.effective_chat.title]:
+        await context.bot.delete_message(chat_id=update.effective_chat.id, message_id=messaggio_per_lobby)
+
+    messaggi_per_lobby[update.effective_chat.title] = []
 
 
 async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, domanda: Domanda, numero_domanda: int,
@@ -166,10 +179,12 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
 
     tastiera_powerups = InlineKeyboardMarkup(righe_tastiera_powerups)
     messaggio = await bot.send_poll(chat_id=update.effective_chat.id,
-                                    question=f"Domanda {numero_domanda}/{totale_domande}\n{domanda.get_testo()}", options=risposte,
+                                    question=f"Domanda: {numero_domanda}/{totale_domande}\nDifficoltà: {domanda.get_difficoltaString()}\n{domanda.get_testo()}", options=risposte,
                                     type=Poll.QUIZ, correct_option_id=int(domanda.get_rispostaCorretta()) - 1,
                                     is_anonymous=False, open_period=domanda.tempoRisposta,
                                     reply_markup=tastiera_powerups)
+
+    messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
 
 
 @filtro_pubblico

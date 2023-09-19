@@ -43,6 +43,15 @@ class Domanda:
     def get_difficolta(self):
         return self.difficolta
 
+    def get_difficoltaString(self):
+        match int(self.difficolta):
+            case 1:
+                return "Facile"
+            case 2:
+                return "Media"
+            case 3:
+                return "Difficile"
+
     def get_tempoRisposta(self):
         return self.tempoRisposta
 
