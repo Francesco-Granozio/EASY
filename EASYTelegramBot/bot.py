@@ -154,6 +154,7 @@ async def bottone_avvia_quiz(update: Update, context: CallbackContext) -> None:
 
     messaggio = await bot.send_message(text="Sto per cancellare la chat 👇🏻", chat_id=update.effective_chat.id)
     messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
+    await asyncio.sleep(3)
     await cancella_messaggi(update, context)
 
 async def cancella_messaggi(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

@@ -38,6 +38,8 @@ namespace EasyInterfacciaDomande
             this.mode = mode;
 
             InitializeComponent();
+
+            domainUpDown_difficolta.SelectedItem = "1";
         }
 
         public FormInserimento(FormVisualizzazione formVisualizzazione, Domanda domanda, bool mode)
@@ -49,9 +51,15 @@ namespace EasyInterfacciaDomande
 
             InitializeComponent();
 
+            comboBox_argomento.Items.AddRange(Argomenti.argomenti);
+            domainUpDown_difficolta.SelectedItem = domanda.Difficolta.ToString();
+
+            Debug.WriteLine(domanda.Argomento);
             this.id = domanda.NumeroDomanda;
             richTextBox_testo.Text = domanda.Testo;
             comboBox_argomento.Text = domanda.Argomento;
+            comboBox_argomento.SelectedItem = domanda.Argomento;
+            Debug.WriteLine(comboBox_argomento.SelectedItem.ToString());
             richTextBox_rispostaA.Text = domanda.RispostaA;
             richTextBox_rispostaB.Text = domanda.RispostaB;
             richTextBox_rispostaC.Text = domanda.RispostaC;
@@ -66,9 +74,6 @@ namespace EasyInterfacciaDomande
 
         private void FormInserimento_Load(object sender, EventArgs e)
         {
-            domainUpDown_difficolta.SelectedItem = "1";
-            comboBox_argomento.Items.AddRange(Argomenti.argomenti);
-            comboBox_argomento.SelectedItem = Argomenti.CONCETTI_BASE;
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
