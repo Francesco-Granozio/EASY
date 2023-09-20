@@ -318,6 +318,23 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
     messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
 
 
+async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    player = await PlayerDAO(database_manager).do_retrieve_by_id(update.poll_answer.user.id)
+
+    if player not in players_in_quiz[update.poll_answer.chat.title]:
+        return
+
+    if update.poll_answer.option_ids[0] == update.poll_answer.poll.correct_option_id:
+        punti = player.get_punteggio() + await calcola_punteggio(update, context, True)
+    else:
+        punti = player.get_punteggio() + await calcola_punteggio(update, context, False)
+
+
+
+async def calcola_punteggio(update: Update, context: ContextTypes.DEFAULT_TYPE, isCorrect) -> None:
+    return 10 if isCorrect else -2
+
+
 async def mostra_classifica(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     classifica = players_in_quiz[update.effective_chat.title]
 
@@ -362,6 +379,8 @@ def main():
     app.add_handler(CallbackQueryHandler(bottone_avvia_quiz, pattern="avvia_quiz"))
     app.add_handler(CallbackQueryHandler(bottone_aggiungi_partecipante, pattern="aggiungi_partecipante"))
     app.add_handler(CallbackQueryHandler(bottone_rimuovi_partecipante, pattern="rimuovi_partecipante"))
+
+    application.add_handler(PollAnswerHandler(processa_risposta))
 
     app.run_polling()
 
