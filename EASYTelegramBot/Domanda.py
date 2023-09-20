@@ -92,5 +92,5 @@ class Domanda:
         self.meme = meme
 
     def has_meme(self):
-        return self.meme != ""
+        return self.meme is not None
 

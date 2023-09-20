@@ -13,16 +13,20 @@ from DatabaseManager import DatabaseManager
 from Player import Player
 from Powerup import Powerup
 from Domanda import Domanda
+from Settings import Settings
 from PlayerDAO import PlayerDAO
 from PowerupDAO import PowerupDAO
 from DomandaDAO import DomandaDAO
+from SettingsDAO import SettingsDAO
 
 bot = telegram.Bot(token=os.environ.get('BOT_TOKEN'))
 DB_PATH = r"C:\Shared\Unisa\Tesi\EASY\database.db"
 database_manager = DatabaseManager(DB_PATH)
 
-lobbies = {argomento.value: False for argomento in Argomenti}
+quiz_attivi = {argomento.value: False for argomento in Argomenti}
 messaggi_per_lobby = {argomento.value: [] for argomento in Argomenti}
+utenti_in_quiz = {argomento.value: [] for argomento in Argomenti}
+
 @filtro_privato
 async def comando_start(update: Update, context: Any) -> None:
     player = (await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id))
@@ -122,21 +126,128 @@ async def comando_start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
     messaggio = await bot.send_message(text="Premi il bottone per iniziare il quiz 👇🏻", chat_id=update.message.chat_id,
                                        reply_markup=InlineKeyboardMarkup(keyboard))
+
+    keyboard = [
+        [
+            InlineKeyboardButton(
+                text=f"Partecipo al quiz ✅\n({len(utenti_in_quiz[update.effective_chat.title])} partecipanti)",
+                callback_data="aggiungi_partecipante"),
+        ],
+        [
+            InlineKeyboardButton(text="Non partecipo al quiz ❌", callback_data="rimuovi_partecipante"),
+        ]
+    ]
+
+    messaggio_opzioni = await bot.send_message(
+        text=f"Seleziona l'opzione 👇🏻",
+        chat_id=update.message.chat_id,
+        reply_markup=InlineKeyboardMarkup(keyboard))
+
+    await SettingsDAO(database_manager).do_delete()
+    await SettingsDAO(database_manager).do_save(Settings(messaggio_opzioni.message_id))
+
     try:
         await context.bot.pin_chat_message(chat_id=update.message.chat_id, message_id=messaggio.message_id)
     except Exception as e:
         print(f"Impossibile fissare il messaggio: {e}")
 
 
+async def bottone_aggiungi_partecipante(update: Update, context: CallbackContext) -> None:
+    nome_gruppo = update.effective_chat.title
+    if update.effective_user.id not in utenti_in_quiz[nome_gruppo]:
+        utenti_in_quiz[nome_gruppo].append(update.effective_user.id)
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Aggiunto al quiz su {nome_gruppo} ✅", show_alert=False)
+
+        # Aggiorna il contatore dei partecipanti
+        # stringa_partecipanti = f"Partecipo al quiz ✅\n({len(utenti_in_quiz[nome_gruppo])} partecipanti)"
+        # numero_membri = await ottieni_numero_membri(update, context)
+        # print(f"Numero membri: {numero_membri}")
+        # if numero_membri is not None:
+        #     stringa_partecipanti = f"Partecipo al quiz ✅\n{len(utenti_in_quiz[nome_gruppo])}/{numero_membri-1}"
+
+        # stringa_partecipanti = f"Partecipo al quiz ✅"
+        #
+        # keyboard = [
+        #     [
+        #         InlineKeyboardButton(
+        #             text=stringa_partecipanti,
+        #             callback_data="aggiungi_partecipante"),
+        #     ],
+        #     [
+        #         InlineKeyboardButton(text="Non partecipo al quiz ❌", callback_data="rimuovi_partecipante"),
+        #     ]
+        # ]
+        # messaggio_opzioni = (await SettingsDAO(database_manager).do_retrieve()).get_messaggio_opzioni()
+        #
+        # await bot.edit_message_reply_markup(chat_id=update.effective_chat.id,
+        #                                     message_id=messaggio_opzioni,
+        #                                     reply_markup=InlineKeyboardMarkup(keyboard))
+
+    else:
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Sei già stato aggiunto al quiz su {nome_gruppo} ⚠", show_alert=False)
+    return
+
+
+async def bottone_rimuovi_partecipante(update: Update, context: CallbackContext) -> None:
+    nome_gruppo = update.effective_chat.title
+    if update.effective_user.id in utenti_in_quiz[nome_gruppo]:
+        utenti_in_quiz[nome_gruppo].remove(update.effective_user.id)
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Rimosso dal quiz su {nome_gruppo} ❌", show_alert=False)
+
+        # Aggiorna il contatore dei partecipanti
+        # stringa_partecipanti = f"Partecipo al quiz ✅\n({len(utenti_in_quiz[nome_gruppo])} partecipanti)"
+        # numero_membri = await ottieni_numero_membri(update, context)
+        # if numero_membri is not None:
+        #     print(f"Numero membri: {numero_membri}")
+        #     stringa_partecipanti = f"Partecipo al quiz ✅\n{len(utenti_in_quiz[nome_gruppo])}/{numero_membri-1}"
+
+        # stringa_partecipanti = f"Partecipo al quiz ✅"
+        # keyboard = [
+        #     [
+        #         InlineKeyboardButton(
+        #             text=stringa_partecipanti,
+        #             callback_data="aggiungi_partecipante"),
+        #     ],
+        #     [
+        #         InlineKeyboardButton(text="Non partecipo al quiz ❌", callback_data="rimuovi_partecipante"),
+        #     ]
+        # ]
+        #
+        # messaggio_opzioni = (await SettingsDAO(database_manager).do_retrieve()).get_messaggio_opzioni()
+        #
+        # await bot.edit_message_reply_markup(chat_id=update.effective_chat.id,
+        #                                     message_id=messaggio_opzioni,
+        #                                     reply_markup=InlineKeyboardMarkup(keyboard))
+    else:
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Non sei attualmente nel quiz su {nome_gruppo} ⚠", show_alert=False)
+    return
+
+
+# async def ottieni_numero_membri(update: Update, context: CallbackContext) -> int:
+#     print(f"Ottengo il numero dei membri")
+#     chat_id = update.effective_chat.id
+#     try:
+#         chat = await context.bot.get_chat(chat_id)
+#         if chat and chat.type in ("group", "supergroup"):
+#             return chat.get_members_count()
+#     except Exception as e:
+#         print(f"Errore durante il recupero del conteggio dei membri: {str(e)}")
+#
+#     return None
+
 async def bottone_avvia_quiz(update: Update, context: CallbackContext) -> None:
     nome_gruppo = update.effective_chat.title
-    if not lobbies[nome_gruppo]:
+    if not quiz_attivi[nome_gruppo]:
 
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Avvio quiz su {nome_gruppo} in corso 🚀")
         await asyncio.sleep(1)
 
-        lobbies[nome_gruppo] = True
+        quiz_attivi[nome_gruppo] = True
     else:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Quiz su {nome_gruppo} già in corso, attendi ⏳")
@@ -149,23 +260,30 @@ async def bottone_avvia_quiz(update: Update, context: CallbackContext) -> None:
         await invia_domanda(update, context, domanda, numero_domanda + 1, len(domande))
         await asyncio.sleep(domanda.get_tempoRisposta())
         if domanda.has_meme():
-            with open(domanda.get_meme(), "rb") as meme:
-                await bot.send_photo(chat_id=update.effective_chat.id, photo=meme)
-                await asyncio.sleep(5)
+            try:
+                with open(domanda.get_meme(), "rb") as meme:
+                    messaggio = await bot.send_photo(chat_id=update.effective_chat.id, photo=meme)
+                    messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
+                    await asyncio.sleep(5)
+            except Exception as e:
+                print(f"Impossibile inviare il meme: {e}")
         else:
             await asyncio.sleep(intervallo_domande)
 
-    lobbies[nome_gruppo] = False
+    quiz_attivi[nome_gruppo] = False
 
     messaggio = await bot.send_message(text="Sto per cancellare la chat 👇🏻", chat_id=update.effective_chat.id)
     messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
     await asyncio.sleep(3)
     await cancella_messaggi(update, context)
 
-async def cancella_messaggi(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
+async def cancella_messaggi(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     for messaggio_per_lobby in messaggi_per_lobby[update.effective_chat.title]:
-        await context.bot.delete_message(chat_id=update.effective_chat.id, message_id=messaggio_per_lobby)
+        try:
+            await context.bot.delete_message(chat_id=update.effective_chat.id, message_id=messaggio_per_lobby)
+        except Exception as e:
+            print(f"Impossibile cancellare il messaggio: {e}")
 
     messaggi_per_lobby[update.effective_chat.title] = []
 
@@ -185,7 +303,8 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
 
     tastiera_powerups = InlineKeyboardMarkup(righe_tastiera_powerups)
     messaggio = await bot.send_poll(chat_id=update.effective_chat.id,
-                                    question=f"Domanda: {numero_domanda}/{totale_domande}\nDifficoltà: {domanda.get_difficoltaString()}\n{domanda.get_testo()}", options=risposte,
+                                    question=f"Domanda: {numero_domanda}/{totale_domande}\nDifficoltà: {domanda.get_difficoltaString()}\n{domanda.get_testo()}",
+                                    options=risposte,
                                     type=Poll.QUIZ, correct_option_id=int(domanda.get_rispostaCorretta()) - 1,
                                     is_anonymous=False, open_period=domanda.tempoRisposta,
                                     reply_markup=tastiera_powerups)
@@ -197,8 +316,8 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
 async def comando_stop_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     nome_gruppo = update.effective_chat.title
 
-    if lobbies[nome_gruppo]:
-        lobbies[nome_gruppo] = False
+    if quiz_attivi[nome_gruppo]:
+        quiz_attivi[nome_gruppo] = False
         print(f"Quiz su {nome_gruppo} terminato")
     else:
         print(f"Non c'è nessun quiz su {nome_gruppo}")
@@ -214,7 +333,9 @@ def main():
     app.add_handler(CommandHandler("avvia_quiz", comando_start_quiz))
     app.add_handler(CommandHandler("stop_quiz", comando_stop_quiz))
 
-    app.add_handler(CallbackQueryHandler(bottone_avvia_quiz, pattern="start_quiz"))
+    app.add_handler(CallbackQueryHandler(bottone_avvia_quiz, pattern="avvia_quiz"))
+    app.add_handler(CallbackQueryHandler(bottone_aggiungi_partecipante, pattern="aggiungi_partecipante"))
+    app.add_handler(CallbackQueryHandler(bottone_rimuovi_partecipante, pattern="rimuovi_partecipante"))
 
     app.run_polling()
 

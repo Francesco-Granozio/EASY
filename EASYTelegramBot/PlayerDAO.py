@@ -63,15 +63,6 @@ class PlayerDAO:
         except sqlite3.Error as e:
             print(f"Errore durante l'inserimento del giocatore: {e}")
 
-    async def do_save(self, player):
-        try:
-            async with self.db_manager as conn:
-                await conn.execute("INSERT INTO Players (id, nickname, punteggio) VALUES (?, ?, ?)",
-                                   (str(player.get_id()), player.get_nickname(), player.get_punteggio()))
-                await conn.commit()
-        except sqlite3.Error as e:
-            print(f"Errore durante l'inserimento del giocatore: {e}")
-
     async def do_update(self, player):
         try:
             async with self.db_manager as conn:
