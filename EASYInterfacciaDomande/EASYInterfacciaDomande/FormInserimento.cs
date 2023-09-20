@@ -130,7 +130,7 @@ namespace EasyInterfacciaDomande
                 richTextBox_rispostaA.Text, richTextBox_rispostaB.Text, richTextBox_rispostaC.Text,
                 richTextBox_rispostaD.Text,
                 comboBox_risposta_corretta.SelectedIndex + 1, domainUpDown_difficolta.SelectedIndex + 1,
-                Convert.ToInt32(trackBar_tempo_risposta.Value), label_meme_path.Text);
+                Convert.ToInt32(trackBar_tempo_risposta.Value), label_meme_path.Text == "" ? null : label_meme_path.Text);
 
 
             }
@@ -190,6 +190,11 @@ namespace EasyInterfacciaDomande
         private void panel2_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            label_meme_path.Text = "";
         }
     }
 }

@@ -148,7 +148,12 @@ async def bottone_avvia_quiz(update: Update, context: CallbackContext) -> None:
     for numero_domanda, domanda in enumerate(domande):
         await invia_domanda(update, context, domanda, numero_domanda + 1, len(domande))
         await asyncio.sleep(domanda.get_tempoRisposta())
-        await asyncio.sleep(intervallo_domande)
+        if domanda.has_meme():
+            with open(domanda.get_meme(), "rb") as meme:
+                await bot.send_photo(chat_id=update.effective_chat.id, photo=meme)
+                await asyncio.sleep(5)
+        else:
+            await asyncio.sleep(intervallo_domande)
 
     lobbies[nome_gruppo] = False
 

@@ -64,6 +64,7 @@
             this.comboBox_argomento = new System.Windows.Forms.ComboBox();
             this.button_conferma = new System.Windows.Forms.Button();
             this.button_annulla = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_tempo_risposta)).BeginInit();
@@ -97,7 +98,7 @@
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(12, 21);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(161, 528);
+            this.panel1.Size = new System.Drawing.Size(161, 532);
             this.panel1.TabIndex = 1;
             // 
             // label10
@@ -277,6 +278,7 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.panel2.Controls.Add(this.button1);
             this.panel2.Controls.Add(this.label_meme_path);
             this.panel2.Controls.Add(this.button_meme);
             this.panel2.Controls.Add(this.label19);
@@ -301,7 +303,7 @@
             this.panel2.Controls.Add(this.richTextBox_rispostaD);
             this.panel2.Location = new System.Drawing.Point(179, 23);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(611, 526);
+            this.panel2.Size = new System.Drawing.Size(611, 539);
             this.panel2.TabIndex = 3;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
@@ -312,13 +314,13 @@
             this.label_meme_path.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_meme_path.Location = new System.Drawing.Point(111, 477);
             this.label_meme_path.Name = "label_meme_path";
-            this.label_meme_path.Size = new System.Drawing.Size(485, 32);
+            this.label_meme_path.Size = new System.Drawing.Size(485, 53);
             this.label_meme_path.TabIndex = 24;
             // 
             // button_meme
             // 
             this.button_meme.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_meme.Location = new System.Drawing.Point(11, 477);
+            this.button_meme.Location = new System.Drawing.Point(11, 468);
             this.button_meme.Name = "button_meme";
             this.button_meme.Size = new System.Drawing.Size(94, 30);
             this.button_meme.TabIndex = 23;
@@ -484,6 +486,17 @@
             this.button_annulla.UseVisualStyleBackColor = true;
             this.button_annulla.Click += new System.EventHandler(this.button3_Click);
             // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(11, 500);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(94, 30);
+            this.button1.TabIndex = 25;
+            this.button1.Text = "Rimuovi";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
             // FormInserimento
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -544,5 +557,6 @@
         private System.Windows.Forms.Button button_conferma;
         private System.Windows.Forms.Button button_annulla;
         private System.Windows.Forms.Label label_meme_path;
+        private System.Windows.Forms.Button button1;
     }
 }

@@ -227,7 +227,7 @@ namespace EasyInterfacciaDomande
                         Convert.ToInt32(row.Cells["rispostaCorretta"].Value),
                         Convert.ToInt32(row.Cells["difficolta"].Value),
                         Convert.ToInt32(row.Cells["tempoRisposta"].Value),
-                        row.Cells["meme"].Value.ToString()),
+                        row.Cells["meme"].Value != null ? row.Cells["meme"].Value.ToString() : null),
                         false);
 
                 form.Show();

@@ -91,3 +91,6 @@ class Domanda:
     def set_meme(self, meme):
         self.meme = meme
 
+    def has_meme(self):
+        return self.meme != ""
+

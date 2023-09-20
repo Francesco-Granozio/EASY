@@ -128,7 +128,7 @@ namespace EasyInterfacciaDomande.Domande
             command.Parameters.AddWithValue("@RispostaCorretta", domanda.RispostaCorretta);
             command.Parameters.AddWithValue("@difficolta", domanda.Difficolta);
             command.Parameters.AddWithValue("@tempoRisposta", domanda.TempoRisposta);
-            command.Parameters.AddWithValue("@meme", domanda.Meme);
+            command.Parameters.AddWithValue("@meme", domanda.Meme is null ? DBNull.Value : (object)domanda.Meme);
             command.Parameters.AddWithValue("@id", domanda.NumeroDomanda);
 
             return command.ExecuteNonQuery() == 1;
