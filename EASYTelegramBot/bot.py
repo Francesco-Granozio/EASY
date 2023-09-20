@@ -25,7 +25,8 @@ database_manager = DatabaseManager(DB_PATH)
 
 quiz_attivi = {argomento.value: False for argomento in Argomenti}
 messaggi_per_lobby = {argomento.value: [] for argomento in Argomenti}
-utenti_in_quiz = {argomento.value: [] for argomento in Argomenti}
+players_in_quiz = {argomento.value: [] for argomento in Argomenti}
+
 
 @filtro_privato
 async def comando_start(update: Update, context: Any) -> None:
@@ -129,9 +130,10 @@ async def comando_start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
     keyboard = [
         [
-            InlineKeyboardButton(
-                text=f"Partecipo al quiz ✅\n({len(utenti_in_quiz[update.effective_chat.title])} partecipanti)",
-                callback_data="aggiungi_partecipante"),
+            # InlineKeyboardButton(
+            #     text=f"Partecipo al quiz ✅\n({len(players_in_quiz[update.effective_chat.title])} partecipanti)",
+            #     callback_data="aggiungi_partecipante"),
+            InlineKeyboardButton(text=f"Partecipo al quiz ✅", callback_data="aggiungi_partecipante"),
         ],
         [
             InlineKeyboardButton(text="Non partecipo al quiz ❌", callback_data="rimuovi_partecipante"),
@@ -153,18 +155,19 @@ async def comando_start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 
 async def bottone_aggiungi_partecipante(update: Update, context: CallbackContext) -> None:
+    # aggiungere controllo quiz attivo
     nome_gruppo = update.effective_chat.title
-    if update.effective_user.id not in utenti_in_quiz[nome_gruppo]:
-        utenti_in_quiz[nome_gruppo].append(update.effective_user.id)
+    if update.effective_user.id not in players_in_quiz[nome_gruppo]:
+        players_in_quiz[nome_gruppo].append(update.effective_user.id)
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Aggiunto al quiz su {nome_gruppo} ✅", show_alert=False)
 
         # Aggiorna il contatore dei partecipanti
-        # stringa_partecipanti = f"Partecipo al quiz ✅\n({len(utenti_in_quiz[nome_gruppo])} partecipanti)"
+        # stringa_partecipanti = f"Partecipo al quiz ✅\n({len(players_in_quiz[nome_gruppo])} partecipanti)"
         # numero_membri = await ottieni_numero_membri(update, context)
         # print(f"Numero membri: {numero_membri}")
         # if numero_membri is not None:
-        #     stringa_partecipanti = f"Partecipo al quiz ✅\n{len(utenti_in_quiz[nome_gruppo])}/{numero_membri-1}"
+        #     stringa_partecipanti = f"Partecipo al quiz ✅\n{len(players_in_quiz[nome_gruppo])}/{numero_membri-1}"
 
         # stringa_partecipanti = f"Partecipo al quiz ✅"
         #
@@ -191,18 +194,19 @@ async def bottone_aggiungi_partecipante(update: Update, context: CallbackContext
 
 
 async def bottone_rimuovi_partecipante(update: Update, context: CallbackContext) -> None:
+    # aggiungere controllo quiz attivo
     nome_gruppo = update.effective_chat.title
-    if update.effective_user.id in utenti_in_quiz[nome_gruppo]:
-        utenti_in_quiz[nome_gruppo].remove(update.effective_user.id)
+    if update.effective_user.id in players_in_quiz[nome_gruppo]:
+        players_in_quiz[nome_gruppo].remove(update.effective_user.id)
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Rimosso dal quiz su {nome_gruppo} ❌", show_alert=False)
 
         # Aggiorna il contatore dei partecipanti
-        # stringa_partecipanti = f"Partecipo al quiz ✅\n({len(utenti_in_quiz[nome_gruppo])} partecipanti)"
+        # stringa_partecipanti = f"Partecipo al quiz ✅\n({len(players_in_quiz[nome_gruppo])} partecipanti)"
         # numero_membri = await ottieni_numero_membri(update, context)
         # if numero_membri is not None:
         #     print(f"Numero membri: {numero_membri}")
-        #     stringa_partecipanti = f"Partecipo al quiz ✅\n{len(utenti_in_quiz[nome_gruppo])}/{numero_membri-1}"
+        #     stringa_partecipanti = f"Partecipo al quiz ✅\n{len(players_in_quiz[nome_gruppo])}/{numero_membri-1}"
 
         # stringa_partecipanti = f"Partecipo al quiz ✅"
         # keyboard = [
@@ -272,9 +276,11 @@ async def bottone_avvia_quiz(update: Update, context: CallbackContext) -> None:
 
     quiz_attivi[nome_gruppo] = False
 
+    await mostra_classifica(update, context)
+
     messaggio = await bot.send_message(text="Sto per cancellare la chat 👇🏻", chat_id=update.effective_chat.id)
     messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
-    await asyncio.sleep(3)
+    await asyncio.sleep(7)
     await cancella_messaggi(update, context)
 
 
@@ -296,7 +302,7 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
     righe_tastiera_powerups = []
 
     for powerup in powerups:
-        if random.randint(0, 3) == random.randint(0, 3):
+        if random.randint(0, 4) == random.randint(0, 4):
             bottone = InlineKeyboardButton(text=powerup.get_nome(), callback_data=f"{powerup.get_nome()}")
             riga = [bottone]
             righe_tastiera_powerups.append(riga)
@@ -308,6 +314,26 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
                                     type=Poll.QUIZ, correct_option_id=int(domanda.get_rispostaCorretta()) - 1,
                                     is_anonymous=False, open_period=domanda.tempoRisposta,
                                     reply_markup=tastiera_powerups)
+
+    messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
+
+
+async def mostra_classifica(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    classifica = players_in_quiz[update.effective_chat.title]
+
+    # classifica = [877616051, 877616053, 171117025, 877616052]
+    classifica = await PlayerDAO(database_manager).do_retrieve_by_id_list(classifica)
+    classifica.sort(key=lambda x: x.get_punteggio(), reverse=True)
+
+    text = f"Ecco la classifica del quiz su *{update.effective_chat.title}*\n"
+    for posizione, player in enumerate(classifica):
+        text += f"*{posizione + 1}°* - *{player.get_nickname()}* - *{round(player.get_punteggio(), 2)}* punti\n"
+
+    if len(classifica) > 0:
+        messaggio = await bot.send_message(text=text, chat_id=update.effective_chat.id, parse_mode='Markdown')
+    else:
+        messaggio = await bot.send_message(text="Nessun partecipante al quiz - classifica vuota",
+                                           chat_id=update.effective_chat.id)
 
     messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
 

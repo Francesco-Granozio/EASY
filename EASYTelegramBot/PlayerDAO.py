@@ -30,6 +30,20 @@ class PlayerDAO:
         except sqlite3.Error as e:
             print(f"Errore durante la ricerca del giocatore per ID: {e}")
 
+    async def do_retrieve_by_id_list(self, id_list):
+        try:
+            async with self.db_manager as conn:
+                # Utilizza una stringa di interrogazione con il segnaposto IN per passare la lista di ID
+                query = "SELECT * FROM Players WHERE id IN ({seq})".format(seq=','.join(['?'] * len(id_list)))
+                cursor = await conn.execute(query, id_list)
+                rows = await cursor.fetchall()
+                players = []
+                for row in rows:
+                    players.append(Player(row[0], row[1], row[2]))
+                return players
+        except sqlite3.Error as e:
+            print(f"Errore durante la ricerca dei giocatori per ID: {e}")
+
     async def do_retrieve_by_nickname(self, nickname):
         try:
             async with self.db_manager as conn:
