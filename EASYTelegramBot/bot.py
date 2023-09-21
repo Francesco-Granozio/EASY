@@ -258,50 +258,6 @@ async def bottone_rimuovi_partecipante(update: Update, context: CallbackContext)
 #
 #     return None
 
-async def bottone_avvia_quiz(update: Update, context: CallbackContext) -> None:
-    nome_gruppo = update.effective_chat.title
-    if not quiz_attivi[nome_gruppo]:
-
-        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
-                                        text=f"Avvio quiz su {nome_gruppo} in corso 🚀")
-        await asyncio.sleep(1)
-
-        quiz_attivi[nome_gruppo] = True
-    else:
-        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
-                                        text=f"Quiz su {nome_gruppo} già in corso, attendi ⏳")
-        return
-
-    domande = await DomandaDAO(database_manager).do_retrieve_by_argomento(nome_gruppo)
-
-    intervallo_domande_senza_meme = 3 - 3
-    intervallo_domande_con_meme = 5 - 5
-    tempo_inizio = datetime.now()
-    for numero_domanda, domanda in enumerate(domande):
-        await invia_domanda(update, context, domanda, numero_domanda + 1, len(domande), tempo_inizio)
-        await asyncio.sleep(domanda.get_tempoRisposta())
-        if domanda.has_meme():
-            try:
-                with open(domanda.get_meme(), "rb") as meme:
-                    messaggio = await bot.send_photo(chat_id=update.effective_chat.id, photo=meme)
-                    messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
-                    await asyncio.sleep(intervallo_domande_con_meme)
-            except Exception as e:
-                print(f"Impossibile inviare il meme: {e}")
-        else:
-            await asyncio.sleep(intervallo_domande_senza_meme)
-
-        tempo_inizio += timedelta(seconds=domanda.get_tempoRisposta())
-
-    quiz_attivi[nome_gruppo] = False
-
-    await mostra_classifica(update, context)
-
-    messaggio = await bot.send_message(text="Sto per cancellare la chat 👇🏻", chat_id=update.effective_chat.id)
-    messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
-    # await asyncio.sleep(7)
-    await cancella_messaggi(update, context)
-
 
 async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> None:
     nome_gruppo = update.effective_chat.title
@@ -324,26 +280,32 @@ async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> N
     for numero_domanda, domanda in enumerate(domande):
         function = partial(invia_domanda, update, context, domanda, numero_domanda + 1, len(domande),
                            tempo_prossima_domanda)
+
         context.job_queue.run_once(function, when=intervallo_domande, name="invia_domanda")
+
         function = partial(manda_meme, update, context, domanda)
+
         context.job_queue.run_once(function, when=intervallo_domande + domanda.get_tempoRisposta(), name="manda_meme")
         tempo_prossima_domanda = tempo_prossima_domanda + timedelta(seconds=domanda.get_tempoRisposta()) + timedelta(
-            seconds=2)
-        intervallo_domande = intervallo_domande + domanda.get_tempoRisposta() + 2
+            seconds=5)
+
+        intervallo_domande = intervallo_domande + domanda.get_tempoRisposta() + 5
 
     quiz_attivi[nome_gruppo] = False
 
-    # await mostra_classifica(update, context)
-
-    # await asyncio.sleep(7)
+    function = partial(mostra_classifica, update, context)
+    context.job_queue.run_once(function, when=intervallo_domande + 2, name="mostra_classifica")
 
     function = partial(cancella_messaggi, update, context)
-    context.job_queue.run_once(function, when=intervallo_domande + 2, name="cancella_messaggi")
+    context.job_queue.run_once(function, when=intervallo_domande + 3, name="cancella_messaggi")
 
 
 async def cancella_messaggi(update: Update, context: ContextTypes.DEFAULT_TYPE, job_name) -> None:
+
     messaggio = await bot.send_message(text="Sto per cancellare la chat 👇🏻", chat_id=update.effective_chat.id)
     messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
+
+    await asyncio.sleep(5)
 
     for messaggio_per_lobby in messaggi_per_lobby[update.effective_chat.title]:
         try:
@@ -422,7 +384,7 @@ async def calcola_punteggio(update: Update, context: ContextTypes.DEFAULT_TYPE, 
     return 10 if isCorrect else -2
 
 
-async def mostra_classifica(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def mostra_classifica(update: Update, context: ContextTypes.DEFAULT_TYPE, job_name) -> None:
     classifica = players_in_quiz[update.effective_chat.title]
 
     # classifica = [877616051, 877616053, 171117025, 877616052]
