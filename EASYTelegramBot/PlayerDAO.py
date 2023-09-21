@@ -56,23 +56,23 @@ class PlayerDAO:
         except sqlite3.Error as e:
             print(f"Errore durante la ricerca del giocatore per nickname: {e}")
 
-    async def do_retrieve_by_punteggio(self, punteggio):
+    async def do_retrieve_by_punteggio_totale(self, punteggio_totale):
         try:
             async with self.db_manager as conn:
-                cursor = await conn.execute("SELECT * FROM Players WHERE punteggio = ?", (punteggio,))
+                cursor = await conn.execute("SELECT * FROM Players WHERE punteggio_totale = ?", (punteggio_totale,))
                 rows = await cursor.fetchall()
                 players = []
                 for row in rows:
                     players.append(Player(row[0], row[1], row[2]))
                 return players
         except sqlite3.Error as e:
-            print(f"Errore durante la ricerca del giocatore per punteggio: {e}")
+            print(f"Errore durante la ricerca del giocatore per punteggio_totale: {e}")
 
     async def do_save(self, player):
         try:
             async with self.db_manager as conn:
-                await conn.execute("INSERT INTO Players (id, nickname, punteggio) VALUES (?, ?, ?)",
-                                   (str(player.get_id()), player.get_nickname(), player.get_punteggio()))
+                await conn.execute("INSERT INTO Players (id, nickname, punteggio_totale) VALUES (?, ?, ?)",
+                                   (str(player.get_id()), player.get_nickname(), player.get_punteggio_totale()))
                 await conn.commit()
         except sqlite3.Error as e:
             print(f"Errore durante l'inserimento del giocatore: {e}")
@@ -80,8 +80,8 @@ class PlayerDAO:
     async def do_update(self, player):
         try:
             async with self.db_manager as conn:
-                await conn.execute("UPDATE Players SET nickname = ?, punteggio = ? WHERE id = ?",
-                                   (player.get_nickname(), player.get_punteggio(), player.get_id()))
+                await conn.execute("UPDATE Players SET nickname = ?, punteggio_totale = ? WHERE id = ?",
+                                   (player.get_nickname(), player.get_punteggio_totale(), player.get_id()))
                 await conn.commit()
         except sqlite3.Error as e:
             print(f"Errore durante l'aggiornamento del giocatore: {e}")

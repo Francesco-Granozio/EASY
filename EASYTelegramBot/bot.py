@@ -103,7 +103,7 @@ async def comando_profilo(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         return
 
     await update.message.reply_text(
-        f'Ecco le informazioni del tuo profilo:\nNickname: *{player.get_nickname()}*\nPunteggio: *{player.get_punteggio()}*',
+        f'Ecco le informazioni del tuo profilo:\nNickname: *{player.get_nickname()}*\nPunteggio ottenuto tra tutti i quiz svolti: *{player.get_punteggio_totale()}*',
         parse_mode='MarkdownV2')
 
 
@@ -190,10 +190,13 @@ async def bottone_aggiungi_partecipante(update: Update, context: CallbackContext
         #                                     message_id=messaggio_opzioni,
         #                                     reply_markup=InlineKeyboardMarkup(keyboard))
 
+        punteggio_iniziale = {argomento.value: 0 for argomento in Argomenti}
         context.bot_data.update({
             update.effective_user.id: {
-                "punteggio": 0,
-                "streak": 0,
+                "nickname": (
+                    await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)).get_nickname(),
+                "punteggio_quiz_corrente": punteggio_iniziale,
+                "streak": 1,
                 "powerups": {},
             }
         })
@@ -264,13 +267,12 @@ async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> N
     if not quiz_attivi[nome_gruppo]:
 
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
-                                        text=f"Avvio quiz su {nome_gruppo} in corso 🚀")
-        await asyncio.sleep(1)
+                                        text=f"Avvio quiz su {nome_gruppo} in corso 🚀", show_alert=False)
 
         quiz_attivi[nome_gruppo] = True
     else:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
-                                        text=f"Quiz su {nome_gruppo} già in corso, attendi ⏳")
+                                        text=f"Quiz su {nome_gruppo} già in corso, attendi ⏳", show_alert=False)
         return
 
     domande = await DomandaDAO(database_manager).do_retrieve_by_argomento(nome_gruppo)
@@ -301,7 +303,6 @@ async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> N
 
 
 async def cancella_messaggi(update: Update, context: ContextTypes.DEFAULT_TYPE, job_name) -> None:
-
     messaggio = await bot.send_message(text="Sto per cancellare la chat 👇🏻", chat_id=update.effective_chat.id)
     messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
 
@@ -352,11 +353,12 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
     context.bot_data.update({
         messaggio.poll.id: {
             "chat_id": update.effective_chat.id,
+            "chat_title": update.effective_chat.title,
             "message_id": messaggio.message_id,
-            "risposta_Corretta": domanda.get_rispostaCorretta(),
-            "tempo_Inizio": tempo_inizio,
+            "risposta_corretta": int(domanda.get_rispostaCorretta()),
+            "tempo_inizio": tempo_inizio,
             "durata_quiz": domanda.get_tempoRisposta(),
-            "difficolta": domanda.get_difficolta()
+            "difficolta": int(domanda.get_difficolta())
         }
     })
 
@@ -367,33 +369,41 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     if player.get_id() not in context.bot_data.keys():
         return
 
-    print("AAAAAAAAAAAAA", context.bot_data[player.get_id()])
+    quiz = context.bot_data[update.poll_answer.poll_id]
+    player_in_quiz = context.bot_data[player.get_id()]
 
-    print("0000000000000", context.bot_data)
+    if update.poll_answer.option_ids[0] == int(quiz["risposta_corretta"]) - 1:
 
-    # if update.poll_answer.option_ids[0] == update.poll_answer.poll.correct_option_id:
-    #     punti = player.get_punteggio() + await calcola_punteggio(update, context, True)
-    #
-    # else:
-    #     punti = player.get_punteggio() + await calcola_punteggio(update, context, False)
+        player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] += quiz["difficolta"] * 10 * player_in_quiz[
+            "streak"]
 
-    # riprendere da riga 368 dell'altro file
+        if player_in_quiz["streak"] <= 1.5:
+            player_in_quiz["streak"] += 0.1
+
+    else:
+        player_in_quiz["streak"] = 1
+        player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] -= float(quiz["difficolta"]) * 1.3
+
+    print(player_in_quiz)
 
 
-async def calcola_punteggio(update: Update, context: ContextTypes.DEFAULT_TYPE, isCorrect: bool) -> None:
+async def calcola_punteggio_quiz_corrente(update: Update, context: ContextTypes.DEFAULT_TYPE, isCorrect: bool) -> None:
     return 10 if isCorrect else -2
 
 
 async def mostra_classifica(update: Update, context: ContextTypes.DEFAULT_TYPE, job_name) -> None:
-    classifica = players_in_quiz[update.effective_chat.title]
 
-    # classifica = [877616051, 877616053, 171117025, 877616052]
-    classifica = await PlayerDAO(database_manager).do_retrieve_by_id_list(classifica)
-    classifica.sort(key=lambda x: x.get_punteggio(), reverse=True)
+    player_ids = players_in_quiz[update.effective_chat.title]
+    classifica = []
+    for id in player_ids:
+        classifica.append(context.bot_data[id])
+
+    classifica.sort(key=lambda x: x["punteggio_quiz_corrente"][update.effective_chat.title], reverse=True)
+    print(classifica)
 
     text = f"Ecco la classifica del quiz su *{update.effective_chat.title}*\n"
-    for posizione, player in enumerate(classifica):
-        text += f"*{posizione + 1}°* - *{player.get_nickname()}* - *{round(player.get_punteggio(), 2)}* punti\n"
+    for posizione, player in enumerate(classifica, start=1):
+        text += f"*{posizione}°* - *{player['nickname']}* - *{round(player['punteggio_quiz_corrente'][update.effective_chat.title], 2)}* punti\n"
 
     if len(classifica) > 0:
         messaggio = await bot.send_message(text=text, chat_id=update.effective_chat.id, parse_mode='Markdown')
