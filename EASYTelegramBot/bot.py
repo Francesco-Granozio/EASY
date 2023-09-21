@@ -14,11 +14,10 @@ from Argomenti import Argomenti
 from filtri import filtro_privato, filtro_pubblico
 from DatabaseManager import DatabaseManager
 from Player import Player
-from Powerup import Powerup
+from Powerups import Powerups
 from Domanda import Domanda
 from Settings import Settings
 from PlayerDAO import PlayerDAO
-from PowerupDAO import PowerupDAO
 from DomandaDAO import DomandaDAO
 from SettingsDAO import SettingsDAO
 
@@ -45,7 +44,8 @@ async def comando_start(update: Update, context: Any) -> None:
                                     f'Ecco la lista dei dei comandi:\n'
                                     f'/nickname *`nuovo nickname`* per modificare il tuo nickname\n'
                                     f'/quiz per visulizzare gli argomenti si cui iniziare un quiz\n'
-                                    f'/profilo per visulizzare le statistiche del tuo profilo (punti, emblemi, ecc...)\n',
+                                    f'/profilo per visulizzare le statistiche del tuo profilo (punti, emblemi, ecc...)\n'
+                                    f'/info per visulizzare le informazioni sul funzionamento del bot\n',
                                     parse_mode='Markdown')
 
 
@@ -71,7 +71,7 @@ async def comando_nickname(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 async def comando_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     opzioni = [
         [
-            InlineKeyboardButton(text=Argomenti.CONCETTI_BASE.value, url='https://t.me/+kV0M0bH98k5iYjNk'),
+            InlineKeyboardButton(text=Argomenti.CONCETTI_BASE.value, url='https://t.me/+5dJJ2GLVTCBhOTNk'),
             InlineKeyboardButton(text=Argomenti.ESPRESSIONI_CONDIZIONALI.value, url='https://t.me/+Yge7RsgLTsE4Mjg0'),
         ],
         [
@@ -104,7 +104,7 @@ async def comando_profilo(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
     await update.message.reply_text(
         f'Ecco le informazioni del tuo profilo:\nNickname: *{player.get_nickname()}*\nPunteggio ottenuto tra tutti i quiz svolti: *{player.get_punteggio_totale()}*',
-        parse_mode='MarkdownV2')
+        parse_mode='Markdown')
 
 
 @filtro_privato
@@ -113,9 +113,8 @@ async def comando_info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
             f"Una volta selezionato l\'argomento su cui vuoi fare il quiz dovrai rispondere correttamente alla domande per ottenere punti ed altre ricompense.\n"
             f"Potrai utilizare un sacco di potenziamenti:\n")
 
-    powerups = await PowerupDAO(database_manager).do_retrieve_all()
-    for powerup in powerups:
-        text += f"*{powerup.get_nome()}*:  {powerup.get_descrizione()}.\n"
+    for powerup in list(Powerups):
+        text += f"*{powerup.nome()}*:  {powerup.descrizione()}.\n"
 
     await update.message.reply_text(text, parse_mode='Markdown')
 
@@ -331,14 +330,19 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
                         totale_domande: int, tempo_inizio: datetime, job_name) -> None:
     risposte = [domanda.rispostaA, domanda.rispostaB, domanda.rispostaC, domanda.rispostaD]
 
-    powerups = await PowerupDAO(database_manager).do_retrieve_all()
     righe_tastiera_powerups = []
+    riga = []
 
-    for powerup in powerups:
-        if random.randint(0, 4) == random.randint(0, 4):
-            bottone = InlineKeyboardButton(text=powerup.get_nome(), callback_data=f"{powerup.get_nome()}")
-            riga = [bottone]
+    for powerup in list(Powerups):
+        bottone = InlineKeyboardButton(text=powerup.nome(), callback_data=f"{powerup.nome()}")
+        riga.append(bottone)
+
+        if len(riga) == 2:
             righe_tastiera_powerups.append(riga)
+            riga = []
+
+    if riga:
+        righe_tastiera_powerups.append(riga)
 
     tastiera_powerups = InlineKeyboardMarkup(righe_tastiera_powerups)
     messaggio = await bot.send_poll(chat_id=update.effective_chat.id,
