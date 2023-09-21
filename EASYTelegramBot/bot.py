@@ -2,10 +2,13 @@ import os
 from typing import Any
 import asyncio
 import random
+from datetime import datetime, timedelta
+from functools import partial
 
 import telegram
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Poll
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, CallbackQueryHandler, CallbackContext
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, CallbackQueryHandler, CallbackContext, \
+    PollAnswerHandler
 
 from Argomenti import Argomenti
 from filtri import filtro_privato, filtro_pubblico
@@ -187,10 +190,18 @@ async def bottone_aggiungi_partecipante(update: Update, context: CallbackContext
         #                                     message_id=messaggio_opzioni,
         #                                     reply_markup=InlineKeyboardMarkup(keyboard))
 
+        context.bot_data.update({
+            update.effective_user.id: {
+                "punteggio": 0,
+                "streak": 0,
+                "powerups": {},
+            }
+        })
+
     else:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Sei già stato aggiunto al quiz su {nome_gruppo} ⚠", show_alert=False)
-    return
+        return
 
 
 async def bottone_rimuovi_partecipante(update: Update, context: CallbackContext) -> None:
@@ -225,6 +236,10 @@ async def bottone_rimuovi_partecipante(update: Update, context: CallbackContext)
         # await bot.edit_message_reply_markup(chat_id=update.effective_chat.id,
         #                                     message_id=messaggio_opzioni,
         #                                     reply_markup=InlineKeyboardMarkup(keyboard))
+
+        if update.effective_user.id in context.bot_data:
+            del context.bot_data[update.effective_user.id]
+
     else:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Non sei attualmente nel quiz su {nome_gruppo} ⚠", show_alert=False)
@@ -259,20 +274,24 @@ async def bottone_avvia_quiz(update: Update, context: CallbackContext) -> None:
 
     domande = await DomandaDAO(database_manager).do_retrieve_by_argomento(nome_gruppo)
 
-    intervallo_domande = 3
+    intervallo_domande_senza_meme = 3 - 3
+    intervallo_domande_con_meme = 5 - 5
+    tempo_inizio = datetime.now()
     for numero_domanda, domanda in enumerate(domande):
-        await invia_domanda(update, context, domanda, numero_domanda + 1, len(domande))
+        await invia_domanda(update, context, domanda, numero_domanda + 1, len(domande), tempo_inizio)
         await asyncio.sleep(domanda.get_tempoRisposta())
         if domanda.has_meme():
             try:
                 with open(domanda.get_meme(), "rb") as meme:
                     messaggio = await bot.send_photo(chat_id=update.effective_chat.id, photo=meme)
                     messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
-                    await asyncio.sleep(5)
+                    await asyncio.sleep(intervallo_domande_con_meme)
             except Exception as e:
                 print(f"Impossibile inviare il meme: {e}")
         else:
-            await asyncio.sleep(intervallo_domande)
+            await asyncio.sleep(intervallo_domande_senza_meme)
+
+        tempo_inizio += timedelta(seconds=domanda.get_tempoRisposta())
 
     quiz_attivi[nome_gruppo] = False
 
@@ -280,11 +299,52 @@ async def bottone_avvia_quiz(update: Update, context: CallbackContext) -> None:
 
     messaggio = await bot.send_message(text="Sto per cancellare la chat 👇🏻", chat_id=update.effective_chat.id)
     messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
-    await asyncio.sleep(7)
+    # await asyncio.sleep(7)
     await cancella_messaggi(update, context)
 
 
-async def cancella_messaggi(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> None:
+    nome_gruppo = update.effective_chat.title
+    if not quiz_attivi[nome_gruppo]:
+
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Avvio quiz su {nome_gruppo} in corso 🚀")
+        await asyncio.sleep(1)
+
+        quiz_attivi[nome_gruppo] = True
+    else:
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Quiz su {nome_gruppo} già in corso, attendi ⏳")
+        return
+
+    domande = await DomandaDAO(database_manager).do_retrieve_by_argomento(nome_gruppo)
+
+    tempo_prossima_domanda = datetime.now() + timedelta(seconds=2)
+    intervallo_domande = 2
+    for numero_domanda, domanda in enumerate(domande):
+        function = partial(invia_domanda, update, context, domanda, numero_domanda + 1, len(domande),
+                           tempo_prossima_domanda)
+        context.job_queue.run_once(function, when=intervallo_domande, name="invia_domanda")
+        function = partial(manda_meme, update, context, domanda)
+        context.job_queue.run_once(function, when=intervallo_domande + domanda.get_tempoRisposta(), name="manda_meme")
+        tempo_prossima_domanda = tempo_prossima_domanda + timedelta(seconds=domanda.get_tempoRisposta()) + timedelta(
+            seconds=2)
+        intervallo_domande = intervallo_domande + domanda.get_tempoRisposta() + 2
+
+    quiz_attivi[nome_gruppo] = False
+
+    # await mostra_classifica(update, context)
+
+    # await asyncio.sleep(7)
+
+    function = partial(cancella_messaggi, update, context)
+    context.job_queue.run_once(function, when=intervallo_domande + 2, name="cancella_messaggi")
+
+
+async def cancella_messaggi(update: Update, context: ContextTypes.DEFAULT_TYPE, job_name) -> None:
+    messaggio = await bot.send_message(text="Sto per cancellare la chat 👇🏻", chat_id=update.effective_chat.id)
+    messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
+
     for messaggio_per_lobby in messaggi_per_lobby[update.effective_chat.title]:
         try:
             await context.bot.delete_message(chat_id=update.effective_chat.id, message_id=messaggio_per_lobby)
@@ -294,8 +354,18 @@ async def cancella_messaggi(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     messaggi_per_lobby[update.effective_chat.title] = []
 
 
+async def manda_meme(update: Update, context: ContextTypes.DEFAULT_TYPE, domanda: Domanda, job_name) -> None:
+    if domanda.has_meme():
+        try:
+            with open(domanda.get_meme(), "rb") as meme:
+                messaggio = await bot.send_photo(chat_id=update.effective_chat.id, photo=meme)
+                messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
+        except Exception as e:
+            print(f"Impossibile inviare il meme: {e}")
+
+
 async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, domanda: Domanda, numero_domanda: int,
-                        totale_domande: int) -> None:
+                        totale_domande: int, tempo_inizio: datetime, job_name) -> None:
     risposte = [domanda.rispostaA, domanda.rispostaB, domanda.rispostaC, domanda.rispostaD]
 
     powerups = await PowerupDAO(database_manager).do_retrieve_all()
@@ -317,21 +387,38 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
 
     messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
 
+    context.bot_data.update({
+        messaggio.poll.id: {
+            "chat_id": update.effective_chat.id,
+            "message_id": messaggio.message_id,
+            "risposta_Corretta": domanda.get_rispostaCorretta(),
+            "tempo_Inizio": tempo_inizio,
+            "durata_quiz": domanda.get_tempoRisposta(),
+            "difficolta": domanda.get_difficolta()
+        }
+    })
+
 
 async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     player = await PlayerDAO(database_manager).do_retrieve_by_id(update.poll_answer.user.id)
 
-    if player not in players_in_quiz[update.poll_answer.chat.title]:
+    if player.get_id() not in context.bot_data.keys():
         return
 
-    if update.poll_answer.option_ids[0] == update.poll_answer.poll.correct_option_id:
-        punti = player.get_punteggio() + await calcola_punteggio(update, context, True)
-    else:
-        punti = player.get_punteggio() + await calcola_punteggio(update, context, False)
+    print("AAAAAAAAAAAAA", context.bot_data[player.get_id()])
+
+    print("0000000000000", context.bot_data)
+
+    # if update.poll_answer.option_ids[0] == update.poll_answer.poll.correct_option_id:
+    #     punti = player.get_punteggio() + await calcola_punteggio(update, context, True)
+    #
+    # else:
+    #     punti = player.get_punteggio() + await calcola_punteggio(update, context, False)
+
+    # riprendere da riga 368 dell'altro file
 
 
-
-async def calcola_punteggio(update: Update, context: ContextTypes.DEFAULT_TYPE, isCorrect) -> None:
+async def calcola_punteggio(update: Update, context: ContextTypes.DEFAULT_TYPE, isCorrect: bool) -> None:
     return 10 if isCorrect else -2
 
 
@@ -376,11 +463,11 @@ def main():
     app.add_handler(CommandHandler("avvia_quiz", comando_start_quiz))
     app.add_handler(CommandHandler("stop_quiz", comando_stop_quiz))
 
-    app.add_handler(CallbackQueryHandler(bottone_avvia_quiz, pattern="avvia_quiz"))
+    app.add_handler(CallbackQueryHandler(bottone_avvia_quiz_jobs, pattern="avvia_quiz"))
     app.add_handler(CallbackQueryHandler(bottone_aggiungi_partecipante, pattern="aggiungi_partecipante"))
     app.add_handler(CallbackQueryHandler(bottone_rimuovi_partecipante, pattern="rimuovi_partecipante"))
 
-    application.add_handler(PollAnswerHandler(processa_risposta))
+    app.add_handler(PollAnswerHandler(processa_risposta))
 
     app.run_polling()
 

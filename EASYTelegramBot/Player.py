@@ -6,7 +6,7 @@ class Player:
 
     # Getter per l'ID
     def get_id(self):
-        return self.player_id
+        return int(self.player_id)
 
     # Setter per l'ID
     def set_id(self, player_id):
