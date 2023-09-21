@@ -366,11 +366,13 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
 async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     player = await PlayerDAO(database_manager).do_retrieve_by_id(update.poll_answer.user.id)
 
-    if player.get_id() not in context.bot_data.keys():
+    if int(player.get_id()) not in context.bot_data.keys():
         return
 
+    print(context.bot_data)
+
     quiz = context.bot_data[update.poll_answer.poll_id]
-    player_in_quiz = context.bot_data[player.get_id()]
+    player_in_quiz = context.bot_data[int(player.get_id())]
 
     if update.poll_answer.option_ids[0] == int(quiz["risposta_corretta"]) - 1:
 
@@ -392,14 +394,12 @@ async def calcola_punteggio_quiz_corrente(update: Update, context: ContextTypes.
 
 
 async def mostra_classifica(update: Update, context: ContextTypes.DEFAULT_TYPE, job_name) -> None:
-
     player_ids = players_in_quiz[update.effective_chat.title]
     classifica = []
     for id in player_ids:
         classifica.append(context.bot_data[id])
 
     classifica.sort(key=lambda x: x["punteggio_quiz_corrente"][update.effective_chat.title], reverse=True)
-    print(classifica)
 
     text = f"Ecco la classifica del quiz su *{update.effective_chat.title}*\n"
     for posizione, player in enumerate(classifica, start=1):

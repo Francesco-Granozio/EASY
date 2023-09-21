@@ -1,5 +1,6 @@
 aggiungere i riferimenti alle risposte
 vedere meglio il sistema di leveling
-fixare il fatto che non si possano fare quiz contemporaneamente
+aggiungere meccansimo countdown quiz
+
 
 
