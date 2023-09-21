@@ -357,7 +357,7 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
             "message_id": messaggio.message_id,
             "risposta_corretta": int(domanda.get_rispostaCorretta()),
             "tempo_inizio": tempo_inizio,
-            "durata_quiz": domanda.get_tempoRisposta(),
+            "durata_risposta": domanda.get_tempoRisposta(),
             "difficolta": int(domanda.get_difficolta())
         }
     })
@@ -369,28 +369,31 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     if int(player.get_id()) not in context.bot_data.keys():
         return
 
-    print(context.bot_data)
-
     quiz = context.bot_data[update.poll_answer.poll_id]
     player_in_quiz = context.bot_data[int(player.get_id())]
 
     if update.poll_answer.option_ids[0] == int(quiz["risposta_corretta"]) - 1:
 
         player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] += quiz["difficolta"] * 10 * player_in_quiz[
-            "streak"]
+            "streak"] + await calcola_punteggio_tempo_risposta(update, context, quiz["tempo_inizio"],
+                                                               quiz["durata_risposta"])
 
         if player_in_quiz["streak"] <= 1.5:
             player_in_quiz["streak"] += 0.1
 
     else:
         player_in_quiz["streak"] = 1
-        player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] -= float(quiz["difficolta"]) * 1.3
+        player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] -= float(quiz["difficolta"]) * 1.5
 
-    print(player_in_quiz)
+    if player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] < 0:
+        player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] = 0
 
 
-async def calcola_punteggio_quiz_corrente(update: Update, context: ContextTypes.DEFAULT_TYPE, isCorrect: bool) -> None:
-    return 10 if isCorrect else -2
+async def calcola_punteggio_tempo_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE, tempo_inizio,
+                                           durata_risposta) -> None:
+    return round(
+        float(timedelta(seconds=durata_risposta).total_seconds() - (datetime.now() - tempo_inizio).total_seconds()),
+        2) * 10
 
 
 async def mostra_classifica(update: Update, context: ContextTypes.DEFAULT_TYPE, job_name) -> None:
