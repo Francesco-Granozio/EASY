@@ -57,10 +57,19 @@ async def comando_nickname(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         await update.message.reply_text('Il nickname deve essere lungo massimo 30 caratteri')
     else:
         player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+        nickname_inserito = " ".join(context.args)
 
-        if player.nickname == " ".join(context.args):
+        if player.nickname == nickname_inserito:
             await update.message.reply_text('Il nickname inserito è già il tuo nickname attuale')
             return
+
+        other_players = await PlayerDAO(database_manager).do_retrieve_by_nickname(nickname_inserito)
+
+        if other_players is not None:
+            for other_player in other_players:
+                if nickname_inserito == other_player.get_nickname():
+                    await update.message.reply_text('Il nickname inserito è già stato scelto da un altro utente')
+                    return
 
         player.set_nickname(" ".join(context.args))
         await PlayerDAO(database_manager).do_update(player)
