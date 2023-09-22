@@ -160,6 +160,12 @@ async def bottone_aggiungi_partecipante(update: Update, context: CallbackContext
     # aggiungere controllo quiz attivo
     nome_gruppo = update.effective_chat.title
     if update.effective_user.id not in players_in_quiz[nome_gruppo]:
+
+        if quiz_attivi[nome_gruppo]:
+            await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                            text=f"Quiz su {nome_gruppo} già in corso, attendi ⏳", show_alert=False)
+            return
+
         players_in_quiz[nome_gruppo].append(update.effective_user.id)
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Aggiunto al quiz su {nome_gruppo} ✅", show_alert=False)
@@ -189,14 +195,13 @@ async def bottone_aggiungi_partecipante(update: Update, context: CallbackContext
         #                                     message_id=messaggio_opzioni,
         #                                     reply_markup=InlineKeyboardMarkup(keyboard))
 
-        punteggio_iniziale = {argomento.value: 0 for argomento in Argomenti}
         context.bot_data.update({
             update.effective_user.id: {
                 "nickname": (
                     await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)).get_nickname(),
-                "punteggio_quiz_corrente": punteggio_iniziale,
+                "punteggio_quiz_corrente": {argomento.value: 0 for argomento in Argomenti},
                 "streak": 1,
-                "powerups": {},
+                "powerups": {powerup.nome(): False for powerup in Powerups},
             }
         })
 
@@ -206,10 +211,31 @@ async def bottone_aggiungi_partecipante(update: Update, context: CallbackContext
         return
 
 
+async def resetta_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE, job_name) -> None:
+
+    context.bot_data.update({
+        update.effective_user.id: {
+            "nickname": (
+                await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)).get_nickname(),
+            "punteggio_quiz_corrente": {argomento.value: 0 for argomento in Argomenti},
+            "streak": 1,
+            "powerups": {powerup.nome(): False for powerup in Powerups},
+        }
+    })
+    players_in_quiz[update.effective_chat.title] = []
+    quiz_attivi[update.effective_chat.title] = False
+
+
 async def bottone_rimuovi_partecipante(update: Update, context: CallbackContext) -> None:
     # aggiungere controllo quiz attivo
     nome_gruppo = update.effective_chat.title
     if update.effective_user.id in players_in_quiz[nome_gruppo]:
+
+        if quiz_attivi[nome_gruppo]:
+            await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                            text=f"Quiz su {nome_gruppo} già in iniziato, attendi ⏳", show_alert=False)
+            return
+
         players_in_quiz[nome_gruppo].remove(update.effective_user.id)
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Rimosso dal quiz su {nome_gruppo} ❌", show_alert=False)
@@ -263,8 +289,8 @@ async def bottone_rimuovi_partecipante(update: Update, context: CallbackContext)
 
 async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> None:
     nome_gruppo = update.effective_chat.title
-    if not quiz_attivi[nome_gruppo]:
 
+    if not quiz_attivi[nome_gruppo]:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Avvio quiz su {nome_gruppo} in corso 🚀", show_alert=False)
 
@@ -273,6 +299,7 @@ async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> N
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Quiz su {nome_gruppo} già in corso, attendi ⏳", show_alert=False)
         return
+
 
     domande = await DomandaDAO(database_manager).do_retrieve_by_argomento(nome_gruppo)
 
@@ -292,13 +319,14 @@ async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> N
 
         intervallo_domande = intervallo_domande + domanda.get_tempoRisposta() + 5
 
-    quiz_attivi[nome_gruppo] = False
-
     function = partial(mostra_classifica, update, context)
     context.job_queue.run_once(function, when=intervallo_domande + 2, name="mostra_classifica")
 
     function = partial(cancella_messaggi, update, context)
     context.job_queue.run_once(function, when=intervallo_domande + 3, name="cancella_messaggi")
+
+    function = partial(resetta_quiz, update, context)
+    context.job_queue.run_once(function, when=intervallo_domande + 3, name="resetta_quiz")
 
 
 async def cancella_messaggi(update: Update, context: ContextTypes.DEFAULT_TYPE, job_name) -> None:
@@ -365,6 +393,33 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
             "difficolta": int(domanda.get_difficolta())
         }
     })
+
+
+async def handle_powerup_streak(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if update.effective_user.id not in players_in_quiz[update.effective_chat.title]:
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Non sei un partecipante del quiz su {update.effective_chat.title} ⚠",
+                                        show_alert=False)
+        return
+
+    print(context.bot_data[update.effective_user.id]["powerups"])
+
+    if not context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()] = True
+
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Powerup {Powerups.STREAK.nome()} utilizato!", show_alert=False)
+
+        player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+        messaggio = await bot.send_message(
+            text=f"Powerup *{Powerups.STREAK.nome()}* utilizzato da *{player.get_nickname()}*!",
+            chat_id=update.effective_chat.id, parse_mode='Markdown')
+
+        messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
+
+    else:
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Powerup {Powerups.STREAK.nome()} già utilizzato! ⚠", show_alert=False)
 
 
 async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -445,6 +500,8 @@ def main():
     app.add_handler(CallbackQueryHandler(bottone_avvia_quiz_jobs, pattern="avvia_quiz"))
     app.add_handler(CallbackQueryHandler(bottone_aggiungi_partecipante, pattern="aggiungi_partecipante"))
     app.add_handler(CallbackQueryHandler(bottone_rimuovi_partecipante, pattern="rimuovi_partecipante"))
+
+    app.add_handler(CallbackQueryHandler(handle_powerup_streak, pattern=Powerups.STREAK.nome()))
 
     app.add_handler(PollAnswerHandler(processa_risposta))
 

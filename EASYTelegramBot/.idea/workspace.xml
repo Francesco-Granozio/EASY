@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="01f806c3-7cbd-4b91-863a-f7e44c87fa9e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Powerup.py" beforeDir="false" afterPath="$PROJECT_DIR$/Powerups.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PowerupDAO.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -123,7 +121,8 @@
       <workItem from="1695194229375" duration="17807000" />
       <workItem from="1695244931964" duration="7691000" />
       <workItem from="1695291080970" duration="18626000" />
-      <workItem from="1695332399820" duration="5918000" />
+      <workItem from="1695332399820" duration="6118000" />
+      <workItem from="1695386588720" duration="5931000" />
     </task>
     <servers />
   </component>
@@ -131,6 +130,6 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/EASYTelegramBot$EASY.coverage" NAME="EASY Coverage Results" MODIFIED="1695339502997" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/EASYTelegramBot$EASY.coverage" NAME="EASY Coverage Results" MODIFIED="1695394499339" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>
