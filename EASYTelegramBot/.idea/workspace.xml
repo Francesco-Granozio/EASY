@@ -122,7 +122,8 @@
       <workItem from="1695244931964" duration="7691000" />
       <workItem from="1695291080970" duration="18626000" />
       <workItem from="1695332399820" duration="6118000" />
-      <workItem from="1695386588720" duration="6894000" />
+      <workItem from="1695386588720" duration="7550000" />
+      <workItem from="1695493706060" duration="1581000" />
     </task>
     <servers />
   </component>
@@ -130,6 +131,6 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/EASYTelegramBot$EASY.coverage" NAME="EASY Coverage Results" MODIFIED="1695395463492" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/EASYTelegramBot$EASY.coverage" NAME="EASY Coverage Results" MODIFIED="1695495285777" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

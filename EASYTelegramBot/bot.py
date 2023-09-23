@@ -71,7 +71,7 @@ async def comando_nickname(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                     await update.message.reply_text('Il nickname inserito è già stato scelto da un altro utente')
                     return
 
-        player.set_nickname(" ".join(context.args))
+        player.set_nickname(nickname_inserito)
         await PlayerDAO(database_manager).do_update(player)
         await update.message.reply_text(f'Nickname aggiornato con successo!')
 
@@ -221,7 +221,6 @@ async def bottone_aggiungi_partecipante(update: Update, context: CallbackContext
 
 
 async def resetta_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE, job_name) -> None:
-
     context.bot_data.update({
         update.effective_user.id: {
             "nickname": (
@@ -308,7 +307,6 @@ async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> N
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Quiz su {nome_gruppo} già in corso, attendi ⏳", show_alert=False)
         return
-
 
     domande = await DomandaDAO(database_manager).do_retrieve_by_argomento(nome_gruppo)
 
@@ -411,8 +409,6 @@ async def handle_powerup_streak(update: Update, context: ContextTypes.DEFAULT_TY
                                         show_alert=False)
         return
 
-    print(context.bot_data[update.effective_user.id]["powerups"])
-
     if not context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()]:
         context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()] = True
 
@@ -442,6 +438,8 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
     if update.poll_answer.option_ids[0] == int(quiz["risposta_corretta"]) - 1:
 
+        await calcola_punteggio_powerup_streak(update, context, player_in_quiz)
+
         player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] += quiz["difficolta"] * 10 * player_in_quiz[
             "streak"] + await calcola_punteggio_tempo_risposta(update, context, quiz["tempo_inizio"],
                                                                quiz["durata_risposta"])
@@ -455,6 +453,14 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
     if player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] < 0:
         player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] = 0
+
+
+async def calcola_punteggio_powerup_streak(update: Update, context: ContextTypes.DEFAULT_TYPE, player_in_quiz) -> None:
+
+    #la streak con il powerup attivato può superare il 1.5
+    if context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()] = False
+        player_in_quiz["streak"] += 0.3
 
 
 async def calcola_punteggio_tempo_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE, tempo_inizio,
