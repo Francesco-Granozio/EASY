@@ -211,6 +211,7 @@ async def bottone_aggiungi_partecipante(update: Update, context: CallbackContext
                 "punteggio_quiz_corrente": {argomento.value: 0 for argomento in Argomenti},
                 "streak": 1,
                 "powerups": {powerup.nome(): False for powerup in Powerups},
+                "powerup_data": {powerup.nome(): {} for powerup in Powerups}
             }
         })
 
@@ -228,6 +229,7 @@ async def resetta_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE, job_n
             "punteggio_quiz_corrente": {argomento.value: 0 for argomento in Argomenti},
             "streak": 1,
             "powerups": {powerup.nome(): False for powerup in Powerups},
+            "powerup_data": {powerup.nome(): {} for powerup in Powerups}
         }
     })
     players_in_quiz[update.effective_chat.title] = []
@@ -310,7 +312,7 @@ async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> N
 
     domande = await DomandaDAO(database_manager).do_retrieve_by_argomento(nome_gruppo)
 
-    tempo_prossima_domanda = datetime.now() + timedelta(seconds=2)
+    tempo_prossima_domanda = datetime.now() + timedelta(seconds=3)
     intervallo_domande = 2
     for numero_domanda, domanda in enumerate(domande):
         function = partial(invia_domanda, update, context, domanda, numero_domanda + 1, len(domande),
@@ -325,6 +327,8 @@ async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> N
             seconds=5)
 
         intervallo_domande = intervallo_domande + domanda.get_tempoRisposta() + 5
+
+
 
     function = partial(mostra_classifica, update, context)
     context.job_queue.run_once(function, when=intervallo_domande + 2, name="mostra_classifica")
@@ -379,12 +383,13 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
     if riga:
         righe_tastiera_powerups.append(riga)
 
+
     tastiera_powerups = InlineKeyboardMarkup(righe_tastiera_powerups)
     messaggio = await bot.send_poll(chat_id=update.effective_chat.id,
                                     question=f"Domanda: {numero_domanda}/{totale_domande}\nDifficoltà: {domanda.get_difficoltaString()}\n{domanda.get_testo()}",
                                     options=risposte,
                                     type=Poll.QUIZ, correct_option_id=int(domanda.get_rispostaCorretta()) - 1,
-                                    is_anonymous=False, open_period=domanda.tempoRisposta,
+                                    is_anonymous=False, open_period=domanda.get_tempoRisposta(),
                                     reply_markup=tastiera_powerups)
 
     messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
@@ -427,6 +432,31 @@ async def handle_powerup_streak(update: Update, context: ContextTypes.DEFAULT_TY
                                         text=f"Powerup {Powerups.STREAK.nome()} già utilizzato! ⚠", show_alert=False)
 
 
+async def handle_powerup_regalo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if update.effective_user.id not in players_in_quiz[update.effective_chat.title]:
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Non sei un partecipante del quiz su {update.effective_chat.title} ⚠",
+                                        show_alert=False)
+        return
+
+    if not context.bot_data[update.effective_user.id]["powerups"][Powerups.REGALO.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.REGALO.nome()] = True
+
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Powerup {Powerups.REGALO.nome()} utilizato!", show_alert=False)
+
+        player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+        messaggio = await bot.send_message(
+            text=f"Powerup *{Powerups.REGALO.nome()}* utilizzato da *{player.get_nickname()}*!",
+            chat_id=update.effective_chat.id, parse_mode='Markdown')
+
+        messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
+
+    else:
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Powerup {Powerups.REGALO.nome()} già utilizzato! ⚠", show_alert=False)
+
+
 async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     player = await PlayerDAO(database_manager).do_retrieve_by_id(update.poll_answer.user.id)
 
@@ -439,11 +469,11 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     if update.poll_answer.option_ids[0] == int(quiz["risposta_corretta"]) - 1:
 
         await calcola_punteggio_powerup_streak(update, context, player_in_quiz)
+        await calcola_punteggio_powerup_regalo(update, context, quiz, player_in_quiz)
 
-        player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] += quiz["difficolta"] * 10 * player_in_quiz[
+        player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] += (quiz["difficolta"] * 10 * player_in_quiz[
             "streak"] + await calcola_punteggio_tempo_risposta(update, context, quiz["tempo_inizio"],
-                                                               quiz["durata_risposta"])
-
+                                                               quiz["durata_risposta"]))
         if player_in_quiz["streak"] <= 1.5:
             player_in_quiz["streak"] += 0.1
 
@@ -456,12 +486,16 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
 
 async def calcola_punteggio_powerup_streak(update: Update, context: ContextTypes.DEFAULT_TYPE, player_in_quiz) -> None:
-
-    #la streak con il powerup attivato può superare il 1.5
+    # la streak con il powerup attivato può superare il 1.5
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()]:
         context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()] = False
         player_in_quiz["streak"] += 0.3
 
+
+async def calcola_punteggio_powerup_regalo(update: Update, context: ContextTypes.DEFAULT_TYPE, quiz, player_in_quiz) -> None:
+    if context.bot_data[update.effective_user.id]["powerups"][Powerups.REGALO.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.REGALO.nome()] = False
+        player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] += random.randint(10, 31) * quiz["difficolta"]
 
 async def calcola_punteggio_tempo_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE, tempo_inizio,
                                            durata_risposta) -> None:
@@ -517,6 +551,7 @@ def main():
     app.add_handler(CallbackQueryHandler(bottone_rimuovi_partecipante, pattern="rimuovi_partecipante"))
 
     app.add_handler(CallbackQueryHandler(handle_powerup_streak, pattern=Powerups.STREAK.nome()))
+    app.add_handler(CallbackQueryHandler(handle_powerup_regalo, pattern=Powerups.REGALO.nome()))
 
     app.add_handler(PollAnswerHandler(processa_risposta))
 

@@ -2,11 +2,6 @@ from enum import Enum
 
 
 class Powerups(Enum):
-    # Super Velocità
-    SUPER_VELOCITA = (
-        "Super Velocità 🏃‍",
-        "Il giocatore guadagna 2x punti per 30 secondi se risponde ad una velocità maggiore"
-    )
 
     # Streak
     STREAK = (
@@ -17,7 +12,7 @@ class Powerups(Enum):
     # Regalo
     REGALO = (
         "Regalo 🎁",
-        "Il giocatore riceve un numero di punti casuale tra 1 e 10"
+        "Il giocatore riceve un numero di punti casuale tra 10 e 30 moltiplicati per la difficoltà della domanda"
     )
 
     # Doppio Rischio
@@ -44,12 +39,6 @@ class Powerups(Enum):
         "Viene eliminata 1 risposta sbagliata"
     )
 
-    # Seconda Chance
-    SECONDA_CHANCE = (
-        "Seconda Chance 🔄",
-        "Il giocatore ha una seconda possibilità di rispondere"
-    )
-
     # Immunità
     IMMUNITA = (
         "Immunità 🛡️",
@@ -61,7 +50,6 @@ class Powerups(Enum):
         "Gioco di Potere 💥",
         "Il giocatore guadagna 2x punti se la risposta è corretta, mentre gli altri giocatori perdono 2x punti in caso di risposta sbagliata"
     )
-
 
     def nome(self):
         return self.value[0]
