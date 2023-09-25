@@ -480,6 +480,32 @@ async def handle_powerup_doppio_rischio(update: Update, context: ContextTypes.DE
                                         show_alert=False)
 
 
+async def handle_powerup_doppio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if update.effective_user.id not in players_in_quiz[update.effective_chat.title]:
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Non sei un partecipante del quiz su {update.effective_chat.title} ⚠",
+                                        show_alert=False)
+        return
+
+    if not context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO.nome()] = True
+
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Powerup {Powerups.DOPPIO.nome()} utilizato!", show_alert=False)
+
+        player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+        messaggio = await bot.send_message(
+            text=f"Powerup *{Powerups.DOPPIO.nome()}* utilizzato da *{player.get_nickname()}*!",
+            chat_id=update.effective_chat.id, parse_mode='Markdown')
+
+        messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
+
+    else:
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Powerup {Powerups.DOPPIO.nome()} già utilizzato! ⚠",
+                                        show_alert=False)
+
+
 async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     player = await PlayerDAO(database_manager).do_retrieve_by_id(update.poll_answer.user.id)
 
@@ -491,17 +517,19 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
     print("Prima: ", player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]])
 
+    await calcola_punteggio_powerup_regalo(update, context, quiz, player_in_quiz)
+
     if update.poll_answer.option_ids[0] == int(quiz["risposta_corretta"]) - 1:
 
         await calcola_punteggio_powerup_streak(update, context, player_in_quiz)
-        await calcola_punteggio_powerup_regalo(update, context, quiz, player_in_quiz)
 
-        doppio_rischio = await calcola_punteggio_powerup_doppio_rischio(
-            update, context, True)
+        punti_tempo_risposta = await calcola_punteggio_tempo_risposta(update, context, quiz["tempo_inizio"],
+                                                                      quiz["durata_risposta"])
+        doppio_rischio = await calcola_punteggio_powerup_doppio_rischio(update, context, True)
+        doppio = await calcola_punteggio_powerup_doppio(update, context)
 
         player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] += ((quiz["difficolta"] * 10 * player_in_quiz[
-            "streak"] + await calcola_punteggio_tempo_risposta(update, context, quiz["tempo_inizio"],
-                                                               quiz["durata_risposta"]))) * doppio_rischio
+            "streak"] + punti_tempo_risposta)) * doppio_rischio * doppio
 
         if player_in_quiz["streak"] <= 1.5:
             player_in_quiz["streak"] += 0.1
@@ -537,6 +565,14 @@ async def calcola_punteggio_powerup_doppio_rischio(update: Update, context: Cont
                                                    isCorrect) -> None:
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO_RISCHIO.nome()]:
         context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO_RISCHIO.nome()] = False
+        return 2
+
+    return 1
+
+
+async def calcola_punteggio_powerup_doppio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO.nome()] = False
         return 2
 
     return 1
@@ -586,6 +622,7 @@ def main():
     app.add_handler(CallbackQueryHandler(handle_powerup_streak, pattern=Powerups.STREAK.nome()))
     app.add_handler(CallbackQueryHandler(handle_powerup_regalo, pattern=Powerups.REGALO.nome()))
     app.add_handler(CallbackQueryHandler(handle_powerup_doppio_rischio, pattern=Powerups.DOPPIO_RISCHIO.nome()))
+    app.add_handler(CallbackQueryHandler(handle_powerup_doppio, pattern=Powerups.DOPPIO.nome()))
 
     app.add_handler(PollAnswerHandler(processa_risposta))
 
