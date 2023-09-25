@@ -567,7 +567,7 @@ async def handle_powerup_gomma(update: Update, context: ContextTypes.DEFAULT_TYP
 
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Powerup {Powerups.GOMMA.nome()} utilizzato!\n"
-                                             f"Una risposta sbagliata è stata rimossa."
+                                             f"Una risposta sbagliata è stata rimossa.\n"
                                              f"1️⃣ {risposte[0]}\n"
                                              f"2️⃣ {risposte[1]}\n"
                                              f"3️⃣ {risposte[2]}",
@@ -585,6 +585,31 @@ async def handle_powerup_gomma(update: Update, context: ContextTypes.DEFAULT_TYP
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Powerup {Powerups.GOMMA.nome()} già utilizzato! ⚠",
                                         show_alert=False)
+
+
+async def handle_powerup_immunita(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if update.effective_user.id not in players_in_quiz[update.effective_chat.title]:
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Non sei un partecipante del quiz su {update.effective_chat.title} ⚠",
+                                        show_alert=False)
+        return
+
+    if not context.bot_data[update.effective_user.id]["powerups"][Powerups.IMMUNITA.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.IMMUNITA.nome()] = True
+
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Powerup {Powerups.IMMUNITA.nome()} utilizato!", show_alert=False)
+
+        player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+        messaggio = await bot.send_message(
+            text=f"Powerup *{Powerups.IMMUNITA.nome()}* utilizzato da *{player.get_nickname()}*!",
+            chat_id=update.effective_chat.id, parse_mode='Markdown')
+
+        messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
+
+    else:
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Powerup {Powerups.IMMUNITA.nome()} già utilizzato! ⚠", show_alert=False)
 
 
 async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -616,6 +641,9 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
             player_in_quiz["streak"] += 0.1
 
     else:
+
+        if await calcola_punteggio_immunita(update, context):
+            return
         doppio_rischio = await calcola_punteggio_powerup_doppio_rischio(update, context, False)
 
         player_in_quiz["streak"] = 1
@@ -657,6 +685,14 @@ async def calcola_punteggio_powerup_doppio(update: Update, context: ContextTypes
         return 2
 
     return 1
+
+
+async def calcola_punteggio_immunita(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if context.bot_data[update.effective_user.id]["powerups"][Powerups.IMMUNITA.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.IMMUNITA.nome()] = False
+        return True
+
+    return False
 
 
 async def calcola_punteggio_tempo_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE, tempo_inizio,
@@ -706,6 +742,7 @@ def main():
     app.add_handler(CallbackQueryHandler(handle_powerup_doppio, pattern=Powerups.DOPPIO.nome()))
     app.add_handler(CallbackQueryHandler(handle_powerup_50_e_50, pattern=Powerups.CINQUANTA_CINQUANTA.nome()))
     app.add_handler(CallbackQueryHandler(handle_powerup_gomma, pattern=Powerups.GOMMA.nome()))
+    app.add_handler(CallbackQueryHandler(handle_powerup_immunita, pattern=Powerups.IMMUNITA.nome()))
 
     app.add_handler(PollAnswerHandler(processa_risposta))
 
