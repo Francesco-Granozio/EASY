@@ -355,10 +355,12 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
     righe_tastiera_powerups = []
     riga = []
 
+    # print("Powerups prima dell'invio: ", context.bot_data[update.effective_user.id]["powerups"])
+
     for powerup in list(Powerups):
 
-        for pow in list(Powerups):
-            context.bot_data[update.effective_user.id]["powerups"][pow.nome()] = False
+        # for pow in list(Powerups):
+        #     context.bot_data[update.effective_user.id]["powerups"][pow.nome()] = False
 
         bottone = InlineKeyboardButton(text=powerup.nome(), callback_data=f"{powerup.nome()}")
         riga.append(bottone)
@@ -403,8 +405,8 @@ async def handle_powerup_streak(update: Update, context: ContextTypes.DEFAULT_TY
                                         show_alert=False)
         return
 
-    if not context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()]:
-        context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()] = True
+    if  context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()] = False
 
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Powerup {Powerups.STREAK.nome()} utilizato!", show_alert=False)
@@ -418,7 +420,7 @@ async def handle_powerup_streak(update: Update, context: ContextTypes.DEFAULT_TY
 
     else:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
-                                        text=f"Powerup {Powerups.STREAK.nome()} già utilizzato! ⚠", show_alert=False)
+                                        text=f"Powerup {Powerups.STREAK.nome()} non disponibile! ⚠", show_alert=False)
 
 
 async def handle_powerup_regalo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -428,8 +430,8 @@ async def handle_powerup_regalo(update: Update, context: ContextTypes.DEFAULT_TY
                                         show_alert=False)
         return
 
-    if not context.bot_data[update.effective_user.id]["powerups"][Powerups.REGALO.nome()]:
-        context.bot_data[update.effective_user.id]["powerups"][Powerups.REGALO.nome()] = True
+    if context.bot_data[update.effective_user.id]["powerups"][Powerups.REGALO.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.REGALO.nome()] = False
 
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Powerup {Powerups.REGALO.nome()} utilizato!", show_alert=False)
@@ -443,7 +445,7 @@ async def handle_powerup_regalo(update: Update, context: ContextTypes.DEFAULT_TY
 
     else:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
-                                        text=f"Powerup {Powerups.REGALO.nome()} già utilizzato! ⚠", show_alert=False)
+                                        text=f"Powerup {Powerups.REGALO.nome()} non disponibile! ⚠", show_alert=False)
 
 
 async def handle_powerup_doppio_rischio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -453,8 +455,8 @@ async def handle_powerup_doppio_rischio(update: Update, context: ContextTypes.DE
                                         show_alert=False)
         return
 
-    if not context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO_RISCHIO.nome()]:
-        context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO_RISCHIO.nome()] = True
+    if context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO_RISCHIO.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO_RISCHIO.nome()] = False
 
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Powerup {Powerups.DOPPIO_RISCHIO.nome()} utilizato!", show_alert=False)
@@ -468,7 +470,7 @@ async def handle_powerup_doppio_rischio(update: Update, context: ContextTypes.DE
 
     else:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
-                                        text=f"Powerup {Powerups.DOPPIO_RISCHIO.nome()} già utilizzato! ⚠",
+                                        text=f"Powerup {Powerups.DOPPIO_RISCHIO.nome()} non disponibile! ⚠",
                                         show_alert=False)
 
 
@@ -479,8 +481,8 @@ async def handle_powerup_doppio(update: Update, context: ContextTypes.DEFAULT_TY
                                         show_alert=False)
         return
 
-    if not context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO.nome()]:
-        context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO.nome()] = True
+    if context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO.nome()] = False
 
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Powerup {Powerups.DOPPIO.nome()} utilizato!", show_alert=False)
@@ -494,7 +496,7 @@ async def handle_powerup_doppio(update: Update, context: ContextTypes.DEFAULT_TY
 
     else:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
-                                        text=f"Powerup {Powerups.DOPPIO.nome()} già utilizzato! ⚠",
+                                        text=f"Powerup {Powerups.DOPPIO.nome()} non disponibile! ⚠",
                                         show_alert=False)
 
 
@@ -505,8 +507,8 @@ async def handle_powerup_50_e_50(update: Update, context: ContextTypes.DEFAULT_T
                                         show_alert=False)
         return
 
-    if not context.bot_data[update.effective_user.id]["powerups"][Powerups.CINQUANTA_CINQUANTA.nome()]:
-        context.bot_data[update.effective_user.id]["powerups"][Powerups.CINQUANTA_CINQUANTA.nome()] = True
+    if context.bot_data[update.effective_user.id]["powerups"][Powerups.CINQUANTA_CINQUANTA.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.CINQUANTA_CINQUANTA.nome()] = False
 
         risposte = context.bot_data[update.callback_query.message.poll.id]["risposte"]
         indice_risposta_corretta = context.bot_data[update.callback_query.message.poll.id]["risposta_corretta"] - 1
@@ -538,11 +540,11 @@ async def handle_powerup_50_e_50(update: Update, context: ContextTypes.DEFAULT_T
             chat_id=update.effective_chat.id, parse_mode='Markdown')
 
         messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
-        context.bot_data[update.effective_user.id]["powerups"][Powerups.CINQUANTA_CINQUANTA.nome()] = False
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.CINQUANTA_CINQUANTA.nome()] = True
 
     else:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
-                                        text=f"Powerup {Powerups.CINQUANTA_CINQUANTA.nome()} già utilizzato! ⚠",
+                                        text=f"Powerup {Powerups.CINQUANTA_CINQUANTA.nome()} non disponibile! ⚠",
                                         show_alert=False)
 
 
@@ -553,8 +555,8 @@ async def handle_powerup_gomma(update: Update, context: ContextTypes.DEFAULT_TYP
                                         show_alert=False)
         return
 
-    if not context.bot_data[update.effective_user.id]["powerups"][Powerups.GOMMA.nome()]:
-        context.bot_data[update.effective_user.id]["powerups"][Powerups.GOMMA.nome()] = True
+    if context.bot_data[update.effective_user.id]["powerups"][Powerups.GOMMA.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.GOMMA.nome()] = False
 
         risposte = context.bot_data[update.callback_query.message.poll.id]["risposte"]
         indice_risposta_corretta = context.bot_data[update.callback_query.message.poll.id]["risposta_corretta"] - 1
@@ -582,11 +584,11 @@ async def handle_powerup_gomma(update: Update, context: ContextTypes.DEFAULT_TYP
             chat_id=update.effective_chat.id, parse_mode='Markdown')
 
         messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
-        context.bot_data[update.effective_user.id]["powerups"][Powerups.GOMMA.nome()] = False
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.GOMMA.nome()] = True
 
     else:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
-                                        text=f"Powerup {Powerups.GOMMA.nome()} già utilizzato! ⚠",
+                                        text=f"Powerup {Powerups.GOMMA.nome()} non disponibile! ⚠",
                                         show_alert=False)
 
 
@@ -597,8 +599,8 @@ async def handle_powerup_immunita(update: Update, context: ContextTypes.DEFAULT_
                                         show_alert=False)
         return
 
-    if not context.bot_data[update.effective_user.id]["powerups"][Powerups.IMMUNITA.nome()]:
-        context.bot_data[update.effective_user.id]["powerups"][Powerups.IMMUNITA.nome()] = True
+    if context.bot_data[update.effective_user.id]["powerups"][Powerups.IMMUNITA.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.IMMUNITA.nome()] = False
 
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Powerup {Powerups.IMMUNITA.nome()} utilizato!", show_alert=False)
@@ -612,7 +614,7 @@ async def handle_powerup_immunita(update: Update, context: ContextTypes.DEFAULT_
 
     else:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
-                                        text=f"Powerup {Powerups.IMMUNITA.nome()} già utilizzato! ⚠", show_alert=False)
+                                        text=f"Powerup {Powerups.IMMUNITA.nome()} non disponibile! ⚠", show_alert=False)
 
 
 async def handle_powerup_gioco_di_potere(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -622,8 +624,8 @@ async def handle_powerup_gioco_di_potere(update: Update, context: ContextTypes.D
                                         show_alert=False)
         return
 
-    if not context.bot_data[update.effective_user.id]["powerups"][Powerups.GIOCO_DI_POTERE.nome()]:
-        context.bot_data[update.effective_user.id]["powerups"][Powerups.GIOCO_DI_POTERE.nome()] = True
+    if context.bot_data[update.effective_user.id]["powerups"][Powerups.GIOCO_DI_POTERE.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.GIOCO_DI_POTERE.nome()] = False
 
         context.bot_data[update.callback_query.message.poll.id]["id_player_gioco_di_potere"] = update.effective_user.id
 
@@ -639,7 +641,7 @@ async def handle_powerup_gioco_di_potere(update: Update, context: ContextTypes.D
 
     else:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
-                                        text=f"Powerup {Powerups.GIOCO_DI_POTERE.nome()} già utilizzato! ⚠",
+                                        text=f"Powerup {Powerups.GIOCO_DI_POTERE.nome()} non disponibile! ⚠",
                                         show_alert=False)
 
 
@@ -702,7 +704,7 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
 
 async def regala_powerup(update: Update, context: ContextTypes.DEFAULT_TYPE, player_in_quiz, quiz) -> None:
-    probabilita = random.randint(0, 1)
+    probabilita = random.randint(0, 0)
 
     if probabilita == 0:
         powerup_disponibili = [powerup for powerup in list(Powerups) if
@@ -711,7 +713,9 @@ async def regala_powerup(update: Update, context: ContextTypes.DEFAULT_TYPE, pla
         if len(powerup_disponibili) == 0:
             return
 
+        print("Powerup disponibili per:", player_in_quiz["nickname"], " ", powerup_disponibili)
         powerup_scelto = random.choice(powerup_disponibili)
+        print("Powerup scelto per:", player_in_quiz["nickname"], " ", powerup_scelto.nome())
         context.bot_data[update.effective_user.id]["powerups"][powerup_scelto.nome()] = True
 
         messaggio = await bot.send_message(chat_id=quiz["chat_id"],
@@ -724,21 +728,21 @@ async def regala_powerup(update: Update, context: ContextTypes.DEFAULT_TYPE, pla
 async def calcola_punteggio_powerup_streak(update: Update, context: ContextTypes.DEFAULT_TYPE, player_in_quiz) -> None:
     # la streak con il powerup attivato può superare il 1.5
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()]:
-        context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()] = False
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()] = True
         player_in_quiz["streak"] += 0.3
 
 
 async def calcola_punteggio_powerup_regalo(update: Update, context: ContextTypes.DEFAULT_TYPE, quiz,
                                            player_in_quiz) -> None:
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.REGALO.nome()]:
-        context.bot_data[update.effective_user.id]["powerups"][Powerups.REGALO.nome()] = False
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.REGALO.nome()] = True
         player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] += random.randint(10, 31) * quiz["difficolta"]
 
 
 async def calcola_punteggio_powerup_doppio_rischio(update: Update, context: ContextTypes.DEFAULT_TYPE,
                                                    isCorrect) -> None:
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO_RISCHIO.nome()]:
-        context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO_RISCHIO.nome()] = False
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO_RISCHIO.nome()] = True
         return 2
 
     return 1
@@ -746,7 +750,7 @@ async def calcola_punteggio_powerup_doppio_rischio(update: Update, context: Cont
 
 async def calcola_punteggio_powerup_doppio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO.nome()]:
-        context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO.nome()] = False
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO.nome()] = True
         return 2
 
     return 1
@@ -754,7 +758,7 @@ async def calcola_punteggio_powerup_doppio(update: Update, context: ContextTypes
 
 async def calcola_punteggio_immunita(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.IMMUNITA.nome()]:
-        context.bot_data[update.effective_user.id]["powerups"][Powerups.IMMUNITA.nome()] = False
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.IMMUNITA.nome()] = True
         return True
 
     return False
@@ -772,13 +776,13 @@ async def calcola_punteggio_gioco_di_potere(update: Update, context: ContextType
     if quiz["id_player_gioco_di_potere"] is not None:
         if quiz["id_player_gioco_di_potere"] == int(player.get_id()):
             print("2x se indovini", player_in_quiz["nickname"])
-            context.bot_data[update.effective_user.id]["powerups"][Powerups.GIOCO_DI_POTERE.nome()] = False
+            context.bot_data[update.effective_user.id]["powerups"][Powerups.GIOCO_DI_POTERE.nome()] = True
             if isCorrect:
                 return 2
 
         else:
             print("-2x se sbagli", player_in_quiz["nickname"])
-            context.bot_data[update.effective_user.id]["powerups"][Powerups.GIOCO_DI_POTERE.nome()] = False
+            context.bot_data[update.effective_user.id]["powerups"][Powerups.GIOCO_DI_POTERE.nome()] = True
             if not isCorrect:
                 return 2
     return 1

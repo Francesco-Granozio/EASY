@@ -1,7 +1,6 @@
 aggiungere i riferimenti alle risposte
 vedere meglio il sistema di leveling
-aggiungere meccansimo countdown quiz
-controllare handle dei powerup, condizioni di utilizzo
+fixare powerup duplicati
 
 
 
