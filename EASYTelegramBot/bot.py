@@ -666,7 +666,8 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
                                                                       quiz["durata_risposta"])
         punti_doppio_rischio = await calcola_punteggio_powerup_doppio_rischio(update, context, True)
         punti_doppio = await calcola_punteggio_powerup_doppio(update, context)
-        punti_gioco_di_potere = await calcola_punteggio_gioco_di_potere(update, context, quiz, player_in_quiz, player, True)
+        punti_gioco_di_potere = await calcola_punteggio_gioco_di_potere(update, context, quiz, player_in_quiz, player,
+                                                                        True)
 
         print(player_in_quiz["nickname"], " risposta corretta ", punti_gioco_di_potere)
 
@@ -681,7 +682,8 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         if await calcola_punteggio_immunita(update, context):
             return
         punti_doppio_rischio = await calcola_punteggio_powerup_doppio_rischio(update, context, False)
-        punti_gioco_di_potere = await calcola_punteggio_gioco_di_potere(update, context, quiz, player_in_quiz, player, False)
+        punti_gioco_di_potere = await calcola_punteggio_gioco_di_potere(update, context, quiz, player_in_quiz, player,
+                                                                        False)
 
         print(player_in_quiz["nickname"], " risposta sbagliata ", punti_gioco_di_potere)
 
@@ -694,7 +696,8 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
     print("Dopo: ", player_in_quiz["nickname"], " ", player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]])
 
-    player.set_punteggio_totale(player.get_punteggio_totale() + player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]])
+    player.set_punteggio_totale(
+        player.get_punteggio_totale() + player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]])
     await PlayerDAO(database_manager).do_update(player)
 
 
