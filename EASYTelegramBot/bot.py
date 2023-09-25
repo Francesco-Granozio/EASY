@@ -388,7 +388,8 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
             "durata_risposta": domanda.get_tempoRisposta(),
             "difficolta": int(domanda.get_difficolta()),
             "risposte": [domanda.get_rispostaA(), domanda.get_rispostaB(), domanda.get_rispostaC(),
-                         domanda.get_rispostaD()]
+                         domanda.get_rispostaD()],
+            "id_player_gioco_di_potere": None
         }
     })
 
@@ -612,6 +613,34 @@ async def handle_powerup_immunita(update: Update, context: ContextTypes.DEFAULT_
                                         text=f"Powerup {Powerups.IMMUNITA.nome()} già utilizzato! ⚠", show_alert=False)
 
 
+async def handle_powerup_gioco_di_potere(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if update.effective_user.id not in players_in_quiz[update.effective_chat.title]:
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Non sei un partecipante del quiz su {update.effective_chat.title} ⚠",
+                                        show_alert=False)
+        return
+
+    if not context.bot_data[update.effective_user.id]["powerups"][Powerups.GIOCO_DI_POTERE.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.GIOCO_DI_POTERE.nome()] = True
+
+        context.bot_data[update.callback_query.message.poll.id]["id_player_gioco_di_potere"] = update.effective_user.id
+
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Powerup {Powerups.GIOCO_DI_POTERE.nome()} utilizato!", show_alert=False)
+
+        player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+        messaggio = await bot.send_message(
+            text=f"Powerup *{Powerups.GIOCO_DI_POTERE.nome()}* utilizzato da *{player.get_nickname()}*!",
+            chat_id=update.effective_chat.id, parse_mode='Markdown')
+
+        messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
+
+    else:
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Powerup {Powerups.GIOCO_DI_POTERE.nome()} già utilizzato! ⚠",
+                                        show_alert=False)
+
+
 async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     player = await PlayerDAO(database_manager).do_retrieve_by_id(update.poll_answer.user.id)
 
@@ -621,7 +650,7 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     quiz = context.bot_data[update.poll_answer.poll_id]
     player_in_quiz = context.bot_data[int(player.get_id())]
 
-    print("Prima: ", player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]])
+    print("Prima: ", player_in_quiz["nickname"], " ", player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]])
 
     await calcola_punteggio_powerup_regalo(update, context, quiz, player_in_quiz)
 
@@ -631,11 +660,14 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
         punti_tempo_risposta = await calcola_punteggio_tempo_risposta(update, context, quiz["tempo_inizio"],
                                                                       quiz["durata_risposta"])
-        doppio_rischio = await calcola_punteggio_powerup_doppio_rischio(update, context, True)
-        doppio = await calcola_punteggio_powerup_doppio(update, context)
+        punti_doppio_rischio = await calcola_punteggio_powerup_doppio_rischio(update, context, True)
+        punti_doppio = await calcola_punteggio_powerup_doppio(update, context)
+        punti_gioco_di_potere = await calcola_punteggio_gioco_di_potere(update, context, quiz, player_in_quiz, player, True)
+
+        print(player_in_quiz["nickname"], " risposta corretta ", punti_gioco_di_potere)
 
         player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] += ((quiz["difficolta"] * 10 * player_in_quiz[
-            "streak"] + punti_tempo_risposta)) * doppio_rischio * doppio
+            "streak"] + punti_tempo_risposta)) * punti_doppio_rischio * punti_doppio * punti_gioco_di_potere
 
         if player_in_quiz["streak"] <= 1.5:
             player_in_quiz["streak"] += 0.1
@@ -644,16 +676,19 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
         if await calcola_punteggio_immunita(update, context):
             return
-        doppio_rischio = await calcola_punteggio_powerup_doppio_rischio(update, context, False)
+        punti_doppio_rischio = await calcola_punteggio_powerup_doppio_rischio(update, context, False)
+        punti_gioco_di_potere = await calcola_punteggio_gioco_di_potere(update, context, quiz, player_in_quiz, player, False)
+
+        print(player_in_quiz["nickname"], " risposta sbagliata ", punti_gioco_di_potere)
 
         player_in_quiz["streak"] = 1
         player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] -= (
-                (float(quiz["difficolta"]) * 5) * doppio_rischio)
+                (float(quiz["difficolta"]) * 5) * punti_doppio_rischio * punti_gioco_di_potere)
 
     if player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] < 0:
         player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] = 0
 
-    print("Dopo: ", player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]])
+    print("Dopo: ", player_in_quiz["nickname"], " ", player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]])
 
 
 async def calcola_punteggio_powerup_streak(update: Update, context: ContextTypes.DEFAULT_TYPE, player_in_quiz) -> None:
@@ -702,6 +737,23 @@ async def calcola_punteggio_tempo_risposta(update: Update, context: ContextTypes
         2) * 10
 
 
+async def calcola_punteggio_gioco_di_potere(update: Update, context: ContextTypes.DEFAULT_TYPE, quiz,
+                                            player_in_quiz, player, isCorrect) -> None:
+    if quiz["id_player_gioco_di_potere"] is not None:
+        if quiz["id_player_gioco_di_potere"] == int(player.get_id()):
+            print("2x se indovini", player_in_quiz["nickname"])
+            context.bot_data[update.effective_user.id]["powerups"][Powerups.GIOCO_DI_POTERE.nome()] = False
+            if isCorrect:
+                return 2
+
+        else:
+            print("-2x se sbagli", player_in_quiz["nickname"])
+            context.bot_data[update.effective_user.id]["powerups"][Powerups.GIOCO_DI_POTERE.nome()] = False
+            if not isCorrect:
+                return 2
+    return 1
+
+
 async def mostra_classifica(update: Update, context: ContextTypes.DEFAULT_TYPE, job_name) -> None:
     player_ids = players_in_quiz[update.effective_chat.title]
     classifica = []
@@ -743,6 +795,7 @@ def main():
     app.add_handler(CallbackQueryHandler(handle_powerup_50_e_50, pattern=Powerups.CINQUANTA_CINQUANTA.nome()))
     app.add_handler(CallbackQueryHandler(handle_powerup_gomma, pattern=Powerups.GOMMA.nome()))
     app.add_handler(CallbackQueryHandler(handle_powerup_immunita, pattern=Powerups.IMMUNITA.nome()))
+    app.add_handler(CallbackQueryHandler(handle_powerup_gioco_di_potere, pattern=Powerups.GIOCO_DI_POTERE.nome()))
 
     app.add_handler(PollAnswerHandler(processa_risposta))
 
