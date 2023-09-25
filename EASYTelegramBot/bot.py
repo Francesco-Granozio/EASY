@@ -284,19 +284,6 @@ async def bottone_rimuovi_partecipante(update: Update, context: CallbackContext)
     return
 
 
-# async def ottieni_numero_membri(update: Update, context: CallbackContext) -> int:
-#     print(f"Ottengo il numero dei membri")
-#     chat_id = update.effective_chat.id
-#     try:
-#         chat = await context.bot.get_chat(chat_id)
-#         if chat and chat.type in ("group", "supergroup"):
-#             return chat.get_members_count()
-#     except Exception as e:
-#         print(f"Errore durante il recupero del conteggio dei membri: {str(e)}")
-#
-#     return None
-
-
 async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> None:
     nome_gruppo = update.effective_chat.title
 
@@ -399,7 +386,9 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
             "risposta_corretta": int(domanda.get_rispostaCorretta()),
             "tempo_inizio": tempo_inizio,
             "durata_risposta": domanda.get_tempoRisposta(),
-            "difficolta": int(domanda.get_difficolta())
+            "difficolta": int(domanda.get_difficolta()),
+            "risposte": [domanda.get_rispostaA(), domanda.get_rispostaB(), domanda.get_rispostaC(),
+                         domanda.get_rispostaD()]
         }
     })
 
@@ -503,6 +492,54 @@ async def handle_powerup_doppio(update: Update, context: ContextTypes.DEFAULT_TY
     else:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Powerup {Powerups.DOPPIO.nome()} già utilizzato! ⚠",
+                                        show_alert=False)
+
+
+async def handle_powerup_50_e_50(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if update.effective_user.id not in players_in_quiz[update.effective_chat.title]:
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Non sei un partecipante del quiz su {update.effective_chat.title} ⚠",
+                                        show_alert=False)
+        return
+
+    if not context.bot_data[update.effective_user.id]["powerups"][Powerups.CINQUANTA_CINQUANTA.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.CINQUANTA_CINQUANTA.nome()] = True
+
+        risposte = context.bot_data[update.callback_query.message.poll.id]["risposte"]
+        indice_risposta_corretta = context.bot_data[update.callback_query.message.poll.id]["risposta_corretta"] - 1
+
+        # Ottieni la risposta corretta
+        risposta_corretta = risposte[indice_risposta_corretta]
+
+        # Ottieni una copia delle risposte errate (tutte tranne quella corretta)
+        risposte_errate = [risposta for i, risposta in enumerate(risposte) if i != indice_risposta_corretta]
+
+        # Seleziona casualmente una risposta errata
+        risposta_errata = random.choice(risposte_errate)
+
+        # Crea una nuova lista contenente una risposta corretta e una errata
+        risposte_50_e_50 = [risposta_corretta, risposta_errata]
+
+        # Mescola gli elementi nella nuova lista
+        random.shuffle(risposte_50_e_50)
+
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Powerup {Powerups.CINQUANTA_CINQUANTA.nome()} utilizzato!\n"
+                                             f"1️⃣ {risposte_50_e_50[0]}\n"
+                                             f"2️⃣ {risposte_50_e_50[1]}",
+                                        show_alert=True)
+
+        player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+        messaggio = await bot.send_message(
+            text=f"Powerup *{Powerups.CINQUANTA_CINQUANTA.nome()}* utilizzato da *{player.get_nickname()}*!",
+            chat_id=update.effective_chat.id, parse_mode='Markdown')
+
+        messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.CINQUANTA_CINQUANTA.nome()] = False
+
+    else:
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Powerup {Powerups.CINQUANTA_CINQUANTA.nome()} già utilizzato! ⚠",
                                         show_alert=False)
 
 
@@ -623,6 +660,7 @@ def main():
     app.add_handler(CallbackQueryHandler(handle_powerup_regalo, pattern=Powerups.REGALO.nome()))
     app.add_handler(CallbackQueryHandler(handle_powerup_doppio_rischio, pattern=Powerups.DOPPIO_RISCHIO.nome()))
     app.add_handler(CallbackQueryHandler(handle_powerup_doppio, pattern=Powerups.DOPPIO.nome()))
+    app.add_handler(CallbackQueryHandler(handle_powerup_50_e_50, pattern=Powerups.CINQUANTA_CINQUANTA.nome()))
 
     app.add_handler(PollAnswerHandler(processa_risposta))
 
