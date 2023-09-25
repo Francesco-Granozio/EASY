@@ -543,6 +543,50 @@ async def handle_powerup_50_e_50(update: Update, context: ContextTypes.DEFAULT_T
                                         show_alert=False)
 
 
+async def handle_powerup_gomma(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if update.effective_user.id not in players_in_quiz[update.effective_chat.title]:
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Non sei un partecipante del quiz su {update.effective_chat.title} ⚠",
+                                        show_alert=False)
+        return
+
+    if not context.bot_data[update.effective_user.id]["powerups"][Powerups.GOMMA.nome()]:
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.GOMMA.nome()] = True
+
+        risposte = context.bot_data[update.callback_query.message.poll.id]["risposte"]
+        indice_risposta_corretta = context.bot_data[update.callback_query.message.poll.id]["risposta_corretta"] - 1
+
+        # Ottieni una copia delle risposte errate (tutte tranne quella corretta)
+        risposte_errate = [risposta for i, risposta in enumerate(risposte) if i != indice_risposta_corretta]
+
+        # Seleziona casualmente una risposta errata da eliminare
+        risposta_da_eliminare = random.choice(risposte_errate)
+
+        # Rimuovi la risposta dalla lista originale
+        risposte.remove(risposta_da_eliminare)
+
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Powerup {Powerups.GOMMA.nome()} utilizzato!\n"
+                                             f"Una risposta sbagliata è stata rimossa."
+                                             f"1️⃣ {risposte[0]}\n"
+                                             f"2️⃣ {risposte[1]}\n"
+                                             f"3️⃣ {risposte[2]}",
+                                        show_alert=True)
+
+        player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+        messaggio = await bot.send_message(
+            text=f"Powerup *{Powerups.GOMMA.nome()}* utilizzato da *{player.get_nickname()}*!",
+            chat_id=update.effective_chat.id, parse_mode='Markdown')
+
+        messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
+        context.bot_data[update.effective_user.id]["powerups"][Powerups.GOMMA.nome()] = False
+
+    else:
+        await bot.answer_callback_query(callback_query_id=update.callback_query.id,
+                                        text=f"Powerup {Powerups.GOMMA.nome()} già utilizzato! ⚠",
+                                        show_alert=False)
+
+
 async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     player = await PlayerDAO(database_manager).do_retrieve_by_id(update.poll_answer.user.id)
 
@@ -661,6 +705,7 @@ def main():
     app.add_handler(CallbackQueryHandler(handle_powerup_doppio_rischio, pattern=Powerups.DOPPIO_RISCHIO.nome()))
     app.add_handler(CallbackQueryHandler(handle_powerup_doppio, pattern=Powerups.DOPPIO.nome()))
     app.add_handler(CallbackQueryHandler(handle_powerup_50_e_50, pattern=Powerups.CINQUANTA_CINQUANTA.nome()))
+    app.add_handler(CallbackQueryHandler(handle_powerup_gomma, pattern=Powerups.GOMMA.nome()))
 
     app.add_handler(PollAnswerHandler(processa_risposta))
 
