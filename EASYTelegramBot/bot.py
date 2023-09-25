@@ -358,6 +358,10 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
     riga = []
 
     for powerup in list(Powerups):
+
+        for pow in list(Powerups):
+            context.bot_data[update.effective_user.id]["powerups"][pow.nome()] = False
+
         bottone = InlineKeyboardButton(text=powerup.nome(), callback_data=f"{powerup.nome()}")
         riga.append(bottone)
 
@@ -689,6 +693,9 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] = 0
 
     print("Dopo: ", player_in_quiz["nickname"], " ", player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]])
+
+    player.set_punteggio_totale(player.get_punteggio_totale() + player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]])
+    await PlayerDAO(database_manager).do_update(player)
 
 
 async def calcola_punteggio_powerup_streak(update: Update, context: ContextTypes.DEFAULT_TYPE, player_in_quiz) -> None:
