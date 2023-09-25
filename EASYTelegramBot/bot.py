@@ -210,8 +210,7 @@ async def bottone_aggiungi_partecipante(update: Update, context: CallbackContext
                     await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)).get_nickname(),
                 "punteggio_quiz_corrente": {argomento.value: 0 for argomento in Argomenti},
                 "streak": 1,
-                "powerups": {powerup.nome(): False for powerup in Powerups},
-                "powerup_data": {powerup.nome(): {} for powerup in Powerups}
+                "powerups": {powerup.nome(): True for powerup in Powerups}
             }
         })
 
@@ -228,8 +227,7 @@ async def resetta_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE, job_n
                 await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)).get_nickname(),
             "punteggio_quiz_corrente": {argomento.value: 0 for argomento in Argomenti},
             "streak": 1,
-            "powerups": {powerup.nome(): False for powerup in Powerups},
-            "powerup_data": {powerup.nome(): {} for powerup in Powerups}
+            "powerups": {powerup.nome(): True for powerup in Powerups}
         }
     })
     players_in_quiz[update.effective_chat.title] = []
@@ -360,7 +358,7 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
     for powerup in list(Powerups):
 
         for pow in list(Powerups):
-            context.bot_data[update.effective_user.id]["powerups"][pow.nome()] = False
+            context.bot_data[update.effective_user.id]["powerups"][pow.nome()] = True
 
         bottone = InlineKeyboardButton(text=powerup.nome(), callback_data=f"{powerup.nome()}")
         riga.append(bottone)
@@ -699,6 +697,13 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     player.set_punteggio_totale(
         player.get_punteggio_totale() + player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]])
     await PlayerDAO(database_manager).do_update(player)
+
+
+async def regala_powerup(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    probabilita = random.randint(0, 1)
+
+    if probabilita == 0:
+        powerup_scelto = random.choice(list(Powerups))
 
 
 async def calcola_punteggio_powerup_streak(update: Update, context: ContextTypes.DEFAULT_TYPE, player_in_quiz) -> None:

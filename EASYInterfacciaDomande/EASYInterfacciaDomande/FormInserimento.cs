@@ -40,6 +40,8 @@ namespace EasyInterfacciaDomande
             InitializeComponent();
 
             domainUpDown_difficolta.SelectedItem = "1";
+            comboBox_argomento.Items.AddRange(Argomenti.argomenti);
+            comboBox_argomento.SelectedItem = Argomenti.CONCETTI_BASE;
         }
 
         public FormInserimento(FormVisualizzazione formVisualizzazione, Domanda domanda, bool mode)
