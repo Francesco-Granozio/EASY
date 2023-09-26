@@ -16,7 +16,7 @@ class DomandaDAO:
                 for row in rows:
                     domande.append(
                         Domanda(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9],
-                                row[10]))
+                                row[10], row[11]))
                 return domande
         except sqlite3.Error as e:
             print(f"Errore durante la ricerca di tutte le domande: {e}")
@@ -28,7 +28,7 @@ class DomandaDAO:
                 row = await cursor.fetchone()
                 if row:
                     return Domanda(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9],
-                                   row[10])
+                                   row[10], row[11])
                 return None
         except sqlite3.Error as e:
             print(f"Errore durante la ricerca della domanda per Numero: {e}")
@@ -42,7 +42,7 @@ class DomandaDAO:
                 for row in rows:
                     domande.append(
                         Domanda(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9],
-                                row[10]))
+                                row[10], row[11]))
                 return domande
         except sqlite3.Error as e:
             print(f"Errore durante la ricerca delle domande per Argomento: {e}")
@@ -51,10 +51,10 @@ class DomandaDAO:
         try:
             async with self.db_manager as conn:
                 await conn.execute(
-                    "INSERT INTO Domande (testo, argomento, rispostaA, rispostaB, rispostaC, rispostaD, rispostaCorretta, difficolta, tempoRisposta, meme) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    "INSERT INTO Domande (testo, argomento, rispostaA, rispostaB, rispostaC, rispostaD, rispostaCorretta, difficolta, tempoRisposta, meme, fonte) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     (domanda.testo, domanda.argomento, domanda.rispostaA, domanda.rispostaB, domanda.rispostaC,
                      domanda.rispostaD, domanda.rispostaCorretta, domanda.difficolta, domanda.tempoRisposta,
-                     domanda.meme))
+                     domanda.meme, domanda.fonte))
                 await conn.commit()
         except sqlite3.Error as e:
             print(f"Errore durante l'inserimento della domanda: {e}")
@@ -63,10 +63,10 @@ class DomandaDAO:
         try:
             async with self.db_manager as conn:
                 await conn.execute(
-                    "UPDATE Domande SET testo = ?, argomento = ?, rispostaA = ?, rispostaB = ?, rispostaC = ?, rispostaD = ?, rispostaCorretta = ?, difficolta = ?, tempoRisposta = ?, meme = ? WHERE numeroDomanda = ?",
+                    "UPDATE Domande SET testo = ?, argomento = ?, rispostaA = ?, rispostaB = ?, rispostaC = ?, rispostaD = ?, rispostaCorretta = ?, difficolta = ?, tempoRisposta = ?, meme = ?, fonte = ? WHERE numeroDomanda = ?",
                     (domanda.testo, domanda.argomento, domanda.rispostaA, domanda.rispostaB, domanda.rispostaC,
                      domanda.rispostaD, domanda.rispostaCorretta, domanda.difficolta, domanda.tempoRisposta,
-                     domanda.meme, domanda.numeroDomanda))
+                     domanda.meme, domanda.fonte, domanda.numeroDomanda))
                 await conn.commit()
         except sqlite3.Error as e:
             print(f"Errore durante l'aggiornamento della domanda: {e}")

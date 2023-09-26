@@ -1,6 +1,6 @@
 class Domanda:
     def __init__(self, numeroDomanda, testo, argomento, rispostaA, rispostaB, rispostaC, rispostaD, rispostaCorretta,
-                 difficolta, tempoRisposta, meme):
+                 difficolta, tempoRisposta, meme, fonte):
         self.numeroDomanda = numeroDomanda
         self.testo = testo
         self.argomento = argomento
@@ -12,9 +12,10 @@ class Domanda:
         self.difficolta = difficolta
         self.tempoRisposta = tempoRisposta
         self.meme = meme
+        self.fonte = fonte
 
     def __str__(self):
-        return f"Domanda [Numero: {self.numeroDomanda}, Testo: {self.testo}, Argomento: {self.argomento}, Risposta A: {self.rispostaA}, Risposta B: {self.rispostaB}, Risposta C: {self.rispostaC}, Risposta D: {self.rispostaD}, Risposta Corretta: {self.rispostaCorretta}, Difficolta: {self.difficolta}, Tempo Risposta: {self.tempoRisposta}, Meme: {self.meme}]"
+        return f"Domanda [Numero: {self.numeroDomanda}, Testo: {self.testo}, Argomento: {self.argomento}, Risposta A: {self.rispostaA}, Risposta B: {self.rispostaB}, Risposta C: {self.rispostaC}, Risposta D: {self.rispostaD}, Risposta Corretta: {self.rispostaCorretta}, Difficolta: {self.difficolta}, Tempo Risposta: {self.tempoRisposta}, Meme: {self.meme}, Fonte: {self.fonte}]"
 
     def get_numeroDomanda(self):
         return self.numeroDomanda
@@ -94,3 +95,8 @@ class Domanda:
     def has_meme(self):
         return self.meme is not None
 
+    def get_fonte(self):
+        return self.fonte
+
+    def set_fonte(self, fonte):
+        self.fonte = fonte
