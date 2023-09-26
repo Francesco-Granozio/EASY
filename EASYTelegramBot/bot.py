@@ -4,6 +4,7 @@ import asyncio
 import random
 from datetime import datetime, timedelta
 from functools import partial
+import math
 
 import telegram
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Poll
@@ -32,6 +33,7 @@ players_in_quiz = {argomento.value: [] for argomento in Argomenti}
 
 @filtro_privato
 async def comando_start(update: Update, context: Any) -> None:
+    # se il player non è registrato nel database, lo registro e gli invio un messaggio di benvenuto
     player = (await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id))
     if player is None:
         player = Player(update.effective_user.id, update.effective_user.full_name, 0)
@@ -51,24 +53,28 @@ async def comando_start(update: Update, context: Any) -> None:
 
 @filtro_privato
 async def comando_nickname(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    # controllo che il player abbia inserito un nickname e non solo /nickname
     if len(context.args) == 0:
         await update.message.reply_text('Devi inserire il nuovo nickname dopo il comando /nickname')
+    # nickname lungo massimo 30 caratteri
     elif len("".join(context.args)) > 30:
         await update.message.reply_text('Il nickname deve essere lungo massimo 30 caratteri')
     else:
         player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
         nickname_inserito = " ".join(context.args)
 
+        # contollo se il nick è uguale a quello attuale
         if player.nickname == nickname_inserito:
             await update.message.reply_text('Il nickname inserito è già il tuo nickname attuale')
             return
 
         other_players = await PlayerDAO(database_manager).do_retrieve_by_nickname(nickname_inserito)
 
+        # controllo l'univocità del nickname
         if other_players is not None:
             for other_player in other_players:
                 if nickname_inserito == other_player.get_nickname():
-                    await update.message.reply_text('Il nickname inserito è già stato scelto da un altro utente')
+                    await update.message.reply_text('Il nickname inserito è già stato scelto da un altro player')
                     return
 
         player.set_nickname(nickname_inserito)
@@ -78,6 +84,7 @@ async def comando_nickname(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 
 @filtro_privato
 async def comando_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    # tastiera inline che permette di scegliere la lobby (gruppo) del quiz
     opzioni = [
         [
             InlineKeyboardButton(text=Argomenti.CONCETTI_BASE.value, url='https://t.me/+5dJJ2GLVTCBhOTNk'),
@@ -106,6 +113,7 @@ async def comando_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 @filtro_privato
 async def comando_profilo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    # controllo se il player è registrato nel database
     player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
     if player is None:
         await update.message.reply_text('Devi prima registrarti con il comando /start')
@@ -118,6 +126,7 @@ async def comando_profilo(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
 @filtro_privato
 async def comando_info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    # mostro le informazioni per il funzionamento del bot
     text = (f"Il funzionamento del bot è molto semplice!\n"
             f"Una volta selezionato l\'argomento su cui vuoi fare il quiz dovrai rispondere correttamente alla domande per ottenere punti ed altre ricompense.\n"
             f"Potrai utilizare un sacco di potenziamenti:\n")
@@ -130,6 +139,8 @@ async def comando_info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 @filtro_pubblico
 async def comando_start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    # comando che deve essere eseguito solo dall'admin del gruppo e permette di generare i
+    # 2 bottoni per iniziare il quiz e per aggiungere/rimuovere un partecipante e fissa il primo
     keyboard = [
         [
             InlineKeyboardButton(text="Inizia il quiz 🚀", callback_data="avvia_quiz"),
@@ -141,9 +152,6 @@ async def comando_start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
     keyboard = [
         [
-            # InlineKeyboardButton(
-            #     text=f"Partecipo al quiz ✅\n({len(players_in_quiz[update.effective_chat.title])} partecipanti)",
-            #     callback_data="aggiungi_partecipante"),
             InlineKeyboardButton(text=f"Partecipo al quiz ✅", callback_data="aggiungi_partecipante"),
         ],
         [
@@ -156,6 +164,7 @@ async def comando_start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE)
         chat_id=update.message.chat_id,
         reply_markup=InlineKeyboardMarkup(keyboard))
 
+    # salvo l'id del messaggio fissato così sarà sempre attivo anche se il bot viene riavviato
     await SettingsDAO(database_manager).do_delete()
     await SettingsDAO(database_manager).do_save(Settings(messaggio_opzioni.message_id))
 
@@ -166,44 +175,25 @@ async def comando_start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 
 async def bottone_aggiungi_partecipante(update: Update, context: CallbackContext) -> None:
-    # aggiungere controllo quiz attivo
     nome_gruppo = update.effective_chat.title
+    # se il player non è già stato aggiunto al quiz, lo aggiungo
     if update.effective_user.id not in players_in_quiz[nome_gruppo]:
 
+        # se il quiz è già in corso avviso il player di aspettare
         if quiz_attivi[nome_gruppo]:
             await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                             text=f"Quiz su {nome_gruppo} già in corso, attendi ⏳", show_alert=False)
             return
 
+        # aggiungo il player alla lista dei partecipanti
         players_in_quiz[nome_gruppo].append(update.effective_user.id)
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Aggiunto al quiz su {nome_gruppo} ✅", show_alert=False)
 
-        # Aggiorna il contatore dei partecipanti
-        # stringa_partecipanti = f"Partecipo al quiz ✅\n({len(players_in_quiz[nome_gruppo])} partecipanti)"
-        # numero_membri = await ottieni_numero_membri(update, context)
-        # print(f"Numero membri: {numero_membri}")
-        # if numero_membri is not None:
-        #     stringa_partecipanti = f"Partecipo al quiz ✅\n{len(players_in_quiz[nome_gruppo])}/{numero_membri-1}"
-
-        # stringa_partecipanti = f"Partecipo al quiz ✅"
-        #
-        # keyboard = [
-        #     [
-        #         InlineKeyboardButton(
-        #             text=stringa_partecipanti,
-        #             callback_data="aggiungi_partecipante"),
-        #     ],
-        #     [
-        #         InlineKeyboardButton(text="Non partecipo al quiz ❌", callback_data="rimuovi_partecipante"),
-        #     ]
-        # ]
-        # messaggio_opzioni = (await SettingsDAO(database_manager).do_retrieve()).get_messaggio_opzioni()
-        #
-        # await bot.edit_message_reply_markup(chat_id=update.effective_chat.id,
-        #                                     message_id=messaggio_opzioni,
-        #                                     reply_markup=InlineKeyboardMarkup(keyboard))
-
+        # salvo alcune informazioni del player come
+        # nickname, punteggio quiz corrente, streak e powerups
+        # powerups è un dizionario che contiene tutti i powerups e per ogni powerup indica se è disponible o meno
+        # False indica non disponible, True indica disponibile
         context.bot_data.update({
             update.effective_user.id: {
                 "nickname": (
@@ -221,6 +211,10 @@ async def bottone_aggiungi_partecipante(update: Update, context: CallbackContext
 
 
 async def resetta_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE, job_name) -> None:
+    # ripristino alcune informazioni del player come
+    # nickname, punteggio quiz corrente, streak e powerups
+    # powerups è un dizionario che contiene tutti i powerups e per ogni powerup indica se è disponible o meno
+    # False indica non disponible, True indica disponibile
     context.bot_data.update({
         update.effective_user.id: {
             "nickname": (
@@ -230,49 +224,30 @@ async def resetta_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE, job_n
             "powerups": {powerup.nome(): False for powerup in Powerups}
         }
     })
+
+    # siccome il metodo viene chiamato ogni volta che finisce un quizz
+    # svuoto la lista dei partecipanti e setto il quiz come non attivo
     players_in_quiz[update.effective_chat.title] = []
     quiz_attivi[update.effective_chat.title] = False
 
 
 async def bottone_rimuovi_partecipante(update: Update, context: CallbackContext) -> None:
-    # aggiungere controllo quiz attivo
+    # controllo se il player è stato aggiunto al quiz
     nome_gruppo = update.effective_chat.title
     if update.effective_user.id in players_in_quiz[nome_gruppo]:
 
+        # se il quiz è già in corso avviso il player di aspettare, non posso rimuoverlo durante il quiz
         if quiz_attivi[nome_gruppo]:
             await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                             text=f"Quiz su {nome_gruppo} già in iniziato, attendi ⏳", show_alert=False)
             return
 
+        # rimuovo il player dalla lista dei partecipanti
         players_in_quiz[nome_gruppo].remove(update.effective_user.id)
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Rimosso dal quiz su {nome_gruppo} ❌", show_alert=False)
 
-        # Aggiorna il contatore dei partecipanti
-        # stringa_partecipanti = f"Partecipo al quiz ✅\n({len(players_in_quiz[nome_gruppo])} partecipanti)"
-        # numero_membri = await ottieni_numero_membri(update, context)
-        # if numero_membri is not None:
-        #     print(f"Numero membri: {numero_membri}")
-        #     stringa_partecipanti = f"Partecipo al quiz ✅\n{len(players_in_quiz[nome_gruppo])}/{numero_membri-1}"
-
-        # stringa_partecipanti = f"Partecipo al quiz ✅"
-        # keyboard = [
-        #     [
-        #         InlineKeyboardButton(
-        #             text=stringa_partecipanti,
-        #             callback_data="aggiungi_partecipante"),
-        #     ],
-        #     [
-        #         InlineKeyboardButton(text="Non partecipo al quiz ❌", callback_data="rimuovi_partecipante"),
-        #     ]
-        # ]
-        #
-        # messaggio_opzioni = (await SettingsDAO(database_manager).do_retrieve()).get_messaggio_opzioni()
-        #
-        # await bot.edit_message_reply_markup(chat_id=update.effective_chat.id,
-        #                                     message_id=messaggio_opzioni,
-        #                                     reply_markup=InlineKeyboardMarkup(keyboard))
-
+        # rimuovo alcune innformazioni del player
         if update.effective_user.id in context.bot_data:
             del context.bot_data[update.effective_user.id]
 
@@ -283,7 +258,12 @@ async def bottone_rimuovi_partecipante(update: Update, context: CallbackContext)
 
 
 async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> None:
+    # questa funzione avvia il quiz e manda le domande una dopo l'altra
+    # manda anche i meme se presenti, mostra la classifica, cancella i messaggi e resetta il quiz
+
     nome_gruppo = update.effective_chat.title
+
+    # se il quiz è già in corso avviso il player di aspettare altrimenti lo avvio
 
     if not quiz_attivi[nome_gruppo]:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
@@ -297,28 +277,37 @@ async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> N
 
     domande = await DomandaDAO(database_manager).do_retrieve_by_argomento(nome_gruppo)
 
+    # Calcola il tempo per la prossima domanda come 2 secondi nel futuro dall'istante corrente
     tempo_prossima_domanda = datetime.now() + timedelta(seconds=2)
+    # Imposta un intervallo iniziale tra le domande a 2 secondi
     intervallo_domande = 2
+    # Itera attraverso le domande e assegna loro un'azione da eseguire come job in un orario specifico
     for numero_domanda, domanda in enumerate(domande):
         function = partial(invia_domanda, update, context, domanda, numero_domanda + 1, len(domande),
                            tempo_prossima_domanda)
 
+        # Programma l'esecuzione della funzione dopo un certo intervallo di tempo
         context.job_queue.run_once(function, when=intervallo_domande, name="invia_domanda")
 
         function = partial(manda_meme, update, context, domanda)
-
         context.job_queue.run_once(function, when=intervallo_domande + domanda.get_tempoRisposta(), name="manda_meme")
+
+        # Aggiorna il tempo per la prossima domanda, considerando il tempo per rispondere e 5 secondi di intervallo
         tempo_prossima_domanda = tempo_prossima_domanda + timedelta(seconds=domanda.get_tempoRisposta()) + timedelta(
             seconds=5)
 
+        # Aggiorna l'intervallo tra le domande considerando il tempo per rispondere e 5 secondi di intervallo
         intervallo_domande = intervallo_domande + domanda.get_tempoRisposta() + 5
 
+    # Mostra la classifica dopo che tutte le domande sono state inviate
     function = partial(mostra_classifica, update, context)
     context.job_queue.run_once(function, when=intervallo_domande + 2, name="mostra_classifica")
 
+    # Cancella i messaggi dopo che tutte le domande sono state inviate
     function = partial(cancella_messaggi, update, context)
     context.job_queue.run_once(function, when=intervallo_domande + 3, name="cancella_messaggi")
 
+    # Resetta il quiz dopo che tutte le domande sono state inviate
     function = partial(resetta_quiz, update, context)
     context.job_queue.run_once(function, when=intervallo_domande + 3, name="resetta_quiz")
 
@@ -329,12 +318,14 @@ async def cancella_messaggi(update: Update, context: ContextTypes.DEFAULT_TYPE, 
 
     await asyncio.sleep(5)
 
+    # Cancella tutti i messaggi inviati dal bot, tranne i primi 2 pulsanti che non sono stati salvati
     for messaggio_per_lobby in messaggi_per_lobby[update.effective_chat.title]:
         try:
             await context.bot.delete_message(chat_id=update.effective_chat.id, message_id=messaggio_per_lobby)
         except Exception as e:
             print(f"Impossibile cancellare il messaggio: {e}")
 
+    # Una volta cancellati i messaggi, svuota la lista dei messaggi per questo gruppo/lobby.
     messaggi_per_lobby[update.effective_chat.title] = []
 
 
@@ -350,17 +341,15 @@ async def manda_meme(update: Update, context: ContextTypes.DEFAULT_TYPE, domanda
 
 async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, domanda: Domanda, numero_domanda: int,
                         totale_domande: int, tempo_inizio: datetime, job_name) -> None:
+    # Questa funzione invia una domanda sotto forma di sondaggio (poll) in una chat e configura le opzioni per i powerup.
+
     risposte = [domanda.rispostaA, domanda.rispostaB, domanda.rispostaC, domanda.rispostaD]
 
+    # Configura la tastiera per i powerup.
     righe_tastiera_powerups = []
     riga = []
 
-    # print("Powerups prima dell'invio: ", context.bot_data[update.effective_user.id]["powerups"])
-
     for powerup in list(Powerups):
-
-        # for pow in list(Powerups):
-        #     context.bot_data[update.effective_user.id]["powerups"][pow.nome()] = False
 
         bottone = InlineKeyboardButton(text=powerup.nome(), callback_data=f"{powerup.nome()}")
         riga.append(bottone)
@@ -369,10 +358,12 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
             righe_tastiera_powerups.append(riga)
             riga = []
 
+    # Se rimane una riga incompleta, aggiungila comunque.
     if riga:
         righe_tastiera_powerups.append(riga)
 
     tastiera_powerups = InlineKeyboardMarkup(righe_tastiera_powerups)
+
     messaggio = await bot.send_poll(chat_id=update.effective_chat.id,
                                     question=f"Domanda: {numero_domanda}/{totale_domande}\nDifficoltà: {domanda.get_difficoltaString()}\n{domanda.get_testo()}",
                                     options=risposte,
@@ -382,6 +373,7 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
 
     messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
 
+    # Aggiorna il bot_data con i dettagli del sondaggio corrente.
     context.bot_data.update({
         messaggio.poll.id: {
             "chat_id": update.effective_chat.id,
@@ -399,18 +391,25 @@ async def invia_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, doma
 
 
 async def handle_powerup_streak(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    # Questa funzione gestisce l'uso del powerup "Streak" da parte di un player durante il quiz.
+
+    # Controlla se il player è un partecipante del quiz.
     if update.effective_user.id not in players_in_quiz[update.effective_chat.title]:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Non sei un partecipante del quiz su {update.effective_chat.title} ⚠",
                                         show_alert=False)
         return
 
+    # Verifica se il player ha già utilizzato il powerup "Streak".
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()]:
+
+        # Imposta il powerup "Streak" come non disponibile.
         context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()] = False
 
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Powerup {Powerups.STREAK.nome()} utilizato!", show_alert=False)
 
+        # Ottieni il nickname del player e mostra che ha usato il powerup.
         player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
         messaggio = await bot.send_message(
             text=f"Powerup *{Powerups.STREAK.nome()}* utilizzato da *{player.get_nickname()}*!",
@@ -424,13 +423,19 @@ async def handle_powerup_streak(update: Update, context: ContextTypes.DEFAULT_TY
 
 
 async def handle_powerup_regalo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    # Questa funzione gestisce l'uso del powerup "Regalo" da parte di un player durante il quiz.
+
+    # Controlla se il player è un partecipante del quiz.
     if update.effective_user.id not in players_in_quiz[update.effective_chat.title]:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Non sei un partecipante del quiz su {update.effective_chat.title} ⚠",
                                         show_alert=False)
         return
 
+    # Verifica se il player ha già utilizzato il powerup "Regalo".
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.REGALO.nome()]:
+
+        # Imposta il powerup "Regalo" come non disponibile.
         context.bot_data[update.effective_user.id]["powerups"][Powerups.REGALO.nome()] = False
 
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
@@ -449,13 +454,19 @@ async def handle_powerup_regalo(update: Update, context: ContextTypes.DEFAULT_TY
 
 
 async def handle_powerup_doppio_rischio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    # Questa funzione gestisce l'uso del powerup "Doppio Rischio" da parte di un player durante il quiz.
+
+    # Controlla se il player è un partecipante del quiz.
     if update.effective_user.id not in players_in_quiz[update.effective_chat.title]:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Non sei un partecipante del quiz su {update.effective_chat.title} ⚠",
                                         show_alert=False)
         return
 
+    # Verifica se il player ha già utilizzato il powerup "Doppio Rischio".
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO_RISCHIO.nome()]:
+
+        # Imposta il powerup "Doppio Rischio" come non disponibile.
         context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO_RISCHIO.nome()] = False
 
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
@@ -475,13 +486,19 @@ async def handle_powerup_doppio_rischio(update: Update, context: ContextTypes.DE
 
 
 async def handle_powerup_doppio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    # Questa funzione gestisce l'uso del powerup "Doppio" da parte di un player durante il quiz.
+
+    # Controlla se il player è un partecipante del quiz.
     if update.effective_user.id not in players_in_quiz[update.effective_chat.title]:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Non sei un partecipante del quiz su {update.effective_chat.title} ⚠",
                                         show_alert=False)
         return
 
+    # Verifica se il player ha già utilizzato il powerup "Doppio".
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO.nome()]:
+
+        # Imposta il powerup "Doppio" come non disponibile.
         context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO.nome()] = False
 
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
@@ -501,13 +518,19 @@ async def handle_powerup_doppio(update: Update, context: ContextTypes.DEFAULT_TY
 
 
 async def handle_powerup_50_e_50(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    # Questa funzione gestisce l'uso del powerup "50 e 50" da parte di un player durante il quiz.
+
+    # Controlla se il player è un partecipante del quiz.
     if update.effective_user.id not in players_in_quiz[update.effective_chat.title]:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Non sei un partecipante del quiz su {update.effective_chat.title} ⚠",
                                         show_alert=False)
         return
 
+    # Verifica se il player ha già utilizzato il powerup "50 e 50".
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.CINQUANTA_CINQUANTA.nome()]:
+
+        # Imposta il powerup "50 e 50" come non disponibile.
         context.bot_data[update.effective_user.id]["powerups"][Powerups.CINQUANTA_CINQUANTA.nome()] = False
 
         risposte = context.bot_data[update.callback_query.message.poll.id]["risposte"]
@@ -540,6 +563,8 @@ async def handle_powerup_50_e_50(update: Update, context: ContextTypes.DEFAULT_T
             chat_id=update.effective_chat.id, parse_mode='Markdown')
 
         messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
+
+        # Imposta il powerup "50 e 50" come disponibile.
         context.bot_data[update.effective_user.id]["powerups"][Powerups.CINQUANTA_CINQUANTA.nome()] = True
 
     else:
@@ -549,13 +574,19 @@ async def handle_powerup_50_e_50(update: Update, context: ContextTypes.DEFAULT_T
 
 
 async def handle_powerup_gomma(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    # Questa funzione gestisce l'uso del powerup "Gomma" da parte di un player durante il quiz.
+
+    # Controlla se il player è un partecipante del quiz.
     if update.effective_user.id not in players_in_quiz[update.effective_chat.title]:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Non sei un partecipante del quiz su {update.effective_chat.title} ⚠",
                                         show_alert=False)
         return
 
+    # Verifica se il player ha già utilizzato il powerup "Gomma".
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.GOMMA.nome()]:
+
+        # Imposta il powerup "Gomma" come non disponibile.
         context.bot_data[update.effective_user.id]["powerups"][Powerups.GOMMA.nome()] = False
 
         risposte = context.bot_data[update.callback_query.message.poll.id]["risposte"]
@@ -584,6 +615,8 @@ async def handle_powerup_gomma(update: Update, context: ContextTypes.DEFAULT_TYP
             chat_id=update.effective_chat.id, parse_mode='Markdown')
 
         messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
+
+        # Imposta il powerup "Gomma" come disponibile.
         context.bot_data[update.effective_user.id]["powerups"][Powerups.GOMMA.nome()] = True
 
     else:
@@ -593,13 +626,19 @@ async def handle_powerup_gomma(update: Update, context: ContextTypes.DEFAULT_TYP
 
 
 async def handle_powerup_immunita(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    # Questa funzione gestisce l'uso del powerup "Immunità" da parte di un player durante il quiz.
+
+    # Controlla se il player è un partecipante del quiz.
     if update.effective_user.id not in players_in_quiz[update.effective_chat.title]:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Non sei un partecipante del quiz su {update.effective_chat.title} ⚠",
                                         show_alert=False)
         return
 
+    # Verifica se il player ha già utilizzato il powerup "Immunità".
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.IMMUNITA.nome()]:
+
+        # Imposta il powerup "Immunità" come non disponibile.
         context.bot_data[update.effective_user.id]["powerups"][Powerups.IMMUNITA.nome()] = False
 
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
@@ -618,15 +657,22 @@ async def handle_powerup_immunita(update: Update, context: ContextTypes.DEFAULT_
 
 
 async def handle_powerup_gioco_di_potere(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    # Questa funzione gestisce l'uso del powerup "Gioco di Potere" da parte di un player durante il quiz.
+
+    # Controlla se il player è un partecipante del quiz.
     if update.effective_user.id not in players_in_quiz[update.effective_chat.title]:
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
                                         text=f"Non sei un partecipante del quiz su {update.effective_chat.title} ⚠",
                                         show_alert=False)
         return
 
+    # Verifica se il player ha già utilizzato il powerup "Gioco di Potere".
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.GIOCO_DI_POTERE.nome()]:
+
+        # Imposta il powerup "Gioco di Potere" come non disponibile.
         context.bot_data[update.effective_user.id]["powerups"][Powerups.GIOCO_DI_POTERE.nome()] = False
 
+        # Salvo l'id del player che ha usato il powerup "Gioco di Potere", mi servirà per il calcolo dei punti.
         context.bot_data[update.callback_query.message.poll.id]["id_player_gioco_di_potere"] = update.effective_user.id
 
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
@@ -646,48 +692,76 @@ async def handle_powerup_gioco_di_potere(update: Update, context: ContextTypes.D
 
 
 async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Questa funzione è responsabile di gestire le risposte dei players alle domande del quiz e
+    di calcolare il punteggio e gli effetti delle risposte corrette o errate. Ecco come funziona:
+
+    Ottiene i dettagli del player che ha inviato la risposta.
+    Verifica se il player è coinvolto in un quiz attivo. Se non lo è, la funzione si interrompe.
+    Ottiene i dettagli del quiz attivo e del player nel quiz.
+    Calcola il punteggio e gli effetti della risposta corretta o errata, tra cui powerup e bonus.
+
+    Se la risposta del player è corretta, calcola il punteggio basato su vari fattori, come il tempo di risposta,
+    i powerup e il gioco di potere attivo.
+    Aggiunge il punteggio alla classifica del player e aggiorna lo "streak" se è inferiore a 1.5.
+
+    Se la risposta del player è errata, calcola il punteggio per il powerup "Doppio Rischio" e il gioco di potere attivo.
+    Sottrae il punteggio per la risposta errata dalla classifica del player.
+
+    Assicura che il punteggio del player non sia inferiore a 0."""
+
     player = await PlayerDAO(database_manager).do_retrieve_by_id(update.poll_answer.user.id)
 
+    # Verifica se il player è coinvolto in un quiz attivo.
     if int(player.get_id()) not in context.bot_data.keys():
         return
 
+    # Ottieni i dettagli del quiz attivo e del player nel quiz.
     quiz = context.bot_data[update.poll_answer.poll_id]
     player_in_quiz = context.bot_data[int(player.get_id())]
 
-    print("Prima: ", player_in_quiz["nickname"], " ", player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]])
-
+    # Se l'utente risponde correttamente alla domanda, gli vengono dati anche i punti del powerup "regalo", se attivo
     await calcola_punteggio_powerup_regalo(update, context, quiz, player_in_quiz)
 
+    # Verifica se la risposta del giocatore è corretta.
     if update.poll_answer.option_ids[0] == int(quiz["risposta_corretta"]) - 1:
 
+        # Calcola il punteggio per il powerup "Streak".
         await calcola_punteggio_powerup_streak(update, context, player_in_quiz)
 
+        # Calcola il punteggio basato sul tempo di risposta del giocatore.
         punti_tempo_risposta = await calcola_punteggio_tempo_risposta(update, context, quiz["tempo_inizio"],
                                                                       quiz["durata_risposta"])
+
+        # Calcola il punteggio per il powerup "Doppio Rischio" restituisce 2 se è attivo, 1 altrimenti.
         punti_doppio_rischio = await calcola_punteggio_powerup_doppio_rischio(update, context, True)
-        punti_doppio = await calcola_punteggio_powerup_doppio(update, context)
+
+        # Calcola il punteggio per il powerup "Doppio" restituisce 2 se è attivo, 1 altrimenti.
+        punti_doppi = await calcola_punteggio_powerup_doppio(update, context)
+
+        # Calcola il punteggio per il gioco di potere attivo.
         punti_gioco_di_potere = await calcola_punteggio_gioco_di_potere(update, context, quiz, player_in_quiz, player,
                                                                         True)
 
-        print(player_in_quiz["nickname"], " risposta corretta ", punti_gioco_di_potere)
-
         player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] += ((quiz["difficolta"] * 10 * player_in_quiz[
-            "streak"] + punti_tempo_risposta)) * punti_doppio_rischio * punti_doppio * punti_gioco_di_potere
+            "streak"] + punti_tempo_risposta)) * punti_doppio_rischio * punti_doppi * punti_gioco_di_potere
 
         if player_in_quiz["streak"] <= 1.5:
             player_in_quiz["streak"] += 0.1
 
+        # regala un powerup con probabilità 1/3 se la risposta è corretta
         await regala_powerup(update, context, player_in_quiz, quiz)
 
     else:
 
+        # Se la risposta del giocatore è errata, esegui il controllo dell'immunità.
         if await calcola_punteggio_immunita(update, context):
             return
+
+        # Calcola il punteggio per il powerup "Doppio Rischio" restituisce 2 se è attivo, 1 altrimenti.
         punti_doppio_rischio = await calcola_punteggio_powerup_doppio_rischio(update, context, False)
+        # Calcola il punteggio per il gioco di potere attivo.
         punti_gioco_di_potere = await calcola_punteggio_gioco_di_potere(update, context, quiz, player_in_quiz, player,
                                                                         False)
-
-        print(player_in_quiz["nickname"], " risposta sbagliata ", punti_gioco_di_potere)
 
         player_in_quiz["streak"] = 1
         player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] -= (
@@ -696,15 +770,16 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     if player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] < 0:
         player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] = 0
 
-    print("Dopo: ", player_in_quiz["nickname"], " ", player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]])
-
+    # Aggiorna il punteggio totale del giocatore nel database.
     player.set_punteggio_totale(
         player.get_punteggio_totale() + player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]])
     await PlayerDAO(database_manager).do_update(player)
 
 
 async def regala_powerup(update: Update, context: ContextTypes.DEFAULT_TYPE, player_in_quiz, quiz) -> None:
-    probabilita = random.randint(0, 0)
+    # regala un powerup con probabilità 1/3 se la risposta è corretta
+
+    probabilita = random.randint(0, 2)
 
     if probabilita == 0:
         powerup_disponibili = [powerup for powerup in list(Powerups) if
@@ -713,9 +788,9 @@ async def regala_powerup(update: Update, context: ContextTypes.DEFAULT_TYPE, pla
         if len(powerup_disponibili) == 0:
             return
 
-        print("Powerup disponibili per:", player_in_quiz["nickname"], " ", powerup_disponibili)
         powerup_scelto = random.choice(powerup_disponibili)
-        print("Powerup scelto per:", player_in_quiz["nickname"], " ", powerup_scelto.nome())
+
+        # Attiva il powerup scelto per il giocatore corrente.
         context.bot_data[update.effective_user.id]["powerups"][powerup_scelto.nome()] = True
 
         messaggio = await bot.send_message(chat_id=quiz["chat_id"],
@@ -726,21 +801,30 @@ async def regala_powerup(update: Update, context: ContextTypes.DEFAULT_TYPE, pla
 
 async def calcola_punteggio_powerup_streak(update: Update, context: ContextTypes.DEFAULT_TYPE, player_in_quiz) -> None:
     # la streak con il powerup attivato può superare il 1.5
+
+    # Verifica se il powerup "Streak" è attivo per il giocatore.
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()]:
+        # Imposta il powerup "Streak" come non disponibile.
         context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()] = True
         player_in_quiz["streak"] += 0.3
 
 
 async def calcola_punteggio_powerup_regalo(update: Update, context: ContextTypes.DEFAULT_TYPE, quiz,
                                            player_in_quiz) -> None:
+    # Verifica se il powerup "Regalo" è attivo per il giocatore.
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.REGALO.nome()]:
+        # Imposta il powerup "Regalo" come non disponibile.
         context.bot_data[update.effective_user.id]["powerups"][Powerups.REGALO.nome()] = True
-        player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] += random.randint(10, 31) * quiz["difficolta"]
+
+        # Aggiungi un bonus di punteggio al giocatore. Il bonus è casuale tra 10 e 30 punti * la difficoltà (1, 3).
+        player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] += random.randint(10, 30) * quiz["difficolta"]
 
 
 async def calcola_punteggio_powerup_doppio_rischio(update: Update, context: ContextTypes.DEFAULT_TYPE,
                                                    isCorrect) -> None:
+    # Verifica se il powerup "Doppio Rischio" è attivo per il giocatore.
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO_RISCHIO.nome()]:
+        # Imposta il powerup "Doppio Rischio" come non disponibile.
         context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO_RISCHIO.nome()] = True
         return 2
 
@@ -748,7 +832,9 @@ async def calcola_punteggio_powerup_doppio_rischio(update: Update, context: Cont
 
 
 async def calcola_punteggio_powerup_doppio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    # Verifica se il powerup "Doppio" è attivo per il giocatore.
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO.nome()]:
+        # Imposta il powerup "Doppio" come non disponibile.
         context.bot_data[update.effective_user.id]["powerups"][Powerups.DOPPIO.nome()] = True
         return 2
 
@@ -756,40 +842,64 @@ async def calcola_punteggio_powerup_doppio(update: Update, context: ContextTypes
 
 
 async def calcola_punteggio_immunita(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    # Verifica se il powerup "Immunità" è attivo per il giocatore.
     if context.bot_data[update.effective_user.id]["powerups"][Powerups.IMMUNITA.nome()]:
+        # Imposta il powerup "Immunità" come non disponibile.
         context.bot_data[update.effective_user.id]["powerups"][Powerups.IMMUNITA.nome()] = True
         return True
 
     return False
 
 
+async def calcola_punteggio_gioco_di_potere(update: Update, context: ContextTypes.DEFAULT_TYPE, quiz,
+                                            player_in_quiz, player, isCorrect) -> None:
+    # Verifica se c'è un gioco di potere attivo nella domanda corrente.
+    if quiz["id_player_gioco_di_potere"] is not None:
+
+        # Verifica se il giocatore attuale è il possessore del gioco di potere.
+        if quiz["id_player_gioco_di_potere"] == int(player.get_id()):
+
+            # Attiva il powerup "Gioco di Potere" per il giocatore.
+            context.bot_data[update.effective_user.id]["powerups"][Powerups.GIOCO_DI_POTERE.nome()] = True
+
+            # Se la risposta è corretta, restituisci un bonus di punteggio (2x).
+            if isCorrect:
+                return 2
+
+        else:
+            context.bot_data[update.effective_user.id]["powerups"][Powerups.GIOCO_DI_POTERE.nome()] = True
+
+            # Se la risposta è errata, restituisci un malus di punteggio (2x).
+            if not isCorrect:
+                return 2
+
+    # Se non c'è gioco di potere attivo, restituisci un punteggio standard (1x).
+    return 1
+
+
 async def calcola_punteggio_tempo_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE, tempo_inizio,
                                            durata_risposta) -> None:
+    """
+    Calcola la differenza tra il tempo corrente e il tempo_inizio,
+    che rappresenta il momento in cui è stata inviata la domanda.
+
+    Sottrae il tempo di risposta calcolato dal tempo massimo consentito per rispondere alla domanda (durata_risposta).
+
+    Moltiplica il tempo di risposta rimanente per 10 per ottenere il punteggio bonus.
+    Questo è basato sul principio che più il giocatore risponde rapidamente, maggiore sarà il punteggio bonus.
+
+    """
     return round(
         float(timedelta(seconds=durata_risposta).total_seconds() - (datetime.now() - tempo_inizio).total_seconds()),
         2) * 10
 
 
-async def calcola_punteggio_gioco_di_potere(update: Update, context: ContextTypes.DEFAULT_TYPE, quiz,
-                                            player_in_quiz, player, isCorrect) -> None:
-    if quiz["id_player_gioco_di_potere"] is not None:
-        if quiz["id_player_gioco_di_potere"] == int(player.get_id()):
-            print("2x se indovini", player_in_quiz["nickname"])
-            context.bot_data[update.effective_user.id]["powerups"][Powerups.GIOCO_DI_POTERE.nome()] = True
-            if isCorrect:
-                return 2
-
-        else:
-            print("-2x se sbagli", player_in_quiz["nickname"])
-            context.bot_data[update.effective_user.id]["powerups"][Powerups.GIOCO_DI_POTERE.nome()] = True
-            if not isCorrect:
-                return 2
-    return 1
-
-
 async def mostra_classifica(update: Update, context: ContextTypes.DEFAULT_TYPE, job_name) -> None:
+    # Ottieni l'elenco dei giocatori che hanno partecipato al quiz.
     player_ids = players_in_quiz[update.effective_chat.title]
     classifica = []
+
+    # Ottieni i dettagli del giocatore e aggiungili alla classifica.
     for id in player_ids:
         classifica.append(context.bot_data[id])
 
@@ -810,6 +920,8 @@ async def mostra_classifica(update: Update, context: ContextTypes.DEFAULT_TYPE, 
 
 def main():
     app = ApplicationBuilder().token(os.environ.get('BOT_TOKEN')).build()
+
+    # Handler comandi
     app.add_handler(CommandHandler("start", comando_start))
     app.add_handler(CommandHandler("nickname", comando_nickname))
     app.add_handler(CommandHandler("quiz", comando_quiz))
@@ -817,10 +929,12 @@ def main():
     app.add_handler(CommandHandler("info", comando_info))
     app.add_handler(CommandHandler("avvia_quiz", comando_start_quiz))
 
+    # Handler callback pulsanti
     app.add_handler(CallbackQueryHandler(bottone_avvia_quiz_jobs, pattern="avvia_quiz"))
     app.add_handler(CallbackQueryHandler(bottone_aggiungi_partecipante, pattern="aggiungi_partecipante"))
     app.add_handler(CallbackQueryHandler(bottone_rimuovi_partecipante, pattern="rimuovi_partecipante"))
 
+    # Handler callback pulsanti powerup
     app.add_handler(CallbackQueryHandler(handle_powerup_streak, pattern=Powerups.STREAK.nome()))
     app.add_handler(CallbackQueryHandler(handle_powerup_regalo, pattern=Powerups.REGALO.nome()))
     app.add_handler(CallbackQueryHandler(handle_powerup_doppio_rischio, pattern=Powerups.DOPPIO_RISCHIO.nome()))
