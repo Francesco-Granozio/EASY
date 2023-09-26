@@ -3,6 +3,7 @@ import os
 import random
 from datetime import datetime, timedelta
 from functools import partial
+from operator import itemgetter
 
 import telegram
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Poll
@@ -117,9 +118,26 @@ async def comando_profilo(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         await update.message.reply_text('Devi prima registrarti con il comando /start')
         return
 
+    rango = "Principiante 👶"
+
+    if player.quiz_completati >= 15 and int(player.get_punteggio_totale()) >= 5000:
+        rango = "Intermedio 🧑‍💼"
+    elif player.quiz_completati >= 50 and int(player.get_punteggio_totale()) >= 20000:
+        rango = "Esperto 🧙‍♂️"
+    elif player.quiz_completati >= 100 and int(player.get_punteggio_totale()) >= 50000:
+        rango = "Dennis Ritchie 👑"
+
     await update.message.reply_text(
-        f'Ecco le informazioni del tuo profilo:\nNickname: *{player.get_nickname()}*'
-        f'\nPunteggio ottenuto tra tutti i quiz svolti: *{round(player.get_punteggio_totale(), 2)}*',
+        f'Ecco le informazioni del tuo profilo:'
+        f'\nNickname: *{player.get_nickname()}*'
+        f'\n📊 Punteggio totale: *{round(player.get_punteggio_totale(), 2)}*'
+        f'\n❓ Domande risposte: *{player.get_domande_risposte()}*'
+        f'\n✅ Risposte corrette: *{player.get_risposte_corrette()}*'
+        f'\n❌ Risposte errate: *{player.get_risposte_errate()}*'
+        f'\n🏁 Quiz completati: *{player.get_quiz_completati()}*'
+        f'\n⚡ Powerup utilizzati: *{player.get_powerup_utilizzati()}*'
+        f'\n🥇 🥈 🥉 Numero podi: *{player.get_numero_podi()}*'
+        f'\nRango: *{rango}*',
         parse_mode='Markdown')
 
 
@@ -134,6 +152,56 @@ async def comando_info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         text += f"*{powerup.nome()}*:  {powerup.descrizione()}.\n"
 
     await update.message.reply_text(text, parse_mode='Markdown')
+
+
+@filtro_privato
+async def comando_classifica(update, context):
+    # Recupera tutti i giocatori dal database
+    players = await PlayerDAO(database_manager).do_retrieve_all()
+
+    # Ordina i giocatori in base a ciascun criterio
+    players_sorted_by_punteggio = sorted(players, key=lambda x: x.get_punteggio_totale(), reverse=True)
+    players_sorted_by_domande_risposte = sorted(players, key=lambda x: x.get_domande_risposte(), reverse=True)
+    players_sorted_by_risposte_corrette = sorted(players, key=lambda x: x.get_risposte_corrette(), reverse=True)
+    players_sorted_by_risposte_errate = sorted(players, key=lambda x: x.get_risposte_errate(), reverse=True)
+    players_sorted_by_quiz_completati = sorted(players, key=lambda x: x.get_quiz_completati(), reverse=True)
+    players_sorted_by_powerup_utilizzati = sorted(players, key=lambda x: x.get_powerup_utilizzati(), reverse=True)
+    players_sorted_by_numero_podi = sorted(players, key=lambda x: x.get_numero_podi(), reverse=True)
+
+    # Trova la posizione del giocatore attuale in base a ciascun criterio
+    player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+    punteggio_totale_player = player.get_punteggio_totale()
+    posizione_punteggio = next((i + 1 for i, p in enumerate(players_sorted_by_punteggio) if p.get_punteggio_totale() == punteggio_totale_player), None)
+
+    domande_risposte_player = player.get_domande_risposte()
+    posizione_domande_risposte = next((i + 1 for i, p in enumerate(players_sorted_by_domande_risposte) if p.get_domande_risposte() == domande_risposte_player), None)
+
+    risposte_corrette_player = player.get_risposte_corrette()
+    posizione_risposte_corrette = next((i + 1 for i, p in enumerate(players_sorted_by_risposte_corrette) if p.get_risposte_corrette() == risposte_corrette_player), None)
+
+    risposte_errate_player = player.get_risposte_errate()
+    posizione_risposte_errate = next((i + 1 for i, p in enumerate(players_sorted_by_risposte_errate) if p.get_risposte_errate() == risposte_errate_player), None)
+
+    quiz_completati_player = player.get_quiz_completati()
+    posizione_quiz_completati = next((i + 1 for i, p in enumerate(players_sorted_by_quiz_completati) if p.get_quiz_completati() == quiz_completati_player), None)
+
+    powerup_utilizzati_player = player.get_powerup_utilizzati()
+    posizione_powerup_utilizzati = next((i + 1 for i, p in enumerate(players_sorted_by_powerup_utilizzati) if p.get_powerup_utilizzati() == powerup_utilizzati_player), None)
+
+    numero_podi_player = player.get_numero_podi()
+    posizione_numero_podi = next((i + 1 for i, p in enumerate(players_sorted_by_numero_podi) if p.get_numero_podi() == numero_podi_player), None)
+
+    # Ora puoi inviare un messaggio con la posizione del giocatore in base a ciascun criterio
+    messaggio = "Posizione del giocatore in base ai criteri:\n"
+    messaggio += f"📊 Punteggio totale: {posizione_punteggio}\n"
+    messaggio += f"❓ Domande risposte: {posizione_domande_risposte}\n"
+    messaggio += f"✅ Risposte corrette: {posizione_risposte_corrette}\n"
+    messaggio += f"❌ Risposte errate: {posizione_risposte_errate}\n"
+    messaggio += f"🏁 Quiz completati: {posizione_quiz_completati}\n"
+    messaggio += f"⚡ Powerup utilizzati: {posizione_powerup_utilizzati}\n"
+    messaggio += f"🥇 🥈 🥉 Numero podi: {posizione_numero_podi}\n"
+
+    await update.message.reply_text(messaggio)
 
 
 @filtro_pubblico
@@ -1034,6 +1102,7 @@ def main():
     app.add_handler(CommandHandler("profilo", comando_profilo))
     app.add_handler(CommandHandler("info", comando_info))
     app.add_handler(CommandHandler("avvia_quiz", comando_start_quiz))
+    app.add_handler(CommandHandler("classifica", comando_classifica))
 
     # Handler callback pulsanti
     app.add_handler(CallbackQueryHandler(bottone_avvia_quiz_jobs, pattern="avvia_quiz"))
