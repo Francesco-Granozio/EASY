@@ -229,6 +229,10 @@ async def resetta_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE, job_n
     players_in_quiz[update.effective_chat.title] = []
     quiz_attivi[update.effective_chat.title] = False
 
+    player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+    player.set_quiz_completati(player.get_quiz_completati() + 1)
+    await PlayerDAO(database_manager).do_update(player)
+
 
 async def bottone_rimuovi_partecipante(update: Update, context: CallbackContext) -> None:
     # controllo se il player è stato aggiunto al quiz
@@ -467,6 +471,9 @@ async def handle_powerup_streak(update: Update, context: ContextTypes.DEFAULT_TY
 
         # Ottieni il nickname del player e mostra che ha usato il powerup.
         player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+        player.set_powerup_utilizzati(player.get_powerup_utilizzati() + 1)
+        await PlayerDAO(database_manager).do_update(player)
+
         messaggio = await bot.send_message(
             text=f"Powerup *{Powerups.STREAK.nome()}* utilizzato da *{player.get_nickname()}*!",
             chat_id=update.effective_chat.id, parse_mode='Markdown')
@@ -498,6 +505,9 @@ async def handle_powerup_regalo(update: Update, context: ContextTypes.DEFAULT_TY
                                         text=f"Powerup {Powerups.REGALO.nome()} utilizato!", show_alert=False)
 
         player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+        player.set_powerup_utilizzati(player.get_powerup_utilizzati() + 1)
+        await PlayerDAO(database_manager).do_update(player)
+
         messaggio = await bot.send_message(
             text=f"Powerup *{Powerups.REGALO.nome()}* utilizzato da *{player.get_nickname()}*!",
             chat_id=update.effective_chat.id, parse_mode='Markdown')
@@ -529,6 +539,9 @@ async def handle_powerup_doppio_rischio(update: Update, context: ContextTypes.DE
                                         text=f"Powerup {Powerups.DOPPIO_RISCHIO.nome()} utilizato!", show_alert=False)
 
         player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+        player.set_powerup_utilizzati(player.get_powerup_utilizzati() + 1)
+        await PlayerDAO(database_manager).do_update(player)
+
         messaggio = await bot.send_message(
             text=f"Powerup *{Powerups.DOPPIO_RISCHIO.nome()}* utilizzato da *{player.get_nickname()}*!",
             chat_id=update.effective_chat.id, parse_mode='Markdown')
@@ -561,6 +574,9 @@ async def handle_powerup_doppio(update: Update, context: ContextTypes.DEFAULT_TY
                                         text=f"Powerup {Powerups.DOPPIO.nome()} utilizato!", show_alert=False)
 
         player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+        player.set_powerup_utilizzati(player.get_powerup_utilizzati() + 1)
+        await PlayerDAO(database_manager).do_update(player)
+
         messaggio = await bot.send_message(
             text=f"Powerup *{Powerups.DOPPIO.nome()}* utilizzato da *{player.get_nickname()}*!",
             chat_id=update.effective_chat.id, parse_mode='Markdown')
@@ -614,6 +630,9 @@ async def handle_powerup_50_e_50(update: Update, context: ContextTypes.DEFAULT_T
                                         show_alert=True)
 
         player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+        player.set_powerup_utilizzati(player.get_powerup_utilizzati() + 1)
+        await PlayerDAO(database_manager).do_update(player)
+
         messaggio = await bot.send_message(
             text=f"Powerup *{Powerups.CINQUANTA_CINQUANTA.nome()}* utilizzato da *{player.get_nickname()}*!",
             chat_id=update.effective_chat.id, parse_mode='Markdown')
@@ -666,6 +685,9 @@ async def handle_powerup_gomma(update: Update, context: ContextTypes.DEFAULT_TYP
                                         show_alert=True)
 
         player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+        player.set_powerup_utilizzati(player.get_powerup_utilizzati() + 1)
+        await PlayerDAO(database_manager).do_update(player)
+
         messaggio = await bot.send_message(
             text=f"Powerup *{Powerups.GOMMA.nome()}* utilizzato da *{player.get_nickname()}*!",
             chat_id=update.effective_chat.id, parse_mode='Markdown')
@@ -701,6 +723,9 @@ async def handle_powerup_immunita(update: Update, context: ContextTypes.DEFAULT_
                                         text=f"Powerup {Powerups.IMMUNITA.nome()} utilizato!", show_alert=False)
 
         player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+        player.set_powerup_utilizzati(player.get_powerup_utilizzati() + 1)
+        await PlayerDAO(database_manager).do_update(player)
+
         messaggio = await bot.send_message(
             text=f"Powerup *{Powerups.IMMUNITA.nome()}* utilizzato da *{player.get_nickname()}*!",
             chat_id=update.effective_chat.id, parse_mode='Markdown')
@@ -735,6 +760,9 @@ async def handle_powerup_gioco_di_potere(update: Update, context: ContextTypes.D
                                         text=f"Powerup {Powerups.GIOCO_DI_POTERE.nome()} utilizato!", show_alert=False)
 
         player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+        player.set_powerup_utilizzati(player.get_powerup_utilizzati() + 1)
+        await PlayerDAO(database_manager).do_update(player)
+
         messaggio = await bot.send_message(
             text=f"Powerup *{Powerups.GIOCO_DI_POTERE.nome()}* utilizzato da *{player.get_nickname()}*!",
             chat_id=update.effective_chat.id, parse_mode='Markdown')
@@ -775,11 +803,19 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     quiz = context.bot_data[update.poll_answer.poll_id]
     player_in_quiz = context.bot_data[int(player.get_id())]
 
+    # Aggiorna il numero di domande a cui il player ha risposto.
+    player.set_domande_risposte(player.get_domande_risposte() + 1)
+    await PlayerDAO(database_manager).do_update(player)
+
     # Se l'utente risponde correttamente alla domanda, gli vengono dati anche i punti del powerup "regalo", se attivo
     await calcola_punteggio_powerup_regalo(update, context, quiz, player_in_quiz)
 
     # Verifica se la risposta del giocatore è corretta.
     if update.poll_answer.option_ids[0] == int(quiz["risposta_corretta"]) - 1:
+
+        # Aggiorna il numero di risposte corrette del giocatore.
+        player.set_risposte_corrette(player.get_risposte_corrette() + 1)
+        await PlayerDAO(database_manager).do_update(player)
 
         # Calcola il punteggio per il powerup "Streak".
         await calcola_punteggio_powerup_streak(update, context, player_in_quiz)
@@ -808,6 +844,11 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         await regala_powerup(update, context, player_in_quiz, quiz)
 
     else:
+
+        # Aggiorna il numero di risposte errate del giocatore.
+        # Chiaramente anche se ha il powerup immunità comunque ha sbagliato la risposta
+        player.set_risposte_errate(player.get_risposte_errate() + 1)
+        await PlayerDAO(database_manager).do_update(player)
 
         # Se la risposta del giocatore è errata, esegui il controllo dell'immunità.
         if await calcola_punteggio_immunita(update, context):
@@ -960,6 +1001,15 @@ async def mostra_classifica(update: Update, context: ContextTypes.DEFAULT_TYPE, 
         classifica.append(context.bot_data[id])
 
     classifica.sort(key=lambda x: x["punteggio_quiz_corrente"][update.effective_chat.title], reverse=True)
+
+    # Aggiorna il numero di podi del player
+    if classifica:
+        player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
+
+        for giocatore in classifica[:3]:
+            if player.get_nickname() == giocatore["nickname"]:
+                player.set_numero_podi(player.get_numero_podi() + 1)
+                await PlayerDAO(database_manager).do_update(player)
 
     text = f"Ecco la classifica del quiz su *{update.effective_chat.title}*\n"
     for posizione, player in enumerate(classifica, start=1):
