@@ -1,10 +1,9 @@
-import os
-from typing import Any
 import asyncio
+import os
 import random
 from datetime import datetime, timedelta
 from functools import partial
-import math
+from typing import Any
 
 import telegram
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Poll
@@ -12,15 +11,15 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, Callb
     PollAnswerHandler
 
 from Argomenti import Argomenti
-from filtri import filtro_privato, filtro_pubblico
 from DatabaseManager import DatabaseManager
-from Player import Player
-from Powerups import Powerups
 from Domanda import Domanda
-from Settings import Settings
-from PlayerDAO import PlayerDAO
 from DomandaDAO import DomandaDAO
+from Player import Player
+from PlayerDAO import PlayerDAO
+from Powerups import Powerups
+from Settings import Settings
 from SettingsDAO import SettingsDAO
+from filtri import filtro_privato, filtro_pubblico
 
 bot = telegram.Bot(token=os.environ.get('BOT_TOKEN'))
 DB_PATH = r"C:\Shared\Unisa\Tesi\EASY\database.db"
@@ -32,12 +31,13 @@ players_in_quiz = {argomento.value: [] for argomento in Argomenti}
 
 
 @filtro_privato
-async def comando_start(update: Update, context: Any) -> None:
+async def comando_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     # se il player non è registrato nel database, lo registro e gli invio un messaggio di benvenuto
     player = (await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id))
     if player is None:
         player = Player(update.effective_user.id, update.effective_user.full_name, 0)
         await PlayerDAO(database_manager).do_save(player)
+
 
     await update.message.reply_text(f'Ciao *{player.get_nickname()}* benvenuto sul bot EASY!\n'
                                     f'Stai avendo difficoltà nello studiare il linguaggio di programmazione C?\n'
@@ -260,6 +260,7 @@ async def bottone_rimuovi_partecipante(update: Update, context: CallbackContext)
 async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> None:
     # questa funzione avvia il quiz e manda le domande una dopo l'altra
     # manda anche i meme se presenti, mostra la classifica, cancella i messaggi e resetta il quiz
+    # mostra i bottoni per l'invio dei riferimenti
 
     nome_gruppo = update.effective_chat.title
 
@@ -276,6 +277,7 @@ async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> N
         return
 
     domande = await DomandaDAO(database_manager).do_retrieve_by_argomento(nome_gruppo)
+    random.shuffle(domande)
 
     # Calcola il tempo per la prossima domanda come 2 secondi nel futuro dall'istante corrente
     tempo_prossima_domanda = datetime.now() + timedelta(seconds=2)
@@ -303,13 +305,69 @@ async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> N
     function = partial(mostra_classifica, update, context)
     context.job_queue.run_once(function, when=intervallo_domande + 2, name="mostra_classifica")
 
+    # Mostra pulsante per la visualizzazione dei riferimenti
+    function = partial(invia_bottone_riferimenti, update, context, domande)
+    context.job_queue.run_once(function, when=intervallo_domande + 3, name="mostra _bottone_riferimenti")
+
     # Cancella i messaggi dopo che tutte le domande sono state inviate
     function = partial(cancella_messaggi, update, context)
-    context.job_queue.run_once(function, when=intervallo_domande + 3, name="cancella_messaggi")
+    context.job_queue.run_once(function, when=intervallo_domande + 4, name="cancella_messaggi")
 
     # Resetta il quiz dopo che tutte le domande sono state inviate
     function = partial(resetta_quiz, update, context)
-    context.job_queue.run_once(function, when=intervallo_domande + 3, name="resetta_quiz")
+    context.job_queue.run_once(function, when=intervallo_domande + 4, name="resetta_quiz")
+
+    # Mostra i bottoni per l'invio dei riferimenti dopo che tutte le domande sono state inviate
+
+
+async def invia_bottone_riferimenti(update: Update, context: ContextTypes.DEFAULT_TYPE, domande, job_name) -> None:
+    # Questa funzione invia un pulsante per visualizzare i riferimenti alle domande del quiz.
+
+    keyboard = [
+        [
+            InlineKeyboardButton(text=f"Visualizza riferimenti alle domande 🔍", callback_data="mostra_riferimenti"),
+        ]
+    ]
+
+    # Salva le domande nel chat_data per poterle utilizzare nella funzione di callback.
+    context.chat_data["domande"] = domande
+
+
+    messaggio = await bot.send_message(
+        text=f"👇🏻",
+        chat_id=update.effective_chat.id,
+        reply_markup=InlineKeyboardMarkup(keyboard))
+
+    messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
+
+
+async def bottone_mostra_riferimenti(update: Update, context: CallbackContext) -> None:
+    # Questa funzione mostra i riferimenti alle domande del quiz.
+
+    if "domande" not in context.chat_data:
+        return
+
+    private_chat_id = update.effective_user.id
+    domande = context.chat_data["domande"]
+
+    text = f"Riferimenti alle domande:\n\n"
+
+    # Aggiungi i riferimenti alle domande nel testo.
+    for numero_domanda, domanda in enumerate(domande, start=1):
+        if domanda.has_fonte():
+            text += f"Domanda *{numero_domanda}*:\n"
+            text += f"*{domanda.get_testo()}*\n\n"
+            text += f"Argomento: *{domanda.get_argomento()}*\n"
+            text += f"Difficoltà: *{domanda.get_difficoltaString()}*\n\n"
+            text += f"Risposta A: *{domanda.get_rispostaA()}*\n"
+            text += f"Risposta B: *{domanda.get_rispostaB()}*\n"
+            text += f"Risposta C: *{domanda.get_rispostaC()}*\n"
+            text += f"Risposta D: *{domanda.get_rispostaD()}*\n\n"
+            text += f"Risposta corretta: *{domanda.get_rispostaCorretta_string()}*\n\n"
+            text += f"Riferimenti: *{domanda.get_fonte()}*\n\n\n"
+
+    # Invia i riferimenti al giocatore nella chat privata.
+    await context.bot.send_message(chat_id=private_chat_id, text=text, parse_mode="Markdown")
 
 
 async def cancella_messaggi(update: Update, context: ContextTypes.DEFAULT_TYPE, job_name) -> None:
@@ -933,6 +991,7 @@ def main():
     app.add_handler(CallbackQueryHandler(bottone_avvia_quiz_jobs, pattern="avvia_quiz"))
     app.add_handler(CallbackQueryHandler(bottone_aggiungi_partecipante, pattern="aggiungi_partecipante"))
     app.add_handler(CallbackQueryHandler(bottone_rimuovi_partecipante, pattern="rimuovi_partecipante"))
+    app.add_handler(CallbackQueryHandler(bottone_mostra_riferimenti, pattern="mostra_riferimenti"))
 
     # Handler callback pulsanti powerup
     app.add_handler(CallbackQueryHandler(handle_powerup_streak, pattern=Powerups.STREAK.nome()))

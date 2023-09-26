@@ -41,6 +41,19 @@ class Domanda:
     def get_rispostaCorretta(self):
         return self.rispostaCorretta
 
+    def get_rispostaCorretta_string(self):
+        print(self.rispostaCorretta)
+        match self.rispostaCorretta:
+            case "1":
+                return "A"
+            case "2":
+                return "B"
+            case "3":
+                return "C"
+            case "4":
+                return "D"
+
+
     def get_difficolta(self):
         return self.difficolta
 
@@ -100,3 +113,6 @@ class Domanda:
 
     def set_fonte(self, fonte):
         self.fonte = fonte
+
+    def has_fonte(self):
+        return self.fonte is not None
