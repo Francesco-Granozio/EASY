@@ -70,6 +70,7 @@ namespace EasyInterfacciaDomande
             domainUpDown_difficolta.Text = domanda.Difficolta.ToString();
             trackBar_tempo_risposta.Value = domanda.TempoRisposta;
             label_meme_path.Text = domanda.Meme;
+            richTextBox_fonte.Text = domanda.Fonte;
         }
 
 
@@ -132,7 +133,8 @@ namespace EasyInterfacciaDomande
                 richTextBox_rispostaA.Text, richTextBox_rispostaB.Text, richTextBox_rispostaC.Text,
                 richTextBox_rispostaD.Text,
                 comboBox_risposta_corretta.SelectedIndex + 1, domainUpDown_difficolta.SelectedIndex + 1,
-                Convert.ToInt32(trackBar_tempo_risposta.Value), label_meme_path.Text == "" ? null : label_meme_path.Text);
+                Convert.ToInt32(trackBar_tempo_risposta.Value), label_meme_path.Text == "" ? null : label_meme_path.Text,
+                richTextBox_fonte.Text == "" ? null : richTextBox_fonte.Text);
 
 
             }

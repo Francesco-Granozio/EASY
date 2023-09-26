@@ -46,6 +46,7 @@
             this.richTextBox_rispostaD = new System.Windows.Forms.RichTextBox();
             this.comboBox_risposta_corretta = new System.Windows.Forms.ComboBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.label_meme_path = new System.Windows.Forms.Label();
             this.button_meme = new System.Windows.Forms.Button();
             this.label19 = new System.Windows.Forms.Label();
@@ -64,7 +65,8 @@
             this.comboBox_argomento = new System.Windows.Forms.ComboBox();
             this.button_conferma = new System.Windows.Forms.Button();
             this.button_annulla = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.label22 = new System.Windows.Forms.Label();
+            this.richTextBox_fonte = new System.Windows.Forms.RichTextBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_tempo_risposta)).BeginInit();
@@ -75,7 +77,7 @@
             this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(7, 14);
+            this.label1.Location = new System.Drawing.Point(7, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(146, 41);
             this.label1.TabIndex = 0;
@@ -86,6 +88,7 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.LightSkyBlue;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.label22);
             this.panel1.Controls.Add(this.label10);
             this.panel1.Controls.Add(this.label9);
             this.panel1.Controls.Add(this.label8);
@@ -98,7 +101,7 @@
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(12, 21);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(161, 532);
+            this.panel1.Size = new System.Drawing.Size(161, 605);
             this.panel1.TabIndex = 1;
             // 
             // label10
@@ -106,7 +109,7 @@
             this.label10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.label10.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label10.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(7, 469);
+            this.label10.Location = new System.Drawing.Point(7, 483);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(146, 41);
             this.label10.TabIndex = 9;
@@ -118,7 +121,7 @@
             this.label9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.label9.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label9.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(7, 417);
+            this.label9.Location = new System.Drawing.Point(7, 426);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(146, 41);
             this.label9.TabIndex = 8;
@@ -130,7 +133,7 @@
             this.label8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.label8.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label8.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(7, 366);
+            this.label8.Location = new System.Drawing.Point(7, 371);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(146, 41);
             this.label8.TabIndex = 7;
@@ -143,7 +146,7 @@
             this.label7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.label7.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(7, 314);
+            this.label7.Location = new System.Drawing.Point(7, 318);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(146, 41);
             this.label7.TabIndex = 6;
@@ -155,7 +158,7 @@
             this.label5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.label5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label5.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(7, 265);
+            this.label5.Location = new System.Drawing.Point(7, 267);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(146, 41);
             this.label5.TabIndex = 5;
@@ -167,7 +170,7 @@
             this.label6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.label6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(7, 215);
+            this.label6.Location = new System.Drawing.Point(7, 217);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(146, 41);
             this.label6.TabIndex = 4;
@@ -179,7 +182,7 @@
             this.label4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.label4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(7, 165);
+            this.label4.Location = new System.Drawing.Point(7, 167);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(146, 41);
             this.label4.TabIndex = 3;
@@ -191,7 +194,7 @@
             this.label3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.label3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(7, 115);
+            this.label3.Location = new System.Drawing.Point(7, 117);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(146, 41);
             this.label3.TabIndex = 2;
@@ -203,7 +206,7 @@
             this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.label2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(7, 65);
+            this.label2.Location = new System.Drawing.Point(7, 67);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(146, 41);
             this.label2.TabIndex = 1;
@@ -278,6 +281,7 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.panel2.Controls.Add(this.richTextBox_fonte);
             this.panel2.Controls.Add(this.button1);
             this.panel2.Controls.Add(this.label_meme_path);
             this.panel2.Controls.Add(this.button_meme);
@@ -303,9 +307,20 @@
             this.panel2.Controls.Add(this.richTextBox_rispostaD);
             this.panel2.Location = new System.Drawing.Point(179, 23);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(611, 539);
+            this.panel2.Size = new System.Drawing.Size(611, 603);
             this.panel2.TabIndex = 3;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
+            // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(11, 500);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(94, 30);
+            this.button1.TabIndex = 25;
+            this.button1.Text = "Rimuovi";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // label_meme_path
             // 
@@ -467,7 +482,7 @@
             // button_conferma
             // 
             this.button_conferma.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_conferma.Location = new System.Drawing.Point(20, 568);
+            this.button_conferma.Location = new System.Drawing.Point(20, 634);
             this.button_conferma.Name = "button_conferma";
             this.button_conferma.Size = new System.Drawing.Size(94, 30);
             this.button_conferma.TabIndex = 24;
@@ -478,7 +493,7 @@
             // button_annulla
             // 
             this.button_annulla.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_annulla.Location = new System.Drawing.Point(138, 568);
+            this.button_annulla.Location = new System.Drawing.Point(138, 634);
             this.button_annulla.Name = "button_annulla";
             this.button_annulla.Size = new System.Drawing.Size(94, 30);
             this.button_annulla.TabIndex = 25;
@@ -486,23 +501,33 @@
             this.button_annulla.UseVisualStyleBackColor = true;
             this.button_annulla.Click += new System.EventHandler(this.button3_Click);
             // 
-            // button1
+            // label22
             // 
-            this.button1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(11, 500);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(94, 30);
-            this.button1.TabIndex = 25;
-            this.button1.Text = "Rimuovi";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            this.label22.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.label22.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label22.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label22.Location = new System.Drawing.Point(6, 542);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(146, 41);
+            this.label22.TabIndex = 10;
+            this.label22.Text = "Fonte:";
+            this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // richTextBox_fonte
+            // 
+            this.richTextBox_fonte.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox_fonte.Location = new System.Drawing.Point(5, 545);
+            this.richTextBox_fonte.Name = "richTextBox_fonte";
+            this.richTextBox_fonte.Size = new System.Drawing.Size(593, 38);
+            this.richTextBox_fonte.TabIndex = 26;
+            this.richTextBox_fonte.Text = "";
             // 
             // FormInserimento
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DarkSeaGreen;
-            this.ClientSize = new System.Drawing.Size(807, 610);
+            this.ClientSize = new System.Drawing.Size(807, 674);
             this.Controls.Add(this.button_annulla);
             this.Controls.Add(this.button_conferma);
             this.Controls.Add(this.panel2);
@@ -558,5 +583,7 @@
         private System.Windows.Forms.Button button_annulla;
         private System.Windows.Forms.Label label_meme_path;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.RichTextBox richTextBox_fonte;
     }
 }

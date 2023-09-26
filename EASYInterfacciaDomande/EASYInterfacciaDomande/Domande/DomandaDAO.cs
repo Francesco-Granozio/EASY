@@ -24,7 +24,7 @@ namespace EasyInterfacciaDomande.Domande
             SqliteDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
-                domande.Add(new Domanda(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetInt32(7), reader.GetInt32(8), reader.GetInt32(9), reader.IsDBNull(10) ? null : reader.GetString(10)));
+                domande.Add(new Domanda(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetInt32(7), reader.GetInt32(8), reader.GetInt32(9), reader.IsDBNull(10) ? null : reader.GetString(10), reader.IsDBNull(11) ? null : reader.GetString(11)));
             }
             return domande;
         }
@@ -37,7 +37,7 @@ namespace EasyInterfacciaDomande.Domande
             SqliteDataReader reader = command.ExecuteReader();
             if (reader.Read())
             {
-                return new Domanda(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetInt32(7), reader.GetInt32(8), reader.GetInt32(9), reader.IsDBNull(10) ? null : reader.GetString(10));
+                return new Domanda(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetInt32(7), reader.GetInt32(8), reader.GetInt32(9), reader.IsDBNull(10) ? null : reader.GetString(10), reader.IsDBNull(11) ? null : reader.GetString(11));
             }
             return null;
         }
@@ -51,7 +51,7 @@ namespace EasyInterfacciaDomande.Domande
             SqliteDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
-                domande.Add(new Domanda(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetInt32(7), reader.GetInt32(8), reader.GetInt32(9), reader.IsDBNull(10) ? null : reader.GetString(10)));
+                domande.Add(new Domanda(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetInt32(7), reader.GetInt32(8), reader.GetInt32(9), reader.IsDBNull(10) ? null : reader.GetString(10), reader.IsDBNull(11) ? null : reader.GetString(11)));
             }
             return domande;
         }
@@ -65,7 +65,7 @@ namespace EasyInterfacciaDomande.Domande
             SqliteDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
-                domande.Add(new Domanda(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetInt32(7), reader.GetInt32(8), reader.GetInt32(9), reader.IsDBNull(10) ? null : reader.GetString(10)));
+                domande.Add(new Domanda(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetInt32(7), reader.GetInt32(8), reader.GetInt32(9), reader.IsDBNull(10) ? null : reader.GetString(10), reader.IsDBNull(11) ? null : reader.GetString(11)));
             }
             // Restituisci l'elenco delle domande trovate
             return domande;
@@ -82,7 +82,7 @@ namespace EasyInterfacciaDomande.Domande
             SqliteDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
-                domande.Add(new Domanda(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetInt32(7), reader.GetInt32(8), reader.GetInt32(9), reader.IsDBNull(10) ? null : reader.GetString(10)));
+                domande.Add(new Domanda(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetInt32(7), reader.GetInt32(8), reader.GetInt32(9), reader.IsDBNull(10) ? null : reader.GetString(10), reader.IsDBNull(11) ? null : reader.GetString(11)));
             }
             return domande;
         }
@@ -92,9 +92,9 @@ namespace EasyInterfacciaDomande.Domande
             Debug.WriteLine("DoSave");
             SqliteCommand command = new SqliteCommand(
                 @"INSERT INTO Domande (testo, argomento, RispostaA, RispostaB, RispostaC, RispostaD, 
-                RispostaCorretta, difficolta, tempoRisposta, meme) 
+                RispostaCorretta, difficolta, tempoRisposta, meme, fonte) 
                 VALUES (@testo, @argomento, @RispostaA, @RispostaB, @RispostaC, @RispostaD, 
-                @RispostaCorretta, @difficolta, @tempoRisposta, @meme)", connection);
+                @RispostaCorretta, @difficolta, @tempoRisposta, @meme, @fonte)", connection);
 
             command.Parameters.AddWithValue("@testo", domanda.Testo);
             command.Parameters.AddWithValue("@argomento", domanda.Argomento);
@@ -106,6 +106,7 @@ namespace EasyInterfacciaDomande.Domande
             command.Parameters.AddWithValue("@difficolta", domanda.Difficolta);
             command.Parameters.AddWithValue("@tempoRisposta", domanda.TempoRisposta);
             command.Parameters.AddWithValue("@meme", domanda.Meme is null ? DBNull.Value : (object)domanda.Meme);
+            command.Parameters.AddWithValue("@fonte", domanda.Fonte is null ? DBNull.Value : (object)domanda.Fonte);
 
             return command.ExecuteNonQuery() == 1;
         }
@@ -117,7 +118,7 @@ namespace EasyInterfacciaDomande.Domande
                 @"UPDATE Domande SET testo = @testo, argomento = @argomento, RispostaA = @RispostaA, 
                 RispostaB = @RispostaB, RispostaC = @RispostaC, RispostaD = @RispostaD, 
                 RispostaCorretta = @RispostaCorretta, difficolta = @difficolta, 
-                tempoRisposta = @tempoRisposta, meme = @meme WHERE NumeroDomanda = @id", connection);
+                tempoRisposta = @tempoRisposta, meme = @meme, fonte = @fonte WHERE NumeroDomanda = @id", connection);
 
             command.Parameters.AddWithValue("@testo", domanda.Testo);
             command.Parameters.AddWithValue("@argomento", domanda.Argomento);
@@ -130,7 +131,8 @@ namespace EasyInterfacciaDomande.Domande
             command.Parameters.AddWithValue("@tempoRisposta", domanda.TempoRisposta);
             command.Parameters.AddWithValue("@meme", domanda.Meme is null ? DBNull.Value : (object)domanda.Meme);
             command.Parameters.AddWithValue("@id", domanda.NumeroDomanda);
-
+            command.Parameters.AddWithValue("@fonte", domanda.Fonte is null ? DBNull.Value : (object)domanda.Fonte);
+            
             return command.ExecuteNonQuery() == 1;
         }
 

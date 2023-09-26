@@ -1,6 +1,27 @@
 aggiungere i riferimenti alle risposte
 vedere meglio il sistema di leveling
-fixare powerup duplicati
 
+
+Tempo trascorso: Il tempo totale trascorso dall'utente nel sistema può essere un indicatore di quanto sia coinvolto.
+
+Rango o Livello: Puoi assegnare agli utenti un livello o un rango in base alle loro prestazioni o al loro coinvolgimento. Ad esempio, potresti avere "Principiante," "Intermedio," e "Esperto."
+
+Record personali: Registra i record personali dell'utente, come il punteggio più alto mai ottenuto in un quiz o il numero massimo di risposte corrette consecutive.
+
+Partecipazione alle classifiche: Tieni traccia della posizione dell'utente nelle classifiche rispetto agli altri utenti. Questo può incentivare la competizione sana.
+
+Powerup preferiti: Puoi registrare quali powerup un utente utilizza più spesso o con maggiore successo.
+
+Feedback ricevuto/dato: Se il tuo sistema supporta feedback o valutazioni tra utenti, puoi tener traccia di quanti feedback ricevono e danno.
+
+Attività recente: Mostra all'utente le sue attività più recenti, come i quiz a cui ha partecipato, i risultati ottenuti e i powerup utilizzati.
+
+Badge o premi guadagnati: Assegna badge o premi agli utenti in base ai loro risultati o alla loro partecipazione. Questi possono essere visualizzati come un riconoscimento delle loro conquiste.
+
+Completamento di obiettivi: Se hai obiettivi o sfide nel tuo sistema, traccia quanti utenti completano con successo queste sfide.
+
+Interazioni sociali: Se il tuo sistema supporta interazioni sociali, come amicizie o seguaci, puoi monitorare quanti amici ha un utente o quante persone lo seguono.
+
+Ricorda che la scelta delle statistiche dipende dagli obiettivi del tuo sistema e da cosa desideri incoraggiare o premiare negli utenti. Puoi personalizzare e adattare queste statistiche in base alle esigenze specifiche del tuo progetto.
 
 

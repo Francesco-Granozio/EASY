@@ -19,13 +19,14 @@ namespace EasyInterfacciaDomande.Domande
         private int difficolta;
         private int tempoRisposta;
         private string meme;
+        private string fonte;
 
         public Domanda(int numeroDomanda)
         {
             this.numeroDomanda = numeroDomanda;
         }
 
-        public Domanda(int numeroDomanda, string testo, string argomento, string rispostaA, string rispostaB, string rispostaC, string rispostaD, int rispostaCorretta, int difficolta, int tempoRisposta, string meme)
+        public Domanda(int numeroDomanda, string testo, string argomento, string rispostaA, string rispostaB, string rispostaC, string rispostaD, int rispostaCorretta, int difficolta, int tempoRisposta, string meme, string fonte)
         {
             this.numeroDomanda = numeroDomanda;
             this.testo = testo;
@@ -38,9 +39,10 @@ namespace EasyInterfacciaDomande.Domande
             this.difficolta = difficolta;
             this.tempoRisposta = tempoRisposta;
             this.meme = meme;
+            this.fonte = fonte;
         }
 
-        public Domanda(string testo, string argomento, string rispostaA, string rispostaB, string rispostaC, string rispostaD, int rispostaCorretta, int difficolta, int tempoRisposta, string meme)
+        public Domanda(string testo, string argomento, string rispostaA, string rispostaB, string rispostaC, string rispostaD, int rispostaCorretta, int difficolta, int tempoRisposta, string meme, string fonte)
         {
             this.testo = testo;
             this.argomento = argomento;
@@ -52,6 +54,7 @@ namespace EasyInterfacciaDomande.Domande
             this.difficolta = difficolta;
             this.tempoRisposta = tempoRisposta;
             this.meme = meme;
+            this.fonte = fonte;
         }
 
         public override string ToString()
@@ -66,7 +69,8 @@ namespace EasyInterfacciaDomande.Domande
                    $"Risposta Corretta: {rispostaCorretta}\n" +
                    $"Difficoltà: {difficolta}\n" +
                    $"Tempo Risposta: {tempoRisposta}\n" +
-                   $"Meme: {meme}\n";
+                   $"Meme: {meme}\n" +
+                   $"Fonte: {fonte}\n";
         }
 
         public string RispostaCorrettaToSting()
@@ -96,5 +100,6 @@ namespace EasyInterfacciaDomande.Domande
         public int Difficolta { get => difficolta; set => difficolta = value; }
         public int TempoRisposta { get => tempoRisposta; set => tempoRisposta = value; }
         public String Meme { get => meme; set => meme = value; }
+        public string Fonte { get => fonte; set => fonte = value; }
     }
 }

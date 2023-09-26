@@ -95,7 +95,7 @@ namespace EasyInterfacciaDomande
         private void Form1_Load(object sender, EventArgs e)
         {
             Carica_Database();
-            comboBox_ricerca.SelectedItem = "Numero domanda";
+            comboBox_ricerca.SelectedItem = "*";
         }
 
         public DataGridView GetDataGridView()
@@ -129,6 +129,8 @@ namespace EasyInterfacciaDomande
 
                     row.Cells[11].Value = memeBytes;
 
+                    row.Cells[12].Value = domanda.Fonte;
+
                     break; // Esci dal ciclo dopo aver trovato e aggiornato la riga
                 }
             }
@@ -158,6 +160,8 @@ namespace EasyInterfacciaDomande
             }
 
             newRow.Cells[11].Value = memeBytes;
+            newRow.Cells[12].Value = domanda.Fonte;
+            
             dataGridView.Rows.Add(newRow);
         }
 
@@ -227,7 +231,8 @@ namespace EasyInterfacciaDomande
                         Convert.ToInt32(row.Cells["rispostaCorretta"].Value),
                         Convert.ToInt32(row.Cells["difficolta"].Value),
                         Convert.ToInt32(row.Cells["tempoRisposta"].Value),
-                        row.Cells["meme"].Value != null ? row.Cells["meme"].Value.ToString() : null),
+                        row.Cells["meme"].Value != null ? row.Cells["meme"].Value.ToString() : null,
+                        row.Cells["fonte"].Value != null ? row.Cells["fonte"].Value.ToString() : null),
                         false);
 
                 form.Show();
@@ -305,7 +310,16 @@ namespace EasyInterfacciaDomande
                 }
             }
 
-            if (comboBox_ricerca.SelectedItem.Equals("Testo"))
+            else if (comboBox_ricerca.SelectedItem.Equals("*"))
+            {
+                Refresh_Database(dao =>
+                {
+                    return dao.DoRetrieveAll();
+                });
+            }
+
+
+            else if (comboBox_ricerca.SelectedItem.Equals("Testo"))
             {
                 Refresh_Database(dao =>
                 {
@@ -313,7 +327,7 @@ namespace EasyInterfacciaDomande
                 });
             }
 
-            if (comboBox_ricerca.SelectedItem.Equals("Argomento"))
+            else if (comboBox_ricerca.SelectedItem.Equals("Argomento"))
             {
                 Refresh_Database(dao =>
                 {
@@ -321,7 +335,7 @@ namespace EasyInterfacciaDomande
                 });
             }
 
-            if (comboBox_ricerca.SelectedItem.Equals("Difficoltà"))
+            else if (comboBox_ricerca.SelectedItem.Equals("Difficoltà"))
             {
                 Refresh_Database(dao =>
                 {
@@ -343,14 +357,14 @@ namespace EasyInterfacciaDomande
                 comboBox_input.DropDownStyle = ComboBoxStyle.DropDownList;
             }
 
-            if (comboBox_ricerca.SelectedItem.Equals("Difficoltà"))
+            else if (comboBox_ricerca.SelectedItem.Equals("Difficoltà"))
             {
 
                 comboBox_input.Items.AddRange(new object[] { 1, 2, 3 });
                 comboBox_input.SelectedItem = 1;
                 comboBox_input.DropDownStyle = ComboBoxStyle.DropDownList;
             }
-            if (comboBox_ricerca.SelectedItem.Equals("Testo") || comboBox_ricerca.SelectedItem.Equals("Numero domanda"))
+            else if (comboBox_ricerca.SelectedItem.Equals("Testo") || comboBox_ricerca.SelectedItem.Equals("Numero domanda"))
             {
                 comboBox_input.DropDownStyle = ComboBoxStyle.DropDown;
             }
