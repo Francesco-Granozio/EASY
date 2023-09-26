@@ -3,7 +3,6 @@ import os
 import random
 from datetime import datetime, timedelta
 from functools import partial
-from typing import Any
 
 import telegram
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Poll
@@ -37,7 +36,6 @@ async def comando_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     if player is None:
         player = Player(update.effective_user.id, update.effective_user.full_name, 0)
         await PlayerDAO(database_manager).do_save(player)
-
 
     await update.message.reply_text(f'Ciao *{player.get_nickname()}* benvenuto sul bot EASY!\n'
                                     f'Stai avendo difficoltà nello studiare il linguaggio di programmazione C?\n'
@@ -120,7 +118,8 @@ async def comando_profilo(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         return
 
     await update.message.reply_text(
-        f'Ecco le informazioni del tuo profilo:\nNickname: *{player.get_nickname()}*\nPunteggio ottenuto tra tutti i quiz svolti: *{player.get_punteggio_totale()}*',
+        f'Ecco le informazioni del tuo profilo:\nNickname: *{player.get_nickname()}*'
+        f'\nPunteggio ottenuto tra tutti i quiz svolti: *{round(player.get_punteggio_totale(), 2)}*',
         parse_mode='Markdown')
 
 
@@ -331,7 +330,6 @@ async def invia_bottone_riferimenti(update: Update, context: ContextTypes.DEFAUL
 
     # Salva le domande nel chat_data per poterle utilizzare nella funzione di callback.
     context.chat_data["domande"] = domande
-
 
     messaggio = await bot.send_message(
         text=f"👇🏻",
