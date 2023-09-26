@@ -405,7 +405,7 @@ async def handle_powerup_streak(update: Update, context: ContextTypes.DEFAULT_TY
                                         show_alert=False)
         return
 
-    if  context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()]:
+    if context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()]:
         context.bot_data[update.effective_user.id]["powerups"][Powerups.STREAK.nome()] = False
 
         await bot.answer_callback_query(callback_query_id=update.callback_query.id,
@@ -719,10 +719,9 @@ async def regala_powerup(update: Update, context: ContextTypes.DEFAULT_TYPE, pla
         context.bot_data[update.effective_user.id]["powerups"][powerup_scelto.nome()] = True
 
         messaggio = await bot.send_message(chat_id=quiz["chat_id"],
-                                        text=f"*{player_in_quiz['nickname']}* ha ricevuto il powerup *{powerup_scelto.nome()}*!",
-                                        parse_mode="Markdown")
+                                           text=f"*{player_in_quiz['nickname']}* ha ricevuto il powerup *{powerup_scelto.nome()}*!",
+                                           parse_mode="Markdown")
         messaggi_per_lobby[quiz["chat_title"]].append(messaggio.message_id)
-
 
 
 async def calcola_punteggio_powerup_streak(update: Update, context: ContextTypes.DEFAULT_TYPE, player_in_quiz) -> None:
