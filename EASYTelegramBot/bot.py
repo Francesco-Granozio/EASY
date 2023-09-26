@@ -46,7 +46,8 @@ async def comando_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
                                     f'/nickname *`nuovo nickname`* per modificare il tuo nickname\n'
                                     f'/quiz per visulizzare gli argomenti si cui iniziare un quiz\n'
                                     f'/profilo per visulizzare le statistiche del tuo profilo (punti, emblemi, ecc...)\n'
-                                    f'/info per visulizzare le informazioni sul funzionamento del bot\n',
+                                    f'/info per visulizzare le informazioni sul funzionamento del bot\n'
+                                    f'/classifica per visulizzare la classifica dei giocatori secondo alcuni criteri\n',
                                     parse_mode='Markdown')
 
 
@@ -144,9 +145,16 @@ async def comando_profilo(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 @filtro_privato
 async def comando_info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     # mostro le informazioni per il funzionamento del bot
-    text = (f"Il funzionamento del bot è molto semplice!\n"
-            f"Una volta selezionato l\'argomento su cui vuoi fare il quiz dovrai rispondere correttamente alla domande per ottenere punti ed altre ricompense.\n"
-            f"Potrai utilizare un sacco di potenziamenti:\n")
+    text = (f"Il funzionamento del bot è molto *semplice*!\n"
+            f"Una volta selezionato l\'*argomento* su cui vuoi fare il quiz entrerai nel *gruppo relativo al quiz*.\n"
+            f"Puoi scegliere se partecipare al quiz tramite gli appositi *pulsanti*\n"
+            f"Ogni quiz consiste in una serie di *domande* a cui dovrai rispondere entro un *tempo limite*.\n"
+            f"Se rispondi *correttamente alla domanda* entro il *tempo limite otterrai dei punti* e avrai la possibilità di *guadagnare* dei *potenziamenti* che ti *avvantaggeranno* nelle *domande successive*\n"
+            f"Se rispondi in modo *sbagliato* ad una *domanda perderai dei punti*\n"
+            f"Se *non rispondi* il tuo *punteggio* rimarrà *invariato*\n"
+            f"Alla *fine* di una *domanda* visualizzerai, se presente, un *meme* relativo alla *domanda*, questo ti permetterà di *consolidare* le tue *conoscenze*\n"
+            f"Potrai utilizare un sacco di potenziamenti:\n"
+            f"Alla *fine di ogni quiz* potrai *visualizzare la classifica* dei giocatori relativi a quel quiz e avrai la possibilità di *visualizzare* i *riferimenti relativi alle domande*\n")
 
     for powerup in list(Powerups):
         text += f"*{powerup.nome()}*:  {powerup.descrizione()}.\n"
@@ -171,35 +179,42 @@ async def comando_classifica(update, context):
     # Trova la posizione del giocatore attuale in base a ciascun criterio
     player = await PlayerDAO(database_manager).do_retrieve_by_id(update.effective_user.id)
     punteggio_totale_player = player.get_punteggio_totale()
-    posizione_punteggio = next((i + 1 for i, p in enumerate(players_sorted_by_punteggio) if p.get_punteggio_totale() == punteggio_totale_player), None)
+    posizione_punteggio = next((i + 1 for i, p in enumerate(players_sorted_by_punteggio) if
+                                p.get_punteggio_totale() == punteggio_totale_player), None)
 
     domande_risposte_player = player.get_domande_risposte()
-    posizione_domande_risposte = next((i + 1 for i, p in enumerate(players_sorted_by_domande_risposte) if p.get_domande_risposte() == domande_risposte_player), None)
+    posizione_domande_risposte = next((i + 1 for i, p in enumerate(players_sorted_by_domande_risposte) if
+                                       p.get_domande_risposte() == domande_risposte_player), None)
 
     risposte_corrette_player = player.get_risposte_corrette()
-    posizione_risposte_corrette = next((i + 1 for i, p in enumerate(players_sorted_by_risposte_corrette) if p.get_risposte_corrette() == risposte_corrette_player), None)
+    posizione_risposte_corrette = next((i + 1 for i, p in enumerate(players_sorted_by_risposte_corrette) if
+                                        p.get_risposte_corrette() == risposte_corrette_player), None)
 
     risposte_errate_player = player.get_risposte_errate()
-    posizione_risposte_errate = next((i + 1 for i, p in enumerate(players_sorted_by_risposte_errate) if p.get_risposte_errate() == risposte_errate_player), None)
+    posizione_risposte_errate = next((i + 1 for i, p in enumerate(players_sorted_by_risposte_errate) if
+                                      p.get_risposte_errate() == risposte_errate_player), None)
 
     quiz_completati_player = player.get_quiz_completati()
-    posizione_quiz_completati = next((i + 1 for i, p in enumerate(players_sorted_by_quiz_completati) if p.get_quiz_completati() == quiz_completati_player), None)
+    posizione_quiz_completati = next((i + 1 for i, p in enumerate(players_sorted_by_quiz_completati) if
+                                      p.get_quiz_completati() == quiz_completati_player), None)
 
     powerup_utilizzati_player = player.get_powerup_utilizzati()
-    posizione_powerup_utilizzati = next((i + 1 for i, p in enumerate(players_sorted_by_powerup_utilizzati) if p.get_powerup_utilizzati() == powerup_utilizzati_player), None)
+    posizione_powerup_utilizzati = next((i + 1 for i, p in enumerate(players_sorted_by_powerup_utilizzati) if
+                                         p.get_powerup_utilizzati() == powerup_utilizzati_player), None)
 
     numero_podi_player = player.get_numero_podi()
-    posizione_numero_podi = next((i + 1 for i, p in enumerate(players_sorted_by_numero_podi) if p.get_numero_podi() == numero_podi_player), None)
+    posizione_numero_podi = next(
+        (i + 1 for i, p in enumerate(players_sorted_by_numero_podi) if p.get_numero_podi() == numero_podi_player), None)
 
     # Ora puoi inviare un messaggio con la posizione del giocatore in base a ciascun criterio
     messaggio = "Posizione del giocatore in base ai criteri:\n"
-    messaggio += f"📊 Punteggio totale: {posizione_punteggio}\n"
-    messaggio += f"❓ Domande risposte: {posizione_domande_risposte}\n"
-    messaggio += f"✅ Risposte corrette: {posizione_risposte_corrette}\n"
-    messaggio += f"❌ Risposte errate: {posizione_risposte_errate}\n"
-    messaggio += f"🏁 Quiz completati: {posizione_quiz_completati}\n"
-    messaggio += f"⚡ Powerup utilizzati: {posizione_powerup_utilizzati}\n"
-    messaggio += f"🥇 🥈 🥉 Numero podi: {posizione_numero_podi}\n"
+    messaggio += f"📊 Punteggio totale: *{posizione_punteggio}*\n"
+    messaggio += f"❓ Domande risposte: *{posizione_domande_risposte}*\n"
+    messaggio += f"✅ Risposte corrette: *{posizione_risposte_corrette}*\n"
+    messaggio += f"❌ Risposte errate: *{posizione_risposte_errate}*\n"
+    messaggio += f"🏁 Quiz completati: *{posizione_quiz_completati}*\n"
+    messaggio += f"⚡ Powerup utilizzati: *{posizione_powerup_utilizzati}*\n"
+    messaggio += f"🥇 🥈 🥉 Numero podi: *{posizione_numero_podi}*\n"
 
     await update.message.reply_text(messaggio)
 
