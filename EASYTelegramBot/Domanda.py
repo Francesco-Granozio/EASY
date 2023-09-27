@@ -42,7 +42,6 @@ class Domanda:
         return self.rispostaCorretta
 
     def get_rispostaCorretta_string(self):
-        print(self.rispostaCorretta)
         match self.rispostaCorretta:
             case "1":
                 return "A"
