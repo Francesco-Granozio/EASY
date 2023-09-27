@@ -47,6 +47,20 @@ class DomandaDAO:
         except sqlite3.Error as e:
             print(f"Errore durante la ricerca delle domande per Argomento: {e}")
 
+    async def do_retrieve_by_argomento_random_limit(self, argomento, limite):
+        try:
+            async with self.db_manager as conn:
+                cursor = await conn.execute("SELECT * FROM Domande WHERE argomento = ? ORDER BY RANDOM() LIMIT ?", (argomento, limite))
+                rows = await cursor.fetchall()
+                domande = []
+                for row in rows:
+                    domande.append(
+                        Domanda(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9],
+                                row[10], row[11]))
+                return domande
+        except sqlite3.Error as e:
+            print(f"Errore durante la ricerca delle domande per Argomento: {e}")
+
     async def do_save(self, domanda):
         try:
             async with self.db_manager as conn:

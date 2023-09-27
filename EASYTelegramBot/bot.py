@@ -362,8 +362,8 @@ async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> N
                                         text=f"Quiz su {nome_gruppo} già in corso, attendi ⏳", show_alert=False)
         return
 
-    domande = await DomandaDAO(database_manager).do_retrieve_by_argomento(nome_gruppo)
-    random.shuffle(domande)
+    # domande = await DomandaDAO(database_manager).do_retrieve_by_argomento(nome_gruppo)
+    domande = await DomandaDAO(database_manager).do_retrieve_by_argomento_random_limit(nome_gruppo, 5)
 
     # Calcola il tempo per la prossima domanda come 2 secondi nel futuro dall'istante corrente
     tempo_prossima_domanda = datetime.now() + timedelta(seconds=2)
