@@ -1,0 +1,35 @@
+Domanda: Come si definisce una macro in C utilizzando l'istruzione di pre-processore #define?
+Risposta 1: #macro(define)
+Risposta 2: #macroName = value
+Risposta 3: #define macroName value
+Risposta 4: #define(value) macroName
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte: Sito web "www.learn-c.org"
+
+Domanda: Cosa rappresenta __FILE__ in C?
+Risposta 1: Il nome del file corrente.
+Risposta 2: Il tipo di dati di una variabile.
+Risposta 3: L'estensione del file.
+Risposta 4: L'ora corrente del sistema.
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte: Libro "Programmazione in C" - Capitolo 8, Paragrafo 2
+
+Domanda: Qual è l'output dell'istruzione #error in C?
+Risposta 1: Mostra un errore durante la compilazione.
+Risposta 2: Crea un nuovo file di codice.
+Risposta 3: Stampa un messaggio di avviso.
+Risposta 4: Aggiunge un commento al codice.
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte: Sito web "www.cplusplus.com"
+
+Domanda: Qual è l'uso principale dell'istruzione #include in C?
+Risposta 1: Per includere un file di intestazione o un altro file di codice.
+Risposta 2: Per dichiarare una variabile.
+Risposta 3: Per definire una funzione.
+Risposta 4: Per creare una macro.
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte: Libro "C Programming for Beginners" - Capitolo 5, Paragrafo 1

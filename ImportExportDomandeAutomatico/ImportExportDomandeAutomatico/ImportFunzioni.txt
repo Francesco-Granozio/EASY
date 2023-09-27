@@ -1,0 +1,162 @@
+Domanda: Cosa rappresenta il termine "chiamata di funzione" in programmazione?
+Risposta 1: La definizione di una funzione.
+Risposta 2: L'invocazione di una funzione.
+Risposta 3: Il nome di una variabile.
+Risposta 4: Un commento nel codice.
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte: Libro "C Programming for Beginners" - Capitolo 4, Paragrafo 2
+
+Domanda: Qual è lo scopo principale delle funzioni in C?
+Risposta 1: Organizzare il codice in modo ordinato.
+Risposta 2: Aggiungere commenti al codice.
+Risposta 3: Eseguire operazioni aritmetiche.
+Risposta 4: Riutilizzare il codice e suddividerlo in blocchi.
+Indice risposta corretta: 4
+Difficoltà: 1
+Fonte: Slides - Capitolo 8, Pagina 5
+
+Domanda: In C, cosa è un "prototipo di funzione"?
+Risposta 1: Un commento che spiega cosa fa una funzione.
+Risposta 2: Una dichiarazione anticipata di una funzione.
+Risposta 3: Una variabile locale a una funzione.
+Risposta 4: Una chiamata a una funzione.
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte: www.learn-c.org
+
+Domanda: Qual è il termine corretto per una variabile dichiarata all'interno di una funzione in C?
+Risposta 1: Variabile globale
+Risposta 2: Variabile locale
+Risposta 3: Variabile esterna
+Risposta 4: Variabile statica
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte: Libro "Programmazione in C" - Capitolo 6, Paragrafo 1
+
+Domanda: Cosa fa il costrutto 'return' all'interno di una funzione in C?
+Risposta 1: Termina il programma.
+Risposta 2: Restituisce un valore dalla funzione.
+Risposta 3: Stampa un messaggio a schermo.
+Risposta 4: Crea una variabile.
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte: Slides - Capitolo 9, Pagina 2
+
+Domanda: Qual è la differenza tra una "chiamata per valore" e una "chiamata per riferimento" di una funzione in C?
+Risposta 1: Non esiste una differenza.
+Risposta 2: Nella chiamata per valore, i parametri originali vengono modificati.
+Risposta 3: Nella chiamata per riferimento, i parametri originali vengono copiati.
+Risposta 4: Nella chiamata per valore, i parametri originali vengono passati per riferimento.
+Indice risposta corretta: 4
+Difficoltà: 2
+Fonte: Libro "C Programming for Beginners" - Capitolo 7, Paragrafo 4
+
+Domanda: Cosa rappresenta la "ricorsione" in programmazione?
+Risposta 1: L'uso di commenti per spiegare una funzione.
+Risposta 2: L'invocazione di una funzione all'interno di se stessa.
+Risposta 3: La creazione di variabili globali.
+Risposta 4: La dichiarazione di variabili locali.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte: Slides - Capitolo 10, Pagina 8
+
+Domanda: In C, cosa rappresenta il termine "parametro di una funzione"?
+Risposta 1: Una variabile locale alla funzione.
+Risposta 2: Un commento nel codice.
+Risposta 3: Un valore restituito dalla funzione.
+Risposta 4: Un valore passato a una funzione quando viene chiamata.
+Indice risposta corretta: 4
+Difficoltà: 1
+Fonte: Slides - Capitolo 8, Pagina 12
+
+Domanda: Qual è il valore restituito da una funzione di tipo 'void' in C?
+Risposta 1: 0
+Risposta 2: Null
+Risposta 3: Non restituisce alcun valore.
+Risposta 4: Il valore restituito è casuale.
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte: Slides - Capitolo 11, Pagina 3
+
+Domanda: In C, cosa rappresenta il termine "funzione ricorsiva"?
+Risposta 1: Una funzione che chiama altre funzioni.
+Risposta 2: Una funzione che si richiama direttamente all'interno del suo corpo.
+Risposta 3: Una funzione che non può essere utilizzata.
+Risposta 4: Una funzione che accetta parametri multipli.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte: www.learn-c.org
+
+Domanda: Come si chiama la funzione predefinita in C che viene eseguita all'avvio del programma?
+Risposta 1: Iniziale
+Risposta 2: Main
+Risposta 3: Inizio
+Risposta 4: Start
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte: Slides - Capitolo 9, Pagina 10
+
+Domanda: Qual è il significato di "passaggio di parametri" in C?
+Risposta 1: Passare informazioni da una funzione all'altra.
+Risposta 2: Modificare il nome di una variabile.
+Risposta 3: Creare una nuova funzione.
+Risposta 4: Aggiungere commenti al codice.
+Indice risposta corretta: 1
+Difficoltà: 1
+Fonte: www.learn-c.org
+
+Domanda: Cosa rappresenta il termine "funzione inline" in C?
+Risposta 1: Una funzione che non può essere chiamata.
+Risposta 2: Una funzione che è definita in un file separato.
+Risposta 3: Una funzione il cui corpo viene inserito direttamente nel punto in cui è chiamata.
+Risposta 4: Una funzione che accetta solo input numerici.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte: Libro "Programmazione in C" - Capitolo 7, Paragrafo 5
+
+Domanda: In C, cosa rappresenta il termine "funzione built-in"?
+Risposta 1: Una funzione personalizzata.
+Risposta 2: Una funzione predefinita nel linguaggio.
+Risposta 3: Una funzione che non può essere utilizzata.
+Risposta 4: Una funzione che accetta molti parametri.
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte: Libro "Programmazione in C" - Capitolo 7, Paragrafo 6
+
+Domanda: Come si definisce una funzione in C?
+Risposta 1: Con la parola chiave 'define'.
+Risposta 2: Con la parola chiave 'function'.
+Risposta 3: Con la parola chiave 'def'.
+Risposta 4: Con la parola chiave 'void'.
+Indice risposta corretta: 4
+Difficoltà: 1
+Fonte: Slides - Capitolo 8, Pagina 3
+
+Domanda: Cosa rappresenta il termine "funzione header" in C?
+Risposta 1: La prima riga di codice di una funzione.
+Risposta 2: Una dichiarazione anticipata di una funzione.
+Risposta 3: Una variabile locale.
+Risposta 4: Un commento nel codice.
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte: Slides - Capitolo 9, Pagina 6
+
+Domanda: In C, cosa rappresenta il termine "funzione definita dall'utente"?
+Risposta 1: Una funzione che può essere utilizzata solo dall'utente.
+Risposta 2: Una funzione che non può essere utilizzata.
+Risposta 3: Una funzione personalizzata dall'utente.
+Risposta 4: Una funzione predefinita nel linguaggio.
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte: Libro "Programmazione in C" - Capitolo 7, Paragrafo 7
+
+Domanda: Cosa rappresenta il termine "passaggio di parametro per valore" in C?
+Risposta 1: Passare l'indirizzo di una variabile.
+Risposta 2: Passare il valore di una variabile.
+Risposta 3: Creare una nuova variabile.
+Risposta 4: Aggiungere commenti al codice.
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte: Slides - Capitolo 8, Pagina 15
+

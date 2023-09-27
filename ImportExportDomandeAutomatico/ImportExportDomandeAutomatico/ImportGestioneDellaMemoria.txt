@@ -1,0 +1,26 @@
+Domanda: Qual è lo scopo principale della funzione malloc in C?
+Risposta 1: Dealloca la memoria.
+Risposta 2: Alloca memoria dinamicamente.
+Risposta 3: Inizializza una variabile.
+Risposta 4: Stampa a schermo un messaggio.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte: Libro "Programmazione in C" - Capitolo 6, Paragrafo 2
+
+Domanda: Qual è il compito della funzione free in C?
+Risposta 1: Alloca la memoria.
+Risposta 2: Dealloca la memoria precedentemente allocata dinamicamente.
+Risposta 3: Inizializza tutti i puntatori a NULL.
+Risposta 4: Calcola la dimensione di un array.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte: Sito web "www.memory-management.org"
+
+Domanda: Cosa succede se si tenta di deallocare una zona di memoria più di una volta in C?
+Risposta 1: La memoria viene automaticamente deallocata.
+Risposta 2: Il programma genera un'eccezione di memoria.
+Risposta 3: Può causare comportamenti imprevedibili o crash del programma.
+Risposta 4: La memoria viene liberata definitivamente.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte: Slides "Gestione della Memoria" - Pagina 29

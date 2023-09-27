@@ -42,10 +42,10 @@ async def comando_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
                                     f'Stai avendo difficoltà nello studiare il linguaggio di programmazione C?\n'
                                     f'Non ti preoccupare, questo bot ti aiuterà a superare le tue difficoltà e allo stesso tempo '
                                     f'ti divertirai con i tuoi amici.\n'
-                                    f'Ecco la lista dei dei comandi:\n'
+                                    f'Ecco la lista dei comandi:\n'
                                     f'/nickname *`nuovo nickname`* per modificare il tuo nickname\n'
                                     f'/quiz per visulizzare gli argomenti si cui iniziare un quiz\n'
-                                    f'/profilo per visulizzare le statistiche del tuo profilo (punti, emblemi, ecc...)\n'
+                                    f'/profilo per visulizzare le statistiche del tuo profilo (punti, risposte corrrette, ecc...)\n'
                                     f'/info per visulizzare le informazioni sul funzionamento del bot\n'
                                     f'/classifica per visulizzare la classifica dei giocatori secondo alcuni criteri\n',
                                     parse_mode='Markdown')
@@ -216,7 +216,7 @@ async def comando_classifica(update, context):
     messaggio += f"⚡ Powerup utilizzati: *{posizione_powerup_utilizzati}*\n"
     messaggio += f"🥇 🥈 🥉 Numero podi: *{posizione_numero_podi}*\n"
 
-    await update.message.reply_text(messaggio)
+    await update.message.reply_text(text=messaggio, parse_mode='Markdown')
 
 
 @filtro_pubblico
@@ -456,7 +456,7 @@ async def bottone_mostra_riferimenti(update: Update, context: CallbackContext) -
 
 
 async def cancella_messaggi(update: Update, context: ContextTypes.DEFAULT_TYPE, job_name) -> None:
-    messaggio = await bot.send_message(text="Sto per cancellare la chat 👇🏻", chat_id=update.effective_chat.id)
+    messaggio = await bot.send_message(text="Sto per cancellare la chat ☝", chat_id=update.effective_chat.id)
     messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
 
     await asyncio.sleep(5)
@@ -917,7 +917,7 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         punti_gioco_di_potere = await calcola_punteggio_gioco_di_potere(update, context, quiz, player_in_quiz, player,
                                                                         True)
 
-        player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] += ((quiz["difficolta"] * 10 * player_in_quiz[
+        player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] += ((quiz["difficolta"] * 5 * player_in_quiz[
             "streak"] + punti_tempo_risposta)) * punti_doppio_rischio * punti_doppi * punti_gioco_di_potere
 
         if player_in_quiz["streak"] <= 1.5:
@@ -945,7 +945,7 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
         player_in_quiz["streak"] = 1
         player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] -= (
-                (float(quiz["difficolta"]) * 5) * punti_doppio_rischio * punti_gioco_di_potere)
+                (float(quiz["difficolta"]) * 2.5) * punti_doppio_rischio * punti_gioco_di_potere)
 
     if player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] < 0:
         player_in_quiz["punteggio_quiz_corrente"][quiz["chat_title"]] = 0
@@ -1071,7 +1071,7 @@ async def calcola_punteggio_tempo_risposta(update: Update, context: ContextTypes
     """
     return round(
         float(timedelta(seconds=durata_risposta).total_seconds() - (datetime.now() - tempo_inizio).total_seconds()),
-        2) * 10
+        2) * 5
 
 
 async def mostra_classifica(update: Update, context: ContextTypes.DEFAULT_TYPE, job_name) -> None:

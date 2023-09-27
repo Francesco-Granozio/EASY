@@ -1,0 +1,17 @@
+Domanda: Cosa fa l'operatore '==' in C?
+Risposta 1: Assegna un valore
+Risposta 2: Confronta due valori
+Risposta 3: Moltiplica due valori
+Risposta 4: Divide due valori
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte: www.learn-c.org
+
+Domanda: Quale operatore viene utilizzato per confrontare due valori in modo diverso da '=='?
+Risposta 1: '!='
+Risposta 2: '<'
+Risposta 3: '>'
+Risposta 4: '='
+Indice risposta corretta: 1
+Difficoltà: 1
+Fonte: Libro "C Programming for the Absolute Beginner" - Capitolo 2, Paragrafo 5
