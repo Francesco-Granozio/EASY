@@ -53,6 +53,8 @@ namespace EasyInterfacciaDomande
 
             InitializeComponent();
 
+            this.Text = "Aggiornamento domanda";
+
             comboBox_argomento.Items.AddRange(Argomenti.argomenti);
             domainUpDown_difficolta.SelectedItem = domanda.Difficolta.ToString();
 

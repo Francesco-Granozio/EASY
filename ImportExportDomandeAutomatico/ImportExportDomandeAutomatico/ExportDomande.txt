@@ -1,0 +1,1629 @@
+Domanda: In C, qual è la libreria standard utilizzata per operare sui file?
+Risposta 1: math.h
+Risposta 2: stdio.h
+Risposta 3: files.h
+Risposta 4: string.h
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte: 
+
+Domanda: Quale funzione viene utilizzata per aprire un file in modalità di lettura in C?
+Risposta 1: loadfile()
+Risposta 2: readfile()
+Risposta 3: fopen()
+Risposta 4: openfile()
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte: 
+
+Domanda: Come si chiude un file dopo averlo aperto in C?
+Risposta 1: closefile()
+Risposta 2: endfile()
+Risposta 3: fclose()
+Risposta 4: finishfile()
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte: 
+
+Domanda: Qual è il carattere speciale utilizzato per indicare la fine di una riga in un file di testo in C?
+Risposta 1: ;
+Risposta 2: :
+Risposta 3: $
+Risposta 4: \n
+Indice risposta corretta: 4
+Difficoltà: 1
+Fonte: 
+
+Domanda: Quale funzione viene utilizzata per scrivere dati in un file in C?
+Risposta 1: read()
+Risposta 2: write()
+Risposta 3: frwite()
+Risposta 4: writefile()
+Indice risposta corretta: 2
+Difficoltà: 3
+Fonte: 
+
+Domanda: Qual è il simbolo utilizzato per definire un commento singolo in C?
+Risposta 1: //
+Risposta 2: --
+Risposta 3: /*
+Risposta 4: #
+Indice risposta corretta: 1
+Difficoltà: 1
+Fonte: Libro "Introduzione alla Programmazione in C", Capitolo 2, Paragrafo 3
+
+Domanda: Qual è il simbolo utilizzato per definire un commento su più righe?
+Risposta 1: //
+Risposta 2: --
+Risposta 3: /*
+Risposta 4:  #
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte: Libro "Fondamenti della Programmazione C", Capitolo 1, Paragrafo 2
+
+Domanda: Cosa rappresenta il tipo di dato "int" in C?
+Risposta 1: Un carattere
+Risposta 2: Un numero intero
+Risposta 3: Un numero in virgola mobile
+Risposta 4: Una stringa
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte: Libro "Programmare in C: Concetti Fondamentali", Capitolo 3, Paragrafo 1
+
+Domanda: Qual è il simbolo per l'operatore di incremento in C?
+Risposta 1: ++
+Risposta 2: --
+Risposta 3: +=
+Risposta 4: +=
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte: Libro "C Programming for Beginners", Capitolo 4, Paragrafo 5
+
+Domanda: Cosa fa la funzione printf in C?
+Risposta 1: Legge un file
+Risposta 2: Scrive dati su un file
+Risposta 3: Stampa dati sulla console
+Risposta 4: Calcola la somma di due numeri
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte: www.tutorialspoint.com
+
+Domanda: Cosa rappresenta sizeof in C?
+Risposta 1: La dimensione in byte di una variabile o un tipo di dato
+Risposta 2: La somma di due numeri
+Risposta 3: Il numero di caratteri in una stringa
+Risposta 4: La lunghezza di un array
+Indice risposta corretta: 1
+Difficoltà: 3
+Fonte: www.learn-c.org
+
+Domanda: Quale delle seguenti affermazioni è vera riguardo alle variabili globali in C?
+Risposta 1: Possono essere utilizzate solo all'interno di una funzione
+Risposta 2: Possono essere utilizzate solo all'interno del main()
+Risposta 3: Possono essere utilizzate in tutto il programma
+Risposta 4: Devono essere dichiarate con la parola chiave global
+Indice risposta corretta: 3
+Difficoltà: 3
+Fonte: Libro "Programmazione Avanzata in C", Capitolo 7, Paragrafo 4
+
+Domanda: Qual è il tipo di dato di base per rappresentare un carattere in C?
+Risposta 1: char
+Risposta 2: int
+Risposta 3: float
+Risposta 4: double
+Indice risposta corretta: 1
+Difficoltà: 1
+Fonte: The C Programming Language, Capitolo 2, Paragrafo 2.1
+
+Domanda: Qual è il comando utilizzato per leggere un carattere da tastiera in C?
+Risposta 1: getchar()
+Risposta 2: puts()
+Risposta 3: printf()
+Risposta 4: scanf()
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte: Libro "Introduzione alla Programmazione in C", Capitolo 5, Paragrafo 3
+
+Domanda: Qual è il comando utilizzato per stampare una stringa a video in C?
+Risposta 1: gets()
+Risposta 2: puts()
+Risposta 3: printf()
+Risposta 4: scanf()
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte: Libro "Introduzione alla Programmazione in C", Capitolo 5, Paragrafo 2
+
+Domanda: Qual è il comando utilizzato per terminare in modo brusco l'esecuzione di un programma in C?
+Risposta 1: exit()
+Risposta 2: return 0
+Risposta 3: quit()
+Risposta 4: abort()
+Indice risposta corretta: 4
+Difficoltà: 3
+Fonte: Libro "Introduzione alla Programmazione in C", Capitolo 6, Paragrafo 1
+
+Domanda: Qual è il simbolo utilizzato per l'operatore di somma in C?
+Risposta 1: +
+Risposta 2: *
+Risposta 3: -
+Risposta 4: /
+Indice risposta corretta: 1
+Difficoltà: 1
+Fonte: Libro "Introduzione alla Programmazione in C", Capitolo 4, Paragrafo 2
+
+Domanda: Cosa fa la funzione scanf in C?
+Risposta 1: Stampa dati sulla console
+Risposta 2: Legge dati dalla console
+Risposta 3: Esegue un'operazione matematica
+Risposta 4: Copia un file
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte: Libro "Fondamenti della Programmazione C", Capitolo 2, Paragrafo 3
+
+Domanda: Quale operatore viene utilizzato per la moltiplicazione in C?
+Risposta 1: +
+Risposta 2: -
+Risposta 3: *
+Risposta 4: /
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte: Libro "Programmare in C: Concetti Fondamentali", Capitolo 1, Paragrafo 5
+
+Domanda: Qual è il simbolo utilizzato per l'operatore di sottrazione in C?
+Risposta 1: +
+Risposta 2: -
+Risposta 3: *
+Risposta 4: /
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte: Libro "Fondamenti della Programmazione C", Capitolo 4, Paragrafo 1
+
+Domanda: Quale funzione C viene utilizzata per ottenere l'intero più grande non superiore a un valore in virgola mobile?
+Risposta 1: floor()
+Risposta 2: round()
+Risposta 3: ceil()
+Risposta 4: int()
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte: Libro "Programmare in C: Concetti Fondamentali", Capitolo 2, Paragrafo 2
+
+Domanda: Cosa rappresenta l'operatore << in C?
+Risposta 1: L'operatore di somma
+Risposta 2: L'operatore di confronto
+Risposta 3: L'operatore di shift a sinistra
+Risposta 4: L'operatore di moltiplicazione
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte: Libro "C Programming Mastery", Capitolo 4, Paragrafo 3
+
+Domanda: Quale funzione C viene utilizzata per generare un numero casuale?
+Risposta 1: random()
+Risposta 2: rand()
+Risposta 3: generateRandom()
+Risposta 4: randomNumber()
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte: Libro "Programmazione Avanzata in C", Capitolo 5, Paragrafo 2
+
+Domanda: Qual è il simbolo utilizzato per l'operatore di divisione in C?
+Risposta 1: +
+Risposta 2: -
+Risposta 3: *
+Risposta 4: /
+Indice risposta corretta: 4
+Difficoltà: 1
+Fonte: Libro "C Programming Essentials", Capitolo 6, Paragrafo 4
+
+Domanda: Cosa rappresenta il termine "header file" in C?
+Risposta 1: Un file che contiene intestazioni di pagina HTML
+Risposta 2: Un file che contiene dichiarazioni di funzioni e costanti
+Risposta 3: Un file che contiene immagini per un'interfaccia utente
+Risposta 4: Un file che contiene dati binari
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte: www.cprogramming.com
+
+Domanda: Quale istruzione C viene utilizzata per dichiarare una variabile di tipo "double"?
+Risposta 1: var
+Risposta 2: float
+Risposta 3: int
+Risposta 4: double
+Indice risposta corretta: 4
+Difficoltà: 1
+Fonte: Slides "Programmazione in C: Tipi di Dati", Slide 3
+
+Domanda: Quale libreria C viene utilizzata per gestire l'input e l'output?
+Risposta 1: math.h
+Risposta 2: inputoutput.h
+Risposta 3: stdio.h
+Risposta 4: io.h
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte: Slides "Gestione Input/Output in C", Slide 2
+
+Domanda: Cosa rappresenta const prima di una variabile in C?
+Risposta 1: La variabile è costante e non può essere modificata
+Risposta 2: La variabile è di tipo float
+Risposta 3: La variabile è globale
+Risposta 4: La variabile è vuota
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte: www.cplusplus.com
+
+Domanda: Quale istruzione C viene utilizzata per dichiarare una variabile di tipo "char" e inizializzarla con il carattere 'A'?
+Risposta 1: char A = 'A';
+Risposta 2: char A;
+Risposta 3: char = 'A';
+Risposta 4: char 'A';
+Indice risposta corretta: 1
+Difficoltà: 1
+Fonte: Slides "Dichiarazione di Variabili in C", Slide 4
+
+Domanda: Cosa rappresenta static prima di una variabile in C?
+Risposta 1: La variabile è costante e non può essere modificata
+Risposta 2: La variabile è di tipo float
+Risposta 3: La variabile è statica e conserva il suo valore tra le chiamate di funzione
+Risposta 4: La variabile è globale
+Indice risposta corretta: 3
+Difficoltà: 3
+Fonte: www.studytonight.com
+
+Domanda:  Cosa fa l'operatore '==' in C?
+Risposta 1:  Assegna un valore
+Risposta 2:  Confronta due valori
+Risposta 3:  Moltiplica due valori
+Risposta 4:  Divide due valori
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  www.learn-c.org
+
+Domanda:  Quale operatore viene utilizzato per confrontare due valori in modo diverso da '=='?
+Risposta 1:  '!='
+Risposta 2:  '<'
+Risposta 3:  '>'
+Risposta 4:  '='
+Indice risposta corretta: 1
+Difficoltà: 1
+Fonte:  Libro "C Programming for the Absolute Beginner" - Capitolo 2, Paragrafo 5
+
+Domanda:  Qual è la sintassi corretta per un'istruzione 'if' in C?
+Risposta 1:  if condizione { }
+Risposta 2:  se condizione { }
+Risposta 3:  condizione if { }
+Risposta 4:  if (condizione) { }
+Indice risposta corretta: 4
+Difficoltà: 1
+Fonte:  www.learn-c.org
+
+Domanda:  Quale ciclo viene eseguito finché una condizione è vera?
+Risposta 1:  for
+Risposta 2:  while
+Risposta 3:  do-while
+Risposta 4:  repeat-until
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Libro "Programmazione in C" - Capitolo 3, Paragrafo 2
+
+Domanda:  Cosa fa un'istruzione 'else' in un'istruzione 'if-else'?
+Risposta 1:  Viene eseguita se la condizione è falsa
+Risposta 2:  Viene eseguita sempre
+Risposta 3:  Viene eseguita solo se la condizione è vera
+Risposta 4:  Non fa nulla
+Indice risposta corretta: 1
+Difficoltà: 1
+Fonte:  Slides - Capitolo 2, Pagina 20
+
+Domanda:  Qual è la sintassi corretta di un ciclo 'for' in C?
+Risposta 1:  for (inizializzazione; condizione; aggiornamento)
+Risposta 2:  per (inizializzazione; condizione; aggiornamento)
+Risposta 3:  loop (inizializzazione; condizione; aggiornamento)
+Risposta 4:  ciclo (inizializzazione; condizione; aggiornamento)
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Slides - Capitolo 4, Pagina 12
+
+Domanda:  Quale ciclo è noto anche come ciclo "pre-test"?
+Risposta 1:  for
+Risposta 2:  while
+Risposta 3:  do-while
+Risposta 4:  repeat-until
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Slides - Capitolo 3, Pagina 8
+
+Domanda:  In un'istruzione 'switch', cosa viene eseguito se nessuna delle etichette corrisponde?
+Risposta 1:  L'istruzione 'default'
+Risposta 2:  L'istruzione 'else'
+Risposta 3:  L'istruzione 'case'
+Risposta 4:  L'istruzione 'break'
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 4, Paragrafo 3
+
+Domanda:  Cosa fa l'istruzione 'break' all'interno di un ciclo?
+Risposta 1:  Termina il ciclo corrente e passa al successivo
+Risposta 2:  Incrementa il contatore del ciclo
+Risposta 3:  Riprende dall'inizio del ciclo
+Risposta 4:  Non fa nulla
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  www.learn-c.org
+
+Domanda:  Quale ciclo viene eseguito almeno una volta, anche se la condizione è falsa?
+Risposta 1:  for
+Risposta 2:  while
+Risposta 3:  do-while
+Risposta 4:  repeat-until
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Slides - Capitolo 5, Pagina 3
+
+Domanda:  Cosa fa l'operatore '||' in una condizione?
+Risposta 1:  Esegue un'operazione logica OR
+Risposta 2:  Esegue un'operazione logica AND
+Risposta 3:  Esegue un'operazione logica NOT
+Risposta 4:  Esegue un'operazione logica XOR
+Indice risposta corretta: 1
+Difficoltà: 1
+Fonte:  www.learn-c.org
+
+Domanda:  Qual è la differenza tra 'if' e 'else if' in C?
+Risposta 1:  'if' verifica una condizione, mentre 'else if' verifica una condizione diversa se quella precedente è falsa.
+Risposta 2:  'if' è una dichiarazione, mentre 'else if' è una funzione.
+Risposta 3:  'if' e 'else if' sono sinonimi in C.
+Risposta 4:  'if' è utilizzato per controllare i cicli, mentre 'else if' controlla le espressioni.
+Indice risposta corretta: 1
+Difficoltà: 1
+Fonte:  Libro "Programmazione in C" - Capitolo 5, Paragrafo 1
+
+Domanda:  Quale ciclo è noto come "ciclo post-test"?
+Risposta 1:  for
+Risposta 2:  while
+Risposta 3:  do-while
+Risposta 4:  repeat-until
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 5, Paragrafo 2
+
+Domanda:  Cosa fa l'operatore '!' in C?
+Risposta 1:  Moltiplica due valori
+Risposta 2:  Esegue un'operazione logica NOT
+Risposta 3:  Esegue un'operazione logica OR
+Risposta 4:  Divide due valori
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Slides - Capitolo 2, Pagina 15
+
+Domanda:  Quale dichiarazione viene utilizzata per saltare l'iterazione corrente in un ciclo?
+Risposta 1:  continue
+Risposta 2:  jump
+Risposta 3:  exit
+Risposta 4:  skip
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  www.learn-c.org
+
+Domanda:  In un'istruzione 'switch', cosa fa l'istruzione 'break'?
+Risposta 1:  Termina il programma
+Risposta 2:  Termina la funzione corrente
+Risposta 3:  Esce dal ciclo corrente
+Risposta 4:  Esce dallo switch corrente
+Indice risposta corretta: 4
+Difficoltà: 2
+Fonte:  Libro "C Programming for the Absolute Beginner" - Capitolo 7, Paragrafo 4
+
+Domanda:  Qual è la differenza principale tra 'while' e 'do-while' in C?
+Risposta 1:  'while' è noto come ciclo post-test, mentre 'do-while' è noto come ciclo pre-test.
+Risposta 2:  'while' è noto come ciclo pre-test, mentre 'do-while' è noto come ciclo post-test.
+Risposta 3:  Non esiste alcuna differenza tra 'while' e 'do-while'.
+Risposta 4:  'do-while' è utilizzato solo in C++, non in C.
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Slides - Capitolo 4, Pagina 8
+
+Domanda:  Cosa fa l'operatore '&&' in C?
+Risposta 1:  Esegue un'operazione logica OR
+Risposta 2:  Esegue un'operazione logica XOR
+Risposta 3:  Esegue un'operazione logica AND
+Risposta 4:  Esegue un'operazione logica NOT
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte:  www.learn-c.org
+
+Domanda:  In un ciclo 'for', dove viene eseguita l'istruzione di aggiornamento?
+Risposta 1:  Prima dell'inizializzazione
+Risposta 2:  Prima della condizione
+Risposta 3:  Dopo l'esecuzione del blocco di codice
+Risposta 4:  Prima dell'esecuzione del blocco di codice
+Indice risposta corretta: 4
+Difficoltà: 2
+Fonte:  Slides - Capitolo 6, Pagina 10
+
+Domanda:  Qual è l'operatore utilizzato per confrontare due valori e restituire il valore più grande?
+Risposta 1:  '>'
+Risposta 2:  '<'
+Risposta 3:  '='
+Risposta 4:  '
+Indice risposta corretta: 1
+Difficoltà: 1
+Fonte:  Libro "Programmazione in C" - Capitolo 3, Paragrafo 2
+
+Domanda:  Quale ciclo viene eseguito almeno una volta?
+Risposta 1:  for
+Risposta 2:  while
+Risposta 3:  do-while
+Risposta 4:  repeat-until
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 5, Paragrafo 4
+
+Domanda:  Cosa rappresenta '||' in C?
+Risposta 1:  Esegue un'operazione logica AND
+Risposta 2:  Esegue un'operazione logica OR
+Risposta 3:  Esegue un'operazione logica NOT
+Risposta 4:  Esegue un'operazione di confronto per l'uguaglianza
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Slides - Capitolo 2, Pagina 22
+
+Domanda:  Qual è il valore iniziale tipico di un contatore in un ciclo 'for'?
+Risposta 1:  1
+Risposta 2:  0
+Risposta 3:  -1
+Risposta 4:  Dipende dal programma
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  www.learn-c.org
+
+Domanda:  In C, cosa rappresenta il simbolo '?' all'interno di un'istruzione condizionale?
+Risposta 1:  Il simbolo di moltiplicazione
+Risposta 2:  Il simbolo di somma
+Risposta 3:  L'operatore di assegnazione
+Risposta 4:  L'operatore ternario condizionale
+Indice risposta corretta: 4
+Difficoltà: 1
+Fonte:  Libro "C Programming for Beginners" - Capitolo 6, Paragrafo 3
+
+Domanda:  Cosa succede se la condizione di un ciclo 'while' è sempre vera?
+Risposta 1:  Il ciclo viene eseguito una volta e poi termina.
+Risposta 2:  Il ciclo non viene mai eseguito.
+Risposta 3:  Il ciclo viene eseguito in modo indefinito.
+Risposta 4:  La condizione del ciclo viene ignorata.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Slides - Capitolo 4, Pagina 12
+
+Domanda:  Qual è l'operatore utilizzato per confrontare due valori e restituire il valore più piccolo?
+Risposta 1:  '>'
+Risposta 2:  '<'
+Risposta 3:  '='
+Risposta 4:  '
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Libro "Programmazione in C" - Capitolo 3, Paragrafo 2
+
+Domanda:  In C, cosa rappresenta il simbolo '||' all'interno di un'istruzione condizionale?
+Risposta 1:  L'operatore logico AND
+Risposta 2:  L'operatore logico OR
+Risposta 3:  L'operatore logico NOT
+Risposta 4:  L'operatore di assegnazione
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  www.learn-c.org
+
+Domanda:  Cosa fa l'operatore 'do' in un ciclo 'do-while' in C?
+Risposta 1:  Incrementa il contatore
+Risposta 2:  Esegue il blocco di codice prima di verificare la condizione
+Risposta 3:  Esegue il blocco di codice dopo aver verificato la condizione
+Risposta 4:  Non ha alcuna funzione specifica
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 5, Paragrafo 4
+
+Domanda:  Qual è il valore restituito da un'operazione di confronto vera in C?
+Risposta 1:  0
+Risposta 2:  1
+Risposta 3:  Vero
+Risposta 4:  Falso
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Libro "Programmazione in C" - Capitolo 2, Paragrafo 7
+
+Domanda:  Cosa rappresenta il termine "chiamata di funzione" in programmazione?
+Risposta 1:  La definizione di una funzione.
+Risposta 2:  L'invocazione di una funzione.
+Risposta 3:  Il nome di una variabile.
+Risposta 4:  Un commento nel codice.
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Libro "C Programming for Beginners" - Capitolo 4, Paragrafo 2
+
+Domanda:  Qual è lo scopo principale delle funzioni in C?
+Risposta 1:  Organizzare il codice in modo ordinato.
+Risposta 2:  Aggiungere commenti al codice.
+Risposta 3:  Eseguire operazioni aritmetiche.
+Risposta 4:  Riutilizzare il codice e suddividerlo in blocchi.
+Indice risposta corretta: 4
+Difficoltà: 1
+Fonte:  Slides - Capitolo 8, Pagina 5
+
+Domanda:  In C, cosa è un "prototipo di funzione"?
+Risposta 1:  Un commento che spiega cosa fa una funzione.
+Risposta 2:  Una dichiarazione anticipata di una funzione.
+Risposta 3:  Una variabile locale a una funzione.
+Risposta 4:  Una chiamata a una funzione.
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  www.learn-c.org
+
+Domanda:  Qual è il termine corretto per una variabile dichiarata all'interno di una funzione in C?
+Risposta 1:  Variabile globale
+Risposta 2:  Variabile locale
+Risposta 3:  Variabile esterna
+Risposta 4:  Variabile statica
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Libro "Programmazione in C" - Capitolo 6, Paragrafo 1
+
+Domanda:  Cosa fa il costrutto 'return' all'interno di una funzione in C?
+Risposta 1:  Termina il programma.
+Risposta 2:  Restituisce un valore dalla funzione.
+Risposta 3:  Stampa un messaggio a schermo.
+Risposta 4:  Crea una variabile.
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Slides - Capitolo 9, Pagina 2
+
+Domanda:  Qual è la differenza tra una "chiamata per valore" e una "chiamata per riferimento" di una funzione in C?
+Risposta 1:  Non esiste una differenza.
+Risposta 2:  Nella chiamata per valore, i parametri originali vengono modificati.
+Risposta 3:  Nella chiamata per riferimento, i parametri originali vengono copiati.
+Risposta 4:  Nella chiamata per valore, i parametri originali vengono passati per riferimento.
+Indice risposta corretta: 4
+Difficoltà: 2
+Fonte:  Libro "C Programming for Beginners" - Capitolo 7, Paragrafo 4
+
+Domanda:  Cosa rappresenta la "ricorsione" in programmazione?
+Risposta 1:  L'uso di commenti per spiegare una funzione.
+Risposta 2:  L'invocazione di una funzione all'interno di se stessa.
+Risposta 3:  La creazione di variabili globali.
+Risposta 4:  La dichiarazione di variabili locali.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Slides - Capitolo 10, Pagina 8
+
+Domanda:  In C, cosa rappresenta il termine "parametro di una funzione"?
+Risposta 1:  Una variabile locale alla funzione.
+Risposta 2:  Un commento nel codice.
+Risposta 3:  Un valore restituito dalla funzione.
+Risposta 4:  Un valore passato a una funzione quando viene chiamata.
+Indice risposta corretta: 4
+Difficoltà: 1
+Fonte:  Slides - Capitolo 8, Pagina 12
+
+Domanda:  Qual è il valore restituito da una funzione di tipo 'void' in C?
+Risposta 1:  0
+Risposta 2:  Null
+Risposta 3:  Non restituisce alcun valore.
+Risposta 4:  Il valore restituito è casuale.
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte:  Slides - Capitolo 11, Pagina 3
+
+Domanda:  In C, cosa rappresenta il termine "funzione ricorsiva"?
+Risposta 1:  Una funzione che chiama altre funzioni.
+Risposta 2:  Una funzione che si richiama direttamente all'interno del suo corpo.
+Risposta 3:  Una funzione che non può essere utilizzata.
+Risposta 4:  Una funzione che accetta parametri multipli.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  www.learn-c.org
+
+Domanda:  Come si chiama la funzione predefinita in C che viene eseguita all'avvio del programma?
+Risposta 1:  Iniziale
+Risposta 2:  Main
+Risposta 3:  Inizio
+Risposta 4:  Start
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Slides - Capitolo 9, Pagina 10
+
+Domanda:  Qual è il significato di "passaggio di parametri" in C?
+Risposta 1:  Passare informazioni da una funzione all'altra.
+Risposta 2:  Modificare il nome di una variabile.
+Risposta 3:  Creare una nuova funzione.
+Risposta 4:  Aggiungere commenti al codice.
+Indice risposta corretta: 1
+Difficoltà: 1
+Fonte:  www.learn-c.org
+
+Domanda:  Cosa rappresenta il termine "funzione inline" in C?
+Risposta 1:  Una funzione che non può essere chiamata.
+Risposta 2:  Una funzione che è definita in un file separato.
+Risposta 3:  Una funzione il cui corpo viene inserito direttamente nel punto in cui è chiamata.
+Risposta 4:  Una funzione che accetta solo input numerici.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 7, Paragrafo 5
+
+Domanda:  In C, cosa rappresenta il termine "funzione built-in"?
+Risposta 1:  Una funzione personalizzata.
+Risposta 2:  Una funzione predefinita nel linguaggio.
+Risposta 3:  Una funzione che non può essere utilizzata.
+Risposta 4:  Una funzione che accetta molti parametri.
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Libro "Programmazione in C" - Capitolo 7, Paragrafo 6
+
+Domanda:  Come si definisce una funzione in C?
+Risposta 1:  Con la parola chiave 'define'.
+Risposta 2:  Con la parola chiave 'function'.
+Risposta 3:  Con la parola chiave 'def'.
+Risposta 4:  Con la parola chiave 'void'.
+Indice risposta corretta: 4
+Difficoltà: 1
+Fonte:  Slides - Capitolo 8, Pagina 3
+
+Domanda:  Cosa rappresenta il termine "funzione header" in C?
+Risposta 1:  La prima riga di codice di una funzione.
+Risposta 2:  Una dichiarazione anticipata di una funzione.
+Risposta 3:  Una variabile locale.
+Risposta 4:  Un commento nel codice.
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Slides - Capitolo 9, Pagina 6
+
+Domanda:  In C, cosa rappresenta il termine "funzione definita dall'utente"?
+Risposta 1:  Una funzione che può essere utilizzata solo dall'utente.
+Risposta 2:  Una funzione che non può essere utilizzata.
+Risposta 3:  Una funzione personalizzata dall'utente.
+Risposta 4:  Una funzione predefinita nel linguaggio.
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte:  Libro "Programmazione in C" - Capitolo 7, Paragrafo 7
+
+Domanda:  Cosa rappresenta il termine "passaggio di parametro per valore" in C?
+Risposta 1:  Passare l'indirizzo di una variabile.
+Risposta 2:  Passare il valore di una variabile.
+Risposta 3:  Creare una nuova variabile.
+Risposta 4:  Aggiungere commenti al codice.
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Slides - Capitolo 8, Pagina 15
+
+Domanda:  Cosa rappresenta un array in C?
+Risposta 1:  Un elenco di variabili con nomi diversi.
+Risposta 2:  Una variabile che contiene un elenco di altre variabili dello stesso tipo.
+Risposta 3:  Un puntatore a una variabile.
+Risposta 4:  Un tipo di dato che può contenere solo numeri interi.
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Libro "Programmazione in C" - Capitolo 5, Paragrafo 2
+
+Domanda:  Qual è il simbolo utilizzato per accedere a un elemento specifico di un array in C?
+Risposta 1:  +
+Risposta 2:  -
+Risposta 3:  *
+Risposta 4:  []
+Indice risposta corretta: 4
+Difficoltà: 1
+Fonte:  Slides - Capitolo 7, Pagina 5
+
+Domanda:  Cosa rappresenta un puntatore in C?
+Risposta 1:  Un tipo di array.
+Risposta 2:  Un tipo di variabile intera.
+Risposta 3:  Un tipo di variabile che contiene l'indirizzo di memoria di un'altra variabile.
+Risposta 4:  Un tipo di variabile con un valore fisso.
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte:  www.learn-c.org
+
+Domanda:  Qual è la differenza tra un array e un puntatore in C?
+Risposta 1:  Un array contiene l'indirizzo di memoria di un'altra variabile, mentre un puntatore contiene valori.
+Risposta 2:  Un array contiene valori, mentre un puntatore contiene l'indirizzo di memoria di un'altra variabile.
+Risposta 3:  Un array è una variabile intera, mentre un puntatore è una stringa.
+Risposta 4:  Un array e un puntatore sono la stessa cosa.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 7, Paragrafo 1
+
+Domanda:  Qual è il simbolo utilizzato per dichiarare un puntatore in C?
+Risposta 1:  &
+Risposta 2:  *
+Risposta 3:  #
+Risposta 4:  @
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Slides - Capitolo 8, Pagina 3
+
+Domanda:  Cosa rappresenta l'operatore * in una dichiarazione di puntatore in C?
+Risposta 1:  Moltiplicazione.
+Risposta 2:  Sottrazione.
+Risposta 3:  Indirezione.
+Risposta 4:  Somma.
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte:  Libro "Programmazione in C" - Capitolo 8, Paragrafo 3
+
+Domanda:  Cosa rappresenta l'operatore & in C quando utilizzato con una variabile?
+Risposta 1:  Moltiplicazione.
+Risposta 2:  Divisione.
+Risposta 3:  Indirizzo di memoria.
+Risposta 4:  Somma.
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte:  Slides - Capitolo 9, Pagina 2
+
+Domanda:  Qual è il nome del processo di ottenere l'indirizzo di una variabile in C?
+Risposta 1:  Dichiarazione.
+Risposta 2:  Inizializzazione.
+Risposta 3:  Indirezione.
+Risposta 4:  Referenziazione.
+Indice risposta corretta: 4
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 9, Paragrafo 5
+
+Domanda:  Qual è la differenza tra un array multidimensionale e un array di puntatori in C?
+Risposta 1:  Gli array multidimensionali sono più efficienti in termini di memoria rispetto agli array di puntatori.
+Risposta 2:  Gli array multidimensionali contengono dati di tipo diverso, mentre gli array di puntatori contengono dati dello stesso tipo.
+Risposta 3:  Gli array multidimensionali hanno una dimensione fissa, mentre gli array di puntatori possono avere dimensioni variabili.
+Risposta 4:  Gli array multidimensionali non possono essere utilizzati come argomenti per le funzioni, mentre gli array di puntatori possono.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 10, Paragrafo 4
+
+Domanda:  Cosa rappresenta l'operatore -> in C?
+Risposta 1:  Moltiplicazione.
+Risposta 2:  Sottrazione.
+Risposta 3:  Accesso a un membro di una struttura puntata da un puntatore.
+Risposta 4:  Somma.
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte:  Slides - Capitolo 11, Pagina 2
+
+Domanda:  Come si crea un array di puntatori in C?
+Risposta 1:  Dichiarando un array e inizializzandolo con puntatori.
+Risposta 2:  Dichiarando un puntatore e inizializzandolo con un array.
+Risposta 3:  Non è possibile creare un array di puntatori in C.
+Risposta 4:  Utilizzando solo variabili intere.
+Indice risposta corretta: 1
+Difficoltà: 1
+Fonte:  Libro "Programmazione in C" - Capitolo 11, Paragrafo 1
+
+Domanda:  Qual è il valore dell'operatore sizeof quando utilizzato con un puntatore in C?
+Risposta 1:  La dimensione dell'oggetto puntato dal puntatore.
+Risposta 2:  La dimensione del puntatore stesso.
+Risposta 3:  La somma delle dimensioni degli oggetti puntati dal puntatore.
+Risposta 4:  La dimensione dell'indirizzo di memoria puntato dal puntatore.
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Slides - Capitolo 12, Pagina 4
+
+Domanda:  Cosa rappresenta un puntatore void in C?
+Risposta 1:  Un tipo di puntatore che può puntare solo a variabili di tipo float.
+Risposta 2:  Un tipo di puntatore che può puntare a variabili di qualsiasi tipo.
+Risposta 3:  Un tipo di puntatore che può puntare solo a variabili di tipo int.
+Risposta 4:  Un tipo di puntatore che può puntare solo a variabili di tipo char.
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Libro "Programmazione in C" - Capitolo 13, Paragrafo 2
+
+Domanda:  Come si restituisce un array da una funzione in C?
+Risposta 1:  Utilizzando una variabile globale.
+Risposta 2:  Utilizzando un puntatore come argomento della funzione.
+Risposta 3:  Non è possibile restituire un array da una funzione in C.
+Risposta 4:  Utilizzando l'operatore return seguito dall'array.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  www.learn-c.org
+
+Domanda:  Come si accede all'elemento all'indice i di un array utilizzando un puntatore in C?
+Risposta 1:  Utilizzando l'operatore * prima del puntatore.
+Risposta 2:  Utilizzando l'operatore . prima del puntatore.
+Risposta 3:  Utilizzando l'operatore -> prima del puntatore.
+Risposta 4:  Non è possibile accedere agli elementi di un array utilizzando un puntatore.
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 15, Paragrafo 3
+
+Domanda:  Cosa rappresenta l'operatore & prima di una variabile in C?
+Risposta 1:  L'indirizzo di memoria della variabile.
+Risposta 2:  Il valore della variabile.
+Risposta 3:  La dimensione della variabile.
+Risposta 4:  La somma della variabile con se stessa.
+Indice risposta corretta: 1
+Difficoltà: 1
+Fonte:  www.learn-c.org
+
+Domanda:  Come si calcola l'indirizzo di memoria di un elemento in un array utilizzando un puntatore in C?
+Risposta 1:  Sommando l'indice dell'elemento all'indirizzo base del puntatore.
+Risposta 2:  Sottraendo l'indice dell'elemento dall'indirizzo base del puntatore.
+Risposta 3:  Moltiplicando l'indice dell'elemento per l'indirizzo base del puntatore.
+Risposta 4:  Dividendo l'indice dell'elemento per l'indirizzo base del puntatore.
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Slides - Capitolo 17, Pagina 5
+
+Domanda:  Qual è la differenza tra una variabile di tipo char e una stringa in C?
+Risposta 1:  Una variabile di tipo char può contenere solo un carattere, mentre una stringa può contenere una sequenza di caratteri.
+Risposta 2:  Una variabile di tipo char è più lunga di una stringa.
+Risposta 3:  Non esiste differenza tra una variabile di tipo char e una stringa.
+Risposta 4:  Una variabile di tipo char può contenere solo numeri, mentre una stringa può contenere solo lettere.
+Indice risposta corretta: 1
+Difficoltà: 1
+Fonte:  Libro "Programmazione in C" - Capitolo 5, Paragrafo 2
+
+Domanda:  Come si dichiara una stringa in C?
+Risposta 1:  Utilizzando l'operatore str.
+Risposta 2:  Dichiarando una variabile di tipo string.
+Risposta 3:  Dichiarando un array di caratteri (char) e inizializzandolo con la stringa.
+Risposta 4:  Utilizzando l'operatore stringa.
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte:  www.learn-c.org
+
+Domanda:  Come si calcola la lunghezza di una stringa in C?
+Risposta 1:  Utilizzando l'operatore len.
+Risposta 2:  Confrontando la stringa con un'altra stringa vuota.
+Risposta 3:  Utilizzando la funzione strlen della libreria string.h.
+Risposta 4:  Sottraendo il primo carattere dall'ultimo carattere della stringa.
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte:  Slides - Capitolo 6, Pagina 3
+
+Domanda:  Qual è il carattere di terminazione di una stringa in C?
+Risposta 1:  Il carattere \0
+Risposta 2:  Il carattere ,.
+Risposta 3:  Il carattere ..
+Risposta 4:  Il carattere !.
+Indice risposta corretta: 1
+Difficoltà: 1
+Fonte:  Libro "Programmazione in C" - Capitolo 7, Paragrafo 2
+
+Domanda:  Come si assegna un valore a una stringa in C?
+Risposta 1:  Utilizzando l'operatore =.
+Risposta 2:  Utilizzando l'operatore ==.
+Risposta 3:  Utilizzando la funzione assign_string.
+Risposta 4:  Non è possibile assegnare un valore a una stringa in C.
+Indice risposta corretta: 4
+Difficoltà: 2
+Fonte:  Slides - Capitolo 8, Pagina 1
+
+Domanda:  Qual è il modo corretto di dichiarare e inizializzare una stringa vuota in C?
+Risposta 1:  char empty_string = "";
+Risposta 2:  char empty_string[] = " ";
+Risposta 3:  char empty_string[1] = "";
+Risposta 4:  char empty_string[] = "";
+Indice risposta corretta: 4
+Difficoltà: 1
+Fonte:  www.learn-c.org
+
+Domanda:  Cosa rappresenta il simbolo %s in una specifica di formattazione in C?
+Risposta 1:  Rappresenta un numero intero.
+Risposta 2:  Rappresenta una stringa.
+Risposta 3:  Rappresenta un carattere.
+Risposta 4:  Rappresenta un valore booleano.
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Libro "Programmazione in C" - Capitolo 9, Paragrafo 3
+
+Domanda:  Come si concatena una stringa a un'altra in C?
+Risposta 1:  Utilizzando la funzione join_strings.
+Risposta 2:  Utilizzando l'operatore +.
+Risposta 3:  Utilizzando la funzione strcat della libreria string.h.
+Risposta 4:  Non è possibile concatenare stringhe in C.
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte:  Slides - Capitolo 10, Pagina 4
+
+Domanda:  Cosa rappresenta la funzione strcmp in C?
+Risposta 1:  La funzione restituisce la somma di due numeri.
+Risposta 2:  La funzione restituisce la differenza tra due numeri.
+Risposta 3:  La funzione confronta due stringhe e restituisce un valore intero che indica l'ordine lessicografico.
+Risposta 4:  La funzione copia una stringa in un'altra.
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte:  www.learn-c.org
+
+Domanda:  Qual è la differenza tra strcpy e strncpy in C?
+Risposta 1:  Entrambe le funzioni copiano una stringa in un'altra senza differenze.
+Risposta 2:  strcpy copia una stringa senza limiti, mentre strncpy permette di specificare una lunghezza massima.
+Risposta 3:  strcpy è più veloce di strncpy.
+Risposta 4:  strncpy è più veloce di strcpy.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 11, Paragrafo 1
+
+Domanda:  Qual è il valore di ritorno della funzione strchr in C se il carattere non è presente nella stringa?
+Risposta 1:  -1
+Risposta 2:  0
+Risposta 3:  NULL
+Risposta 4:  1
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Slides - Capitolo 12, Pagina 2
+
+Domanda:  Cosa fa la funzione strtok in C?
+Risposta 1:  La funzione converte una stringa in lettere maiuscole.
+Risposta 2:  La funzione divide una stringa in sottostringhe basate su un delimitatore.
+Risposta 3:  La funzione concatena due stringhe.
+Risposta 4:  La funzione cerca una sottostringa all'interno di un'altra stringa.
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  www.learn-c.org
+
+Domanda:  Quale funzione in C può essere utilizzata per confrontare due stringhe senza distinzione tra maiuscole e minuscole?
+Risposta 1:  strcmp
+Risposta 2:  strcoll
+Risposta 3:  strcasecmp
+Risposta 4:  strspn
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 13, Paragrafo 2
+
+Domanda:  Qual è il risultato dell'espressione strlen("Ciao") in C?
+Risposta 1:  4
+Risposta 2:  3
+Risposta 3:  5
+Risposta 4:  2
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Slides - Capitolo 14, Pagina 1
+
+Domanda:  Come si restituisce una sottostringa da una stringa in C?
+Risposta 1:  Utilizzando l'operatore sub.
+Risposta 2:  Utilizzando la funzione substring.
+Risposta 3:  Utilizzando l'operatore [].
+Risposta 4:  Utilizzando la funzione strstr della libreria string.h.
+Indice risposta corretta: 4
+Difficoltà: 2
+Fonte:  www.learn-c.org
+
+Domanda:  Cosa fa la funzione strcat in C?
+Risposta 1:  La funzione restituisce la lunghezza di una stringa.
+Risposta 2:  La funzione concatena due stringhe.
+Risposta 3:  La funzione cerca una sottostringa all'interno di una stringa.
+Risposta 4:  La funzione converte una stringa in lettere maiuscole.
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Libro "Programmazione in C" - Capitolo 16, Paragrafo 4
+
+Domanda:  Quale funzione in C può essere utilizzata per confrontare due stringhe ignorando la loro lunghezza?
+Risposta 1:  strcmp
+Risposta 2:  strcoll
+Risposta 3:  strncasecmp
+Risposta 4:  strcasecmp
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Slides - Capitolo 17, Pagina 4
+
+Domanda:  Qual è il carattere di escape utilizzato per rappresentare una nuova riga in una stringa in C?
+Risposta 1:  \n
+Risposta 2:  \t
+Risposta 3:  \r
+Risposta 4:  \b
+Indice risposta corretta: 1
+Difficoltà: 1
+Fonte:  Libro "Programmazione in C" - Capitolo 18, Paragrafo 1
+
+Domanda:  Cosa rappresenta il simbolo %c in una specifica di formattazione in C?
+Risposta 1:  Rappresenta un numero intero.
+Risposta 2:  Rappresenta una stringa.
+Risposta 3:  Rappresenta un carattere.
+Risposta 4:  Rappresenta un valore booleano.
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte:  Slides - Capitolo 19, Pagina 2
+
+Domanda:  Qual è il risultato dell'espressione strcat("Hello", "World") in C?
+Risposta 1:  HelloWorld
+Risposta 2:  Hello World
+Risposta 3:  WorldHello
+Risposta 4:  Helloworld
+Indice risposta corretta: 1
+Difficoltà: 1
+Fonte:  Libro "Programmazione in C" - Capitolo 20, Paragrafo 3
+
+Domanda:  Qual è l'obiettivo principale delle strutture dati?
+Risposta 1:  Ottimizzare il consumo di memoria.
+Risposta 2:  Rendere il codice più complesso.
+Risposta 3:  Organizzare e gestire dati in modo efficiente.
+Risposta 4:  Semplificare la scrittura del codice.
+Indice risposta corretta: 3
+Difficoltà: 1
+Fonte:  Slides - Pagina 5
+
+Domanda:  Cosa rappresenta una pila (stack) nelle strutture dati?
+Risposta 1:  Una struttura dati che segue un approccio FIFO (First-In, First-Out).
+Risposta 2:  Una struttura dati che segue un approccio LIFO (Last-In, First-Out).
+Risposta 3:  Una struttura dati che organizza i dati in ordine alfabetico.
+Risposta 4:  Una struttura dati che organizza i dati in ordine numerico.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Libro "Strutture Dati in C" - Capitolo 3, Paragrafo 1
+
+Domanda:  Qual è il vantaggio principale dell'utilizzo di una coda (queue) nelle strutture dati?
+Risposta 1:  Permette l'accesso casuale ai dati.
+Risposta 2:  Garantisce un accesso rapido ai dati.
+Risposta 3:  Assicura che i dati vengano elaborati nell'ordine in cui sono stati inseriti.
+Risposta 4:  Organizza i dati in una struttura ad albero.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Slides - Pagina 9
+
+Domanda:  Cosa rappresenta un albero binario nelle strutture dati?
+Risposta 1:  Un albero in cui ogni nodo ha un solo figlio.
+Risposta 2:  Un albero in cui ogni nodo ha al massimo due figli.
+Risposta 3:  Un albero in cui i nodi sono collegati in modo circolare.
+Risposta 4:  Un albero in cui i nodi sono disconnessi.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Libro "Strutture Dati in C" - Capitolo 5, Paragrafo 1
+
+Domanda:  Cosa rappresenta una lista concatenata (linked list) nelle strutture dati?
+Risposta 1:  Una lista di numeri casuali.
+Risposta 2:  Una lista in cui gli elementi sono collegati tra loro da puntatori.
+Risposta 3:  Una lista in cui gli elementi sono organizzati in ordine alfabetico.
+Risposta 4:  Una lista in cui gli elementi sono disposti in una griglia.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Slides - Pagina 15
+
+Domanda:  Qual è il vantaggio principale delle tabelle hash nelle strutture dati?
+Risposta 1:  Garantiscono un accesso casuale ai dati.
+Risposta 2:  Forniscono un'organizzazione gerarchica dei dati.
+Risposta 3:  Consentono una rapida ricerca e recupero dei dati.
+Risposta 4:  Organizzano i dati in una sequenza lineare.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Libro "Strutture Dati in C" - Capitolo 7, Paragrafo 2
+
+Domanda:  Cosa rappresenta un grafo (graph) nelle strutture dati?
+Risposta 1:  Una struttura dati che contiene solo dati numerici.
+Risposta 2:  Una struttura dati che rappresenta relazioni tra oggetti.
+Risposta 3:  Una struttura dati che organizza i dati in una pila.
+Risposta 4:  Una struttura dati che contiene solo dati di testo.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Slides - Pagina 21
+
+Domanda:  Cosa rappresenta una matrice (matrix) nelle strutture dati?
+Risposta 1:  Una struttura dati che organizza i dati in una lista concatenata.
+Risposta 2:  Una struttura dati che organizza i dati in una griglia bidimensionale.
+Risposta 3:  Una struttura dati che contiene solo dati booleani.
+Risposta 4:  Una struttura dati che contiene solo dati di tipo stringa.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Libro "Strutture Dati in C" - Capitolo 9, Paragrafo 1
+
+Domanda:  Qual è il vantaggio principale dell'utilizzo di un albero binario di ricerca nelle strutture dati?
+Risposta 1:  Garantisce l'accesso casuale ai dati.
+Risposta 2:  Fornisce un'organizzazione gerarchica dei dati.
+Risposta 3:  Assicura una rapida ricerca dei dati.
+Risposta 4:  Organizza i dati in una pila.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Slides - Pagina 27
+
+Domanda:  Cosa rappresenta una coda a priorità (priority queue) nelle strutture dati?
+Risposta 1:  Una coda in cui i dati vengono elaborati in ordine casuale.
+Risposta 2:  Una coda in cui i dati vengono elaborati in ordine alfabetico.
+Risposta 3:  Una coda in cui i dati vengono elaborati in base a una priorità assegnata.
+Risposta 4:  Una coda in cui i dati vengono elaborati in ordine inverso.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Libro "Strutture Dati in C" - Capitolo 11, Paragrafo 3
+
+Domanda:  Qual è il vantaggio principale dell'utilizzo di un grafo diretto nelle strutture dati?
+Risposta 1:  Permette solo relazioni bidirezionali tra nodi.
+Risposta 2:  Consente di rappresentare relazioni unidirezionali tra nodi.
+Risposta 3:  Organizza i dati in una struttura ad albero.
+Risposta 4:  Garantisce un accesso casuale ai dati.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Slides - Pagina 33
+
+Domanda:  Cosa rappresenta una coda circolare (circular queue) nelle strutture dati?
+Risposta 1:  Una coda in cui i dati sono disposti in modo circolare.
+Risposta 2:  Una coda in cui i dati vengono elaborati in ordine casuale.
+Risposta 3:  Una coda in cui i dati sono organizzati in ordine alfabetico.
+Risposta 4:  Una coda in cui i dati vengono elaborati in ordine inverso.
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Libro "Strutture Dati in C" - Capitolo 13, Paragrafo 2
+
+Domanda:  Qual è il vantaggio principale dell'utilizzo di un albero AVL nelle strutture dati?
+Risposta 1:  Assicura un accesso casuale ai dati.
+Risposta 2:  Mantiene bilanciato l'albero, garantendo tempi di ricerca efficienti.
+Risposta 3:  Organizza i dati in una struttura ad albero binario.
+Risposta 4:  Fornisce una rapida organizzazione dei dati in ordine alfabetico.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Slides - Pagina 39
+
+Domanda:  Cosa rappresenta una hash table nelle strutture dati?
+Risposta 1:  Una tabella con dati disorganizzati.
+Risposta 2:  Una struttura dati che organizza i dati in una sequenza lineare.
+Risposta 3:  Una struttura dati che associa chiavi a valori in modo efficiente.
+Risposta 4:  Una lista concatenata di elementi numerici.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Sito web - www.data-structures.com
+
+Domanda:  Cosa rappresenta una struttura dati dinamica nelle strutture dati?
+Risposta 1:  Una struttura che non può essere modificata.
+Risposta 2:  Una struttura in cui le dimensioni possono essere modificate durante l'esecuzione.
+Risposta 3:  Una struttura dati che organizza i dati in modo statico.
+Risposta 4:  Una struttura dati che contiene solo dati numerici.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Slides - Pagina 45
+
+Domanda:  Cosa rappresenta un albero binario di ricerca bilanciato (balanced BST) nelle strutture dati?
+Risposta 1:  Un albero in cui i nodi sono disposti in ordine casuale.
+Risposta 2:  Un albero in cui il bilanciamento non è importante.
+Risposta 3:  Un albero in cui la differenza tra le altezze dei sottoalberi sinistro e destro è limitata.
+Risposta 4:  Un albero in cui i nodi sono collegati in modo circolare.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Libro "Strutture Dati in C" - Capitolo 15, Paragrafo 1
+
+Domanda:  Cosa rappresenta una struttura dati ad albero B nelle strutture dati?
+Risposta 1:  Un albero in cui ogni nodo ha un solo figlio.
+Risposta 2:  Un albero in cui ogni nodo ha al massimo due figli.
+Risposta 3:  Un albero in cui i nodi sono disconnessi.
+Risposta 4:  Un albero in cui i nodi sono collegati in modo circolare.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Slides - Pagina 51
+
+Domanda:  Cosa rappresenta una struttura dati ad albero B+ nelle strutture dati?
+Risposta 1:  Un albero in cui i nodi sono collegati in modo circolare.
+Risposta 2:  Un albero in cui i nodi foglia sono collegati da un elenco concatenato.
+Risposta 3:  Un albero in cui i nodi non contengono dati.
+Risposta 4:  Un albero in cui ogni nodo ha un solo figlio.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Libro "Strutture Dati in C" - Capitolo 17, Paragrafo 3
+
+Domanda:  Cosa rappresenta una struttura dati heap nelle strutture dati?
+Risposta 1:  Una struttura dati che organizza i dati in una sequenza lineare.
+Risposta 2:  Una struttura dati che organizza i dati in modo circolare.
+Risposta 3:  Una struttura dati che mantiene l'elemento di massimo o minimo in cima.
+Risposta 4:  Una struttura dati che organizza i dati in ordine alfabetico.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Libro "Strutture Dati in C" - Capitolo 19, Paragrafo 2
+
+Domanda:  Qual è il principale vantaggio dell'allocazione dinamica della memoria in C?
+Risposta 1:  Maggior controllo sulla durata della memoria.
+Risposta 2:  Minore utilizzo della CPU.
+Risposta 3:  Allocazione automatica della memoria.
+Risposta 4:  Maggior efficienza nell'utilizzo della memoria.
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 7, Paragrafo 3
+
+Domanda:  Qual è la differenza tra un array statico e un array dinamico in C?
+Risposta 1:  Gli array dinamici sono dichiarati con una dimensione fissa.
+Risposta 2:  Gli array statici possono essere ridimensionati durante l'esecuzione del programma.
+Risposta 3:  Gli array dinamici possono cambiare dimensione durante l'esecuzione del programma.
+Risposta 4:  Gli array statici vengono allocati nella stack, mentre gli array dinamici nella heap.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Slides "Gestione della Memoria" - Pagina 18
+
+Domanda:  Qual è l'importanza di deallocare la memoria allocata dinamicamente in C?
+Risposta 1:  La memoria deallocata viene automaticamente rilasciata dal sistema operativo.
+Risposta 2:  La mancata deallocazione può causare memory leak e spreco di risorse.
+Risposta 3:  La deallocazione è necessaria solo per gli array statici.
+Risposta 4:  La deallocazione è importante solo per i programmi di grandi dimensioni.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Sito web "www.memory-management.com"
+
+Domanda:  Cosa rappresenta un puntatore NULL nella gestione della memoria?
+Risposta 1:  Un puntatore a un'area di memoria libera.
+Risposta 2:  Un puntatore che non fa riferimento a nessuna area di memoria.
+Risposta 3:  Un puntatore a un indirizzo fisico.
+Risposta 4:  Un puntatore utilizzato solo in linguaggi diversi da C.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Sito web "www.memory-management.org"
+
+Domanda:  Cosa succede se si tenta di liberare una zona di memoria già deallocata in C?
+Risposta 1:  La memoria viene automaticamente allocata di nuovo.
+Risposta 2:  Il programma genera un'eccezione di memoria.
+Risposta 3:  Può causare comportamenti imprevedibili o crash del programma.
+Risposta 4:  La memoria viene liberata definitivamente.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 8, Paragrafo 4
+
+Domanda:  Qual è il vantaggio principale dell'allocazione dinamica rispetto all'allocazione statica in C?
+Risposta 1:  Maggiore efficienza nell'utilizzo della memoria.
+Risposta 2:  Minor complessità nella gestione della memoria.
+Risposta 3:  Maggiore controllo sulla durata della memoria.
+Risposta 4:  Nessun vantaggio specifico rispetto all'allocazione statica.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Sito web "www.memory-management.org"
+
+Domanda:  Cosa rappresenta un leak di memoria nella gestione della memoria?
+Risposta 1:  Un'allocazione di memoria dinamica.
+Risposta 2:  La liberazione della memoria non più utilizzata.
+Risposta 3:  La perdita di memoria a causa dell'allocazione non deallocata.
+Risposta 4:  La gestione della memoria all'interno di un processo.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Slides "Gestione della Memoria" - Pagina 22
+
+Domanda:  Cos'è la memoria volatile in termini di gestione della memoria?
+Risposta 1:  Una memoria che mantiene i dati anche quando l'alimentazione viene interrotta.
+Risposta 2:  Una memoria temporanea che può essere modificata durante l'esecuzione del programma.
+Risposta 3:  Una memoria che viene allocata dinamicamente dal sistema operativo.
+Risposta 4:  Una memoria utilizzata per l'archiviazione a lungo termine.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Libro "Gestione della Memoria" - Capitolo 2, Paragrafo 1
+
+Domanda:  Qual è lo scopo principale della funzione malloc in C?
+Risposta 1:  Dealloca la memoria.
+Risposta 2:  Alloca memoria dinamicamente.
+Risposta 3:  Inizializza una variabile.
+Risposta 4:  Stampa a schermo un messaggio.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 6, Paragrafo 2
+
+Domanda:  Qual è il compito della funzione free in C?
+Risposta 1:  Alloca la memoria.
+Risposta 2:  Dealloca la memoria precedentemente allocata dinamicamente.
+Risposta 3:  Inizializza tutti i puntatori a NULL.
+Risposta 4:  Calcola la dimensione di un array.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Sito web "www.memory-management.org"
+
+Domanda:  Cosa succede se si tenta di deallocare una zona di memoria più di una volta in C?
+Risposta 1:  La memoria viene automaticamente deallocata.
+Risposta 2:  Il programma genera un'eccezione di memoria.
+Risposta 3:  Può causare comportamenti imprevedibili o crash del programma.
+Risposta 4:  La memoria viene liberata definitivamente.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Slides "Gestione della Memoria" - Pagina 29
+
+Domanda:  Come si elimina un file in C?
+Risposta 1:  remove(file);
+Risposta 2:  delete(file);
+Risposta 3:  erase(file);
+Risposta 4:  unlink(file);
+Indice risposta corretta: 4
+Difficoltà: 2
+Fonte:  Libro "Programmazione C" - Capitolo 9, Paragrafo 4
+
+Domanda:  Qual è il vantaggio di utilizzare la modalità binaria ("rb", "wb", ecc.) quando si lavora con i file in C?
+Risposta 1:  I file binari sono più facili da leggere.
+Risposta 2:  La modalità binaria permette di scrivere dati più velocemente.
+Risposta 3:  La modalità binaria mantiene la formattazione originale dei dati.
+Risposta 4:  La modalità binaria non ha vantaggi rispetto alla modalità testuale.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Slides "Gestione dei File" - Pagina 12
+
+Domanda:  Cosa rappresenta feof() in C?
+Risposta 1:  Fine del file.
+Risposta 2:  Funzione per l'output dei dati.
+Risposta 3:  Flusso di errore.
+Risposta 4:  Flusso di input.
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Sito web "www.c-fileinfo.com"
+
+Domanda:  Quale funzione C viene utilizzata per spostare il cursore di lettura/scrittura in un file?
+Risposta 1:  movecursor()
+Risposta 2:  fseek()
+Risposta 3:  shiftcursor()
+Risposta 4:  setposition()
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 11, Paragrafo 2
+
+Domanda:  Qual è il simbolo usato per indicare il file standard di errore in C?
+Risposta 1:  stdin
+Risposta 2:  input
+Risposta 3:  stderr
+Risposta 4:  errorfile
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Slides "Gestione dei File" - Pagina 18
+
+Domanda:  Come si apre un file in modalità lettura in C?
+Risposta 1:  fopen("file.txt", "w")
+Risposta 2:  fopen("file.txt", "r")
+Risposta 3:  fopen("file.txt", "a")
+Risposta 4:  fopen("file.txt", "x")
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Libro "Programmazione C" - Capitolo 8, Paragrafo 2
+
+Domanda:  Come si chiude un file dopo averlo aperto in C?
+Risposta 1:  fclose(file);
+Risposta 2:  close(file);
+Risposta 3:  closefile(file);
+Risposta 4:  endfile(file);
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Slides "Gestione dei File" - Pagina 9
+
+Domanda:  Quale funzione C viene utilizzata per leggere un singolo carattere da un file?
+Risposta 1:  readchar()
+Risposta 2:  getc()
+Risposta 3:  readfile()
+Risposta 4:  read()
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Sito web "www.file-handling.com"
+
+Domanda:  Qual è il modo corretto per scrivere dati in un file in C?
+Risposta 1:  writefile(file, data);
+Risposta 2:  fwrite(data, file);
+Risposta 3:  fputchar(data, file);
+Risposta 4:  fprintf(file, data);
+Indice risposta corretta: 4
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 10, Paragrafo 3
+
+Domanda:  Cosa rappresenta EOF in C quando si leggono file?
+Risposta 1:  End Of Function.
+Risposta 2:  End Of File.
+Risposta 3:  End Of Frame.
+Risposta 4:  End Of Function.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Slides "Gestione dei File" - Pagina 16
+
+Domanda:  Qual è il simbolo usato per indicare il file standard di output in C?
+Risposta 1:  stdin
+Risposta 2:  input
+Risposta 3:  stdout
+Risposta 4:  output
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Sito web "www.c-fileinfo.com"
+
+Domanda:  Come si verifica se un file è stato aperto con successo in C?
+Risposta 1:  Verificando il valore restituito da fopen.
+Risposta 2:  Usando la funzione fileopen.
+Risposta 3:  Verificando il valore restituito da filecheck.
+Risposta 4:  Usando la funzione filestatus.
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Slides "Gestione dei File" - Pagina 5
+
+Domanda:  Qual è il significato di "file pointer" in C?
+Risposta 1:  Un puntatore a una variabile di tipo "file".
+Risposta 2:  Un puntatore a una stringa.
+Risposta 3:  Un puntatore a una variabile di tipo "file descriptor".
+Risposta 4:  Un puntatore a una variabile intera.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 8, Paragrafo 1
+
+Domanda:  Come si scrive una nuova riga in un file in C?
+Risposta 1:  Usando newline().
+Risposta 2:  Usando writenewline(file);.
+Risposta 3:  Usando fputc('\n', file);.
+Risposta 4:  Usando write('\n', file);.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Sito web "www.c-filehandling.com"
+
+Domanda:  Qual è il significato di "stream" in relazione ai file in C?
+Risposta 1:  Una sequenza di caratteri legati tra loro.
+Risposta 2:  Una serie di numeri interi.
+Risposta 3:  Una struttura dati usata per il controllo di input/output.
+Risposta 4:  Un flusso di dati binari.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Slides "Gestione dei File" - Pagina 8
+
+Domanda:  Cosa rappresenta stdout in C?
+Risposta 1:  Standard Input.
+Risposta 2:  Standard Output.
+Risposta 3:  Standard Error.
+Risposta 4:  Stream Output.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Sito web "www.c-fileinfo.com"
+
+Domanda:  Quale funzione C viene utilizzata per scrivere una stringa in un file?
+Risposta 1:  fputstring(file, string);
+Risposta 2:  fputs(string, file);
+Risposta 3:  write(string, file);
+Risposta 4:  fprintf(file, string);
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 10, Paragrafo 3
+
+Domanda:  Qual è il simbolo usato per indicare il file standard di input in C?
+Risposta 1:  stdin
+Risposta 2:  input
+Risposta 3:  stdout
+Risposta 4:  inputfile
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Slides "Gestione dei File" - Pagina 17
+
+Domanda:  Come si verifica se un file è aperto in modalità append in C?
+Risposta 1:  Usando la funzione isappend().
+Risposta 2:  Controllando il valore restituito da fopen con modalità append.
+Risposta 3:  Usando la funzione fileappend().
+Risposta 4:  Controllando il valore restituito da filemode().
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Sito web "www.c-fileinfo.com"
+
+Domanda:  Qual è il significato di "file descriptor" in C?
+Risposta 1:  Un numero univoco associato a un file aperto.
+Risposta 2:  Un puntatore a una variabile di tipo "file".
+Risposta 3:  Un tipo di dati che memorizza il contenuto di un file.
+Risposta 4:  Un valore booleano che indica se un file è aperto o chiuso.
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Slides "Gestione dei File" - Pagina 6
+
+Domanda:  Cosa rappresenta stderr in C?
+Risposta 1:  Standard Input.
+Risposta 2:  Standard Output.
+Risposta 3:  Standard Error.
+Risposta 4:  Stream Error.
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 8, Paragrafo 1
+
+Domanda:  Come si legge una stringa da un file in C?
+Risposta 1:  fgetstring(file, string);
+Risposta 2:  fscanf(file, "%s", string);
+Risposta 3:  readstring(file, string);
+Risposta 4:  fgets(string, file);
+Indice risposta corretta: 4
+Difficoltà: 2
+Fonte:  Sito web "www.c-filehandling.com"
+
+Domanda:  In C, quale direttiva di pre-processore viene utilizzata per includere il contenuto di un file di intestazione standard?
+Risposta 1:  #define
+Risposta 2:  #include
+Risposta 3:  #ifdef
+Risposta 4:  #ifndef
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Libro "C Programming for Beginners" - Capitolo 5, Paragrafo 2
+
+Domanda:  Cosa fa l'istruzione di pre-processore #define?
+Risposta 1:  Include un file di intestazione.
+Risposta 2:  Crea una macro di sostituzione.
+Risposta 3:  Dichiarazione di una variabile.
+Risposta 4:  Inizia una funzione.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Sito web "www.learn-c.org"
+
+Domanda:  Come si definisce una costante numerica in C utilizzando il pre-processore?
+Risposta 1:  #variable
+Risposta 2:  #define constant
+Risposta 3:  #constant
+Risposta 4:  #const
+Indice risposta corretta: 2
+Difficoltà: 1
+Fonte:  Slides "Introduzione alle Istruzioni di Pre-Processore" - Pagina 7
+
+Domanda:  Cosa rappresenta __LINE__ in C?
+Risposta 1:  Il numero di riga corrente nel programma.
+Risposta 2:  Il nome del file corrente.
+Risposta 3:  Il tipo di dati della variabile.
+Risposta 4:  Il carattere di escape per una nuova linea.
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 8, Paragrafo 3
+
+Domanda:  Qual è l'output dell'istruzione di pre-processore #error?
+Risposta 1:  Mostra un errore durante la compilazione.
+Risposta 2:  Crea un nuovo file di codice.
+Risposta 3:  Stampa un messaggio di avviso.
+Risposta 4:  Aggiunge un commento al codice.
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Sito web "www.cplusplus.com"
+
+Domanda:  Come si utilizza #ifdef per verificare se una macro è definita?
+Risposta 1:  #ifdef macro_name
+Risposta 2:  #ifdef macro_name()
+Risposta 3:  #ifdef (macro_name)
+Risposta 4:  #ifdef <macro_name>
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Slides "Introduzione alle Istruzioni di Pre-Processore" - Pagina 12
+
+Domanda:  Quale simbolo viene utilizzato per l'operatore di concatenazione in una macro in C?
+Risposta 1:  +
+Risposta 2:  ,
+Risposta 3:  >
+Risposta 4:  ##
+Indice risposta corretta: 4
+Difficoltà: 2
+Fonte:  Libro "C Programming for Beginners" - Capitolo 6, Paragrafo 5
+
+Domanda:  In C, cosa fa l'istruzione #pragma?
+Risposta 1:  Definisce una macro.
+Risposta 2:  Abilita ottimizzazioni specifiche del compilatore.
+Risposta 3:  Esegue una funzione.
+Risposta 4:  Imposta una variabile globale.
+Indice risposta corretta: 2
+Difficoltà: 2
+Fonte:  Sito web "www.learn-c.org"
+
+Domanda:  Qual è l'output dell'istruzione #undef in C?
+Risposta 1:  Cancella una macro precedentemente definita.
+Risposta 2:  Imposta una variabile a zero.
+Risposta 3:  Crea una nuova macro.
+Risposta 4:  Stampa una stringa di testo.
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Slides "Introduzione alle Istruzioni di Pre-Processore" - Pagina 15
+
+Domanda:  Cosa rappresenta __FILE__ in C?
+Risposta 1:  Il nome del file corrente.
+Risposta 2:  Il tipo di dati di una variabile.
+Risposta 3:  L'estensione del file.
+Risposta 4:  L'ora corrente del sistema.
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 8, Paragrafo 2
+
+Domanda:  Come si utilizza #ifndef per verificare se una macro non è definita?
+Risposta 1:  #ifndef macro_name
+Risposta 2:  #ifndef macro_name()
+Risposta 3:  #ifndef (macro_name)
+Risposta 4:  #ifndef <macro_name>
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Slides "Introduzione alle Istruzioni di Pre-Processore" - Pagina 14
+
+Domanda:  Come si definisce una macro in C utilizzando l'istruzione di pre-processore #define?
+Risposta 1:  #macro(define)
+Risposta 2:  #macroName = value
+Risposta 3:  #define macroName value
+Risposta 4:  #define(value) macroName
+Indice risposta corretta: 3
+Difficoltà: 2
+Fonte:  Sito web "www.learn-c.org"
+
+Domanda:  Cosa rappresenta __FILE__ in C?
+Risposta 1:  Il nome del file corrente.
+Risposta 2:  Il tipo di dati di una variabile.
+Risposta 3:  L'estensione del file.
+Risposta 4:  L'ora corrente del sistema.
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Libro "Programmazione in C" - Capitolo 8, Paragrafo 2
+
+Domanda:  Qual è l'output dell'istruzione #error in C?
+Risposta 1:  Mostra un errore durante la compilazione.
+Risposta 2:  Crea un nuovo file di codice.
+Risposta 3:  Stampa un messaggio di avviso.
+Risposta 4:  Aggiunge un commento al codice.
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Sito web "www.cplusplus.com"
+
+Domanda:  Qual è l'uso principale dell'istruzione #include in C?
+Risposta 1:  Per includere un file di intestazione o un altro file di codice.
+Risposta 2:  Per dichiarare una variabile.
+Risposta 3:  Per definire una funzione.
+Risposta 4:  Per creare una macro.
+Indice risposta corretta: 1
+Difficoltà: 2
+Fonte:  Libro "C Programming for Beginners" - Capitolo 5, Paragrafo 1
+
