@@ -363,7 +363,7 @@ async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> N
         return
 
     # domande = await DomandaDAO(database_manager).do_retrieve_by_argomento(nome_gruppo)
-    domande = await DomandaDAO(database_manager).do_retrieve_by_argomento_random_limit(nome_gruppo, 5)
+    domande = await DomandaDAO(database_manager).do_retrieve_by_argomento_random_limit(nome_gruppo, 10)
 
     # Calcola il tempo per la prossima domanda come 2 secondi nel futuro dall'istante corrente
     tempo_prossima_domanda = datetime.now() + timedelta(seconds=2)
@@ -923,7 +923,7 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         if player_in_quiz["streak"] <= 1.5:
             player_in_quiz["streak"] += 0.1
 
-        # regala un powerup con probabilità 1/3 se la risposta è corretta
+        # regala un powerup con probabilità 1/2 se la risposta è corretta
         await regala_powerup(update, context, player_in_quiz, quiz)
 
     else:
@@ -957,9 +957,9 @@ async def processa_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
 
 async def regala_powerup(update: Update, context: ContextTypes.DEFAULT_TYPE, player_in_quiz, quiz) -> None:
-    # regala un powerup con probabilità 1/3 se la risposta è corretta
+    # regala un powerup con probabilità 1/2 se la risposta è corretta
 
-    probabilita = random.randint(0, 2)
+    probabilita = random.randint(0, 1)
 
     if probabilita == 0:
         powerup_disponibili = [powerup for powerup in list(Powerups) if
