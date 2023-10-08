@@ -5,9 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="01f806c3-7cbd-4b91-863a-f7e44c87fa9e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../EASYInterfacciaDomande/.vs/EASYInterfacciaDomande/FileContentIndex/0db93255-c5bd-443e-adf0-ec09642f6d20.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../EASYInterfacciaDomande/.vs/EASYInterfacciaDomande/FileContentIndex/ed6c99fe-5d69-4c1c-8d7c-612b655e21fb.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../EASYInterfacciaDomande/.vs/EASYInterfacciaDomande/v17/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/../EASYInterfacciaDomande/.vs/EASYInterfacciaDomande/v17/.suo" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../database.db" beforeDir="false" afterPath="$PROJECT_DIR$/../database.db" afterDir="false" />
@@ -145,7 +142,9 @@
       <workItem from="1696071988555" duration="29000" />
       <workItem from="1696120517984" duration="130000" />
       <workItem from="1696129911096" duration="440000" />
-      <workItem from="1696131060835" duration="9000" />
+      <workItem from="1696131060835" duration="56000" />
+      <workItem from="1696228238729" duration="2685000" />
+      <workItem from="1696598553317" duration="3374000" />
     </task>
     <servers />
   </component>
@@ -153,6 +152,6 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/EASYTelegramBot$EASY.coverage" NAME="EASY Coverage Results" MODIFIED="1696130058270" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/EASYTelegramBot$EASY.coverage" NAME="EASY Coverage Results" MODIFIED="1696606254542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

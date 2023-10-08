@@ -42,11 +42,11 @@ async def comando_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
                                     f'Stai avendo difficoltà nello studiare il linguaggio di programmazione C?\n'
                                     f'Non ti preoccupare, questo bot ti aiuterà a superare le tue difficoltà e allo stesso tempo '
                                     f'ti divertirai con i tuoi amici.\n'
-                                    f'Ecco la lista dei comandi:\n'
-                                    f'/nickname *`nuovo nickname`* per modificare il tuo nickname\n'
+                                    f'Ecco la lista dei comandi: (suggerimento: ti consiglio di usare il comando */info* prima di iniziare un quiz)\n'
+                                    f'/info per visulizzare le informazioni sul funzionamento del bot\n'
+                                    f'/nickname *`nuovo nickname`* per modificare il tuo nickname (es. /nickname Francesco Granozio)\n'
                                     f'/quiz per visulizzare gli argomenti si cui iniziare un quiz\n'
                                     f'/profilo per visulizzare le statistiche del tuo profilo (punti, risposte corrrette, ecc...)\n'
-                                    f'/info per visulizzare le informazioni sul funzionamento del bot\n'
                                     f'/classifica per visulizzare la classifica dei giocatori secondo alcuni criteri\n',
                                     parse_mode='Markdown')
 
@@ -242,7 +242,7 @@ async def comando_start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE)
     ]
 
     messaggio_opzioni = await bot.send_message(
-        text=f"Seleziona l'opzione 👇🏻",
+        text=f"Seleziona l'opzione prima di iniziare il quiz👇🏻",
         chat_id=update.message.chat_id,
         reply_markup=InlineKeyboardMarkup(keyboard))
 
@@ -363,7 +363,7 @@ async def bottone_avvia_quiz_jobs(update: Update, context: CallbackContext) -> N
         return
 
     # domande = await DomandaDAO(database_manager).do_retrieve_by_argomento(nome_gruppo)
-    domande = await DomandaDAO(database_manager).do_retrieve_by_argomento_random_limit(nome_gruppo, 10)
+    domande = await DomandaDAO(database_manager).do_retrieve_by_argomento_random_limit(nome_gruppo, 5)
 
     # Calcola il tempo per la prossima domanda come 2 secondi nel futuro dall'istante corrente
     tempo_prossima_domanda = datetime.now() + timedelta(seconds=2)
@@ -459,7 +459,7 @@ async def cancella_messaggi(update: Update, context: ContextTypes.DEFAULT_TYPE, 
     messaggio = await bot.send_message(text="Sto per cancellare la chat ☝", chat_id=update.effective_chat.id)
     messaggi_per_lobby[update.effective_chat.title].append(messaggio.message_id)
 
-    await asyncio.sleep(5)
+    await asyncio.sleep(8)
 
     # Cancella tutti i messaggi inviati dal bot, tranne i primi 2 pulsanti che non sono stati salvati
     for messaggio_per_lobby in messaggi_per_lobby[update.effective_chat.title]:

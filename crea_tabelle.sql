@@ -10,25 +10,25 @@ CREATE TABLE "Domande" (
 	"difficolta"	TEXT NOT NULL,
 	"tempoRisposta"	INTEGER NOT NULL,
 	"meme"	TEXT,
+	"fonte"	TEXT,
 	PRIMARY KEY("numeroDomanda" AUTOINCREMENT)
 );
 
 
 CREATE TABLE "Players" (
-	"id"	INTEGER NOT NULL,
+	"id"	TEXT NOT NULL,
 	"nickname"	TEXT NOT NULL UNIQUE,
-	"punteggio"	INTEGER NOT NULL,
+	"punteggio_totale"	REAL NOT NULL DEFAULT 0,
+	"domande_risposte"	INTEGER DEFAULT 0,
+	"risposte_corrette"	INTEGER DEFAULT 0,
+	"risposte_errate"	INTEGER DEFAULT 0,
+	"quiz_completati"	INTEGER DEFAULT 0,
+	"powerup_utilizzati"	INTEGER DEFAULT 0,
+	"numero_podi"	INTEGER DEFAULT 0,
 	PRIMARY KEY("id")
 );
 
-CREATE TABLE "Powerups" (
-	"id"	INTEGER NOT NULL,
-	"nome"	TEXT NOT NULL UNIQUE,
-	"descrizione"	TEXT NOT NULL UNIQUE,
-	PRIMARY KEY("id" AUTOINCREMENT)
-);
 
-/*CREATE TABLE "sqlite_sequence" (
-	"name"	,
-	"seq"	
-);*/
+CREATE TABLE "Settings" (
+	"messaggio_opzioni"	INTEGER
+);
